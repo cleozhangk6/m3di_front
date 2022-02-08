@@ -49,10 +49,10 @@ class Basicinfo2(models.Model):
         managed = False
         db_table = 'BasicInfo2'
 
-class Signalpeptide(models.Model):
+class Sigpepfin(models.Model):
     sp_uniprot_id = models.CharField(max_length=100, blank=True, primary_key=True)
     signal_peptide = models.CharField(max_length=5, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'SignalPeptide'
+        db_table = 'SigPepFin'
