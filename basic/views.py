@@ -36,9 +36,9 @@ class SearchView(generic.ListView):
         query = self.request.GET.get('q', None)
 
         if query is not None:
-            basic_results = Basicbackup.objects.raw(
-                'SELECT * FROM BasicBackup LEFT JOIN SigPep ON uniprot_id=sp_uniprot_id WHERE uniprot_id = %s', [query])
+            basic_results = Basicinfo2.objects.raw(
+                'SELECT * FROM BasicInfo2 LEFT JOIN SigPep ON uniprot_id=sp_uniprot_id WHERE uniprot_id = %s', [query])
 
             return basic_results
-        return Pronameunique.objects.none()
+        return Basicinfo2.objects.none()
 
