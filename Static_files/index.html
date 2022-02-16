@@ -5,34 +5,46 @@
       <meta name="description" content="Welcome to Missense3D-Interaction">
       <!--Font Awesome kit's code-->
       <script src="https://kit.fontawesome.com/777bbb3675.js" crossorigin="anonymous"></script>
+      <!--Link CSS stylesheet-->
+      <link rel="stylesheet" href="styles.css" />
   </head>
-  <br />
+
   <body>
-    <header>
-      <nav>
-          <img src="images/logo.png">
-        <ul>
-          <li>Home</li>
-          <li>About</li>
-          <li>Dataset</li>
-          <li>Contact us</li>
-        </ul>
-      </nav>
-      <hr />
+
+    <div class="top_bar">
+      <div class="container">
+      </div>
+    </div>
+
+    <header class="main-header">
+      <div class="container">
+        <a id="m3di_logo_left" href="index.html">
+        <nav class="nav main-nav">
+          <img src="images/logo.png" width="100">
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="dataset.html">Dataset</a></li>
+            <li><a href="contact.html">Contact us</a></li>
+          </ul>
+        </nav>
+      </div>      
+
     </header>
 
-    <section>
-        <h1>Welcome to M3DI</h1>
-        <p>
-            Missense 3D interaction is Lorem ipsum dolor sit amet, consectetur
-            adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-            magna aliqua.
-        </p>
-        <button type="button">Start your search</button>
-    </section>
-    <hr>
+    <section class="hero">
+        <div class="container">
+          <h1 id="welcome"> Welcome to M3DI</h1>
+          <p>
+              Missense 3D interaction is Lorem ipsum dolor sit amet, consectetur
+              adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+              magna aliqua.
+          </p>
+          <button type="button">Start your search</button>  
+        </div>
+      </section>
 
-    <section>
+    <section id="main-search">
         <form action="main.html" method="get">
             <p>Uniprot/GeneID*:
             <input name="q" type="text" placeholder="">
@@ -55,11 +67,11 @@
         </form>
         <button type="submit">Submit</button>
     </section>
-    <hr>
+    <hr />
     
     <footer>
-        <h3>MSc Bioinformatics and Systems Biology</h3>
-        <img src="images/Imperial.png">
+        <p>MSc Bioinformatics and Systems Biology</p>
+        <img src="images/Imperial.png" width="250">
     </footer>
   </body>
 </html>
