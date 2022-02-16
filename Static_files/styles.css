@@ -31,7 +31,6 @@ html, body {
     margin-right:auto;
     margin-left: auto;
     position: relative;
-    z-index: 1000;
 }
 
 .main-header .container {
@@ -40,7 +39,6 @@ html, body {
     margin-right:auto;
     margin-left: auto;
     position: relative;
-    z-index: 10;
 }
 
 #m3di_logo_left {
@@ -89,5 +87,78 @@ html, body {
     margin-left: auto;
     padding-top: 60px;
     position: relative;
-    z-index: 10;
+}
+
+.hero button {
+    background-color: transparent;
+    color: black;
+    font-size:1em;
+    border: 0.13em solid black;
+    border-radius: 8px;
+    padding: 0.7em;
+    vertical-align: middle;
+}
+
+.hero button:hover {
+    background-color: #c3bdcf;
+    color: white;
+    border: none;
+}
+
+.home-search .container {
+    width: 600px;
+    height: 300px;
+    margin-right:auto;
+    margin-left: auto;
+    padding-top: 70px;
+    position: relative;
+}
+
+.home-search form {
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.home-search p {
+    display: table-row;
+
+}
+
+.home-search label {
+    display: table-cell;
+    text-align: right;
+    color: black;
+    font-weight: 500;
+}
+
+.home-search input {
+    display: table-cell;
+    font-size: small;
+    height: 2.5em;
+    text-align: start;
+    text-indent: 0.5em;
+    margin: 0.5em;
+    border: 0.13em solid #7A7A7A;
+}
+
+#input-id {
+    width: 9em;
+}
+
+#input-rsd {
+    width: 6em;
+}
+
+.input-mut input {
+    width: 5em;
+}
+
+.home-search button {
+    background-color: #7F798B;
+    color: #FFFFFF;
+    font-size:1em;
+    border: none;
+    padding: 0.5em;
+    margin-top: 1em;
 }

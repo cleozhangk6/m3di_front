@@ -40,33 +40,35 @@
               adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
               magna aliqua.
           </p>
-          <button type="button">Start your search</button>  
+          <br>
+          <a href="#home-search">
+          <button type="button">Start your search</button></a>  
         </div>
       </section>
 
-    <section id="main-search">
-        <form action="main.html" method="get">
-            <p>Uniprot/GeneID*:
-            <input name="q" type="text" placeholder="">
+    <section class="home-search">
+        <div class="container">
+          <form action="main.html" method="get">
+            <p>
+            <label>Uniprot ID/Gene ID:</label>
+            <input id="input-id" name="q1" type="text" placeholder="e.g. Q9BYF1">
             <i class="fa-solid fa-circle-info"></i>
             </p>
-        </form>
-
-        <form action="main.html" method="get">
-            <p>Residue Position*:
-            <input name="q" type="text" placeholder="">
+            <p>
+            <label>Residue Position:</label>
+            <input id="input-rsd" name="q2" type="text" placeholder="e.g. 199">
             </p>
-        </form>
-
-        <form action="main.html" method="get">
-            <p>Mutation:
-            <input name="q" type="text" placeholder="">
+            <p class="input-mut">
+            <label>Mutation:</label>
+            <input id="input-mut1" name="q3" type="text" placeholder="">
             <i class="fa-solid fa-arrow-right"></i>
-            <input name="q" type="text" placeholder="">
+            <input name="q4" type="text" placeholder="">
             </p>
-        </form>
+          </form>
+
         <button type="submit">Submit</button>
-    </section>
+        </div>
+     </section>
     <hr />
     
     <footer>
