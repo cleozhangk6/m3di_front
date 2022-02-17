@@ -266,3 +266,21 @@ footer .container{
     background-color: #EDE8F9;
     color: #7F798B;
 }
+
+
+.results .container{
+    width: 50%;
+    height:300px;
+    margin-right:auto;
+    margin-left: 50px;
+    padding-top: 20px;
+    position: relative;
+}
+
+.results .container li {
+    text-align: left;
+}
+
+.results .container h3 {
+    text-align: left;
+}

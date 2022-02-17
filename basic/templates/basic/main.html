@@ -1,3 +1,6 @@
+{% load static %}
+
+
 <!DOCTYPE html>
 <html>
   <head> 
@@ -5,7 +8,7 @@
       <!--Font Awesome kit's code-->
       <script src="https://kit.fontawesome.com/777bbb3675.js" crossorigin="anonymous"></script>
       <!--Link CSS stylesheet-->
-      <link rel="stylesheet" href="styles.css" />
+      <link rel="stylesheet" href="{% static 'basic/styles.css' %}" />
   </head>
 
   <body>
@@ -16,11 +19,11 @@
       </div>
       <header class="main-header">
         <div class="container">
-          <a id="m3di_logo_left" href="index.html">
-            <img src="images/logo.png" width="100"></a>
+          <a id="m3di_logo_left" href="{% url 'basic:index' %}">
+            <img src="{% static 'basic/images/logo.png' %}" width="100"></a>
           <nav class="nav main-nav">            
             <ul>
-              <li><a href="index.html">Home</a></li>
+              <li><a href="{% url 'basic:index' %}">Home</a></li>
               <li><a href="about.html">About</a></li>
               <li><a href="dataset.html">Dataset</a></li>
               <li><a href="contact.html">Contact us</a></li>
@@ -30,26 +33,40 @@
       </header>
       <div class="search-bar">
           <div class="container">
-              <form>
                 Uniprot/Gene ID:
-                <input id="input_uniprot" name="q1" type="text" placeholder="" size="10px">
+                <input id="input_uniprot" name="q" type="text" placeholder="" size="10px">
                 Residue NO.:
                 <input id="input_residue" name="q2" type="text" placeholder="" size="6px">
                 Mutation:
                 <input id="input_mut" name="q3" type="text" placeholder="" size="4px">
                 <i class="fa-solid fa-arrow-right"></i>
                 <input id="input_mut" name="q4s" type="text" placeholder="" size="4px">
-                <a href="main.html">
+                <a href="{% url 'basic:main' %}">
                   <button type="submit">Submit</button></a>
-              </form>
           </div>
     </div>
     </div>
     
-    <section>
-        <div class="container">
+    <section class="results">
+        <!-- <div class="container"> -->
             <p>Search Results</p>
-        </div>
+            {% for object in object_list %}
+              <p>You searched for <a href="{{ object.protein_link }}">{{ object.uniprot_id }}</a></p> <br>
+              <div class="container">
+                <h3>Basic Info</h3>
+                  <ul>
+                    <li>Protein name: {{ object.protein_name }}</li>
+                    <li>Gene name: <a href="{{ object.gene_link }}">{{ object.gene_name }}</a></li>
+                  </ul>
+                <h3>Signal Peptide</h3>
+                  <ul>
+                    <li>Signal peptide: {{ object.signal_peptide }}</li>
+                  </ul>
+              </div>
+            {% endfor %}
+          <br>
+          <br>
+        <!-- </div> -->
     </section>
     
     <hr color="#CAC4D7">
@@ -57,13 +74,13 @@
     <footer>
       <div class="container">
         <span id="msc_left">MSc Bioinformatics and Systems Biology</span>
-        <img id="ic_logo_right" src="images/Imperial.png" width="200">
+        <img id="ic_logo_right" src="{% static 'basic/images/Imperial.png' %}" width="200">
       </div>
     </footer>
 
 
 
-    <script src="index.js"></script>
+    <script src="{% static 'basic/index.js' %}"></script>
 
   </body>
 </html>

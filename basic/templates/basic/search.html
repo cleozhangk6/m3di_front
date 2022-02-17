@@ -1,20 +1,24 @@
 
+<!DOCTYPE html>
+
+<html>
+
+    <h1>Basic Info</h1>
+
+    {% for object in object_list %}
+        
+        <p>You searched for <a href="{{ object.protein_link }}">{{ object.uniprot_id }}</a></p> <br>
+        <li>Protein name: {{ object.protein_name }}</li>
+        <li>Gene name: <a href="{{ object.gene_link }}">{{ object.gene_name }}</a></li>
+        <li>Signal peptide: {{ object.signal_peptide }}</li>
+
+    {% endfor %}
 
 
-<h1>Basic Info</h1>
 
-{% for object in object_list %}
-    
-    <p>You searched for <a href="{{ object.protein_link }}">{{ object.uniprot_id }}</a></p> <br>
-    <li>Protein name: {{ object.protein_name }}</li>
-    <li>Gene name: <a href="{{ object.gene_link }}">{{ object.gene_name }}</a></li>
-    <li>Signal peptide: {{ object.signal_peptide }}</li>
+    <br>
+    <br>
 
-{% endfor %}
+    <p> Back to <a href="{% url 'basic:home' %}">Home Page</a></p>
 
-
-
-<br>
-<br>
-
-<p> Back to <a href="{% url 'basic:home' %}">Home Page</a></p> 
+</html>

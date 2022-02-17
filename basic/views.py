@@ -7,6 +7,9 @@ from itertools import chain
 class HomeView(generic.TemplateView):
     template_name = 'basic/home.html'
 
+class IndexView(generic.TemplateView):
+    template_name = 'basic/index.html'
+
 # class SearchView(generic.ListView):
 #     template_name = 'basic/search.html'
 
@@ -31,6 +34,21 @@ class HomeView(generic.TemplateView):
 
 class SearchView(generic.ListView):
     template_name = 'basic/search.html'
+
+    def get_queryset(self): #overwrite the get_queryset method
+        query = self.request.GET.get('q', None)
+
+        if query is not None:
+            basic_results = Basicinfo2.objects.raw(
+                'SELECT * FROM BasicInfo2 LEFT JOIN SignalPeptide ON uniprot_id=sp_uniprot_id WHERE uniprot_id = %s', [query])
+
+            return basic_results
+        return Basicinfo2.objects.none()
+
+
+
+class MainView(generic.ListView):
+    template_name = 'basic/main.html'
 
     def get_queryset(self): #overwrite the get_queryset method
         query = self.request.GET.get('q', None)
