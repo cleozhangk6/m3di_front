@@ -3,12 +3,23 @@
 
 <h1>Basic Info</h1>
 
-{% for object in object_list %}
+
+{% for object in topo_results %}
     
-    <p>You searched for <a href="{{ object.protein_link }}">{{ object.uniprot_id }}</a></p> <br>
-    <li>Protein name: {{ object.protein_name }}</li>
-    <li>Gene name: <a href="{{ object.gene_link }}">{{ object.gene_name }}</a></li>
-    <li>Signal peptide: {{ object.signal_peptide }}</li>
+ 
+
+    <li>Topology is {{ object.topology }}<li>
+    
+
+{% endfor %}
+
+{% for object in variant_results %}
+    
+ 
+
+    <li>Wild type variant is {{ object.res_wt }} and mutant variant is  {{ object.res_mut }}</li>
+    
+    
 
 {% endfor %}
 
