@@ -9,7 +9,7 @@ from django.db import models
 
 
 class Basicinfo2(models.Model):
-    uniprot_id = models.CharField(max_length=10, blank=True, primary_key= True)
+    uniprot_id = models.CharField(max_length=10, blank=True, null=True)
     protein_link = models.TextField(blank=True, null=True)
     protein_name = models.TextField(blank=True, null=True)
     gene_name = models.TextField(blank=True, null=True)
@@ -125,20 +125,6 @@ class MissenseVarCom(models.Model):
     class Meta:
         managed = False
         db_table = 'Missense_Var_Com'
-
-class MissenseVarComCopy(models.Model):
-    uniprot = models.CharField(max_length=10, blank=True, null=True)
-    posuniprot = models.IntegerField(blank=True, null=True)
-    pdbpos = models.IntegerField(blank=True, null=True)
-    res_wt = models.CharField(max_length=4, blank=True, null=True)
-    res_mut = models.CharField(max_length=4, blank=True, null=True)
-    missensepred = models.CharField(max_length=50, blank=True, null=True)
-    missense_reason = models.CharField(max_length=100, blank=True, null=True)
-    comment = models.CharField(max_length=500, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'Missense_Var_Com_Copy'
 
 
 class Ptms(models.Model):

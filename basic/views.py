@@ -4,8 +4,11 @@ from .models import *
 from itertools import chain
 
 # Create your views here.
+
+
 class HomeView(generic.TemplateView):
     template_name = 'basic/home.html'
+
 
 class IndexView(generic.TemplateView):
     template_name = 'basic/index.html'
@@ -30,33 +33,94 @@ class IndexView(generic.TemplateView):
 
 #             return queryset_chain
 #         return ProNameUnique.objects.none()
+#testinggit123
 
 
-class SearchView(generic.ListView):
-    template_name = 'basic/search.html'
+# class SearchView(generic.ListView):
+#     template_name = 'basic/search.html'
 
-    def get_queryset(self): #overwrite the get_queryset method
-        query = self.request.GET.get('q', None)
+#     def get_queryset(self):  # overwrite the get_queryset method
+#         query = self.request.GET.get('q', None)
 
-        if query is not None:
-            basic_results = Basicinfo2.objects.raw(
-                'SELECT * FROM BasicInfo2 LEFT JOIN SignalPeptide ON uniprot_id=sp_uniprot_id WHERE uniprot_id = %s', [query])
+#         if query is not None:
+#             basic_results = Basicinfo2.objects.raw(
+#                 'SELECT * FROM BasicInfo2 LEFT JOIN SignalPeptide ON uniprot_id=sp_uniprot_id WHERE uniprot_id = %s', [query])
 
-            return basic_results
-        return Basicinfo2.objects.none()
+#             return basic_results
+#         return Basicinfo2.objects.none()
+
+def search_view(request):
+    if request.method == "GET":
+        query_uni = request.GET['q']
+        query_var = request.GET['v']
+
+        results_basic = Basicinfo2.objects.raw(
+            'SELECT * FROM BasicInfo2 LEFT JOIN SignalPeptide ON uniprot_id=sp_uniprot_id WHERE uniprot_id = %s', [query_uni]
+        )
+        results_topo = Topodom.objects.raw(
+            'SELECT id, topology FROM (SELECT * FROM TopoDom WHERE uniprot = %s) AS tab WHERE topo_start <= %s and topo_end >= %s', [query_uni, query_var, query_var]
+        )
+        results_variant = MissenseVarCom.objects.raw(
+            'SELECT * FROM Missense_Var_Com WHERE uniprot = %s and posuniprot = %s', [query_uni, query_var]
+        )
+        context = {
+            'results_basic': results_basic,
+            'results_topo': results_topo,
+            'results_variant': results_variant}
+
+        return render(request, 'basic/search.html', context)
+
+# class MainView(generic.ListView):
+#     template_name = 'basic/main.html'
+
+#     def get_queryset(self):  # overwrite the get_queryset method
+#         query_uniprot = self.request.GET.get('q', None)
+#         query_residue = self.request.GET.get('q2', None)
+
+#         if query_uniprot is not None:
+#             basic_results = Basicinfo2.objects.raw(
+#                 'SELECT * FROM BasicInfo2 LEFT JOIN SignalPeptide ON uniprot_id=sp_uniprot_id WHERE uniprot_id = %s', [query_uniprot])
+
+#             return basic_results
+#         return Basicinfo2.objects.none()
 
 
 
-class MainView(generic.ListView):
-    template_name = 'basic/main.html'
+def main_UniVar(request):
+    if request.method == "GET":
+        query_uni = request.GET['q']
+        query_var = request.GET['v']
 
-    def get_queryset(self): #overwrite the get_queryset method
-        query = self.request.GET.get('q', None)
+        results_basic = Basicinfo2.objects.raw(
+            'SELECT * FROM BasicInfo2 WHERE uniprot_id = %s', [query_uni]
+        )
 
-        if query is not None:
-            basic_results = Basicinfo2.objects.raw(
-                'SELECT * FROM BasicInfo2 LEFT JOIN SignalPeptide ON uniprot_id=sp_uniprot_id WHERE uniprot_id = %s', [query])
+        results_signal = Pronameunique.objects.raw(
+            'SELECT * FROM ProNameUnique LEFT JOIN SignalPeptide ON uniprot_id=sp_uniprot_id WHERE uniprot_id = %s', [query_uni]
+        )
 
-            return basic_results
-        return Basicinfo2.objects.none()
+        results_topo = Topodom.objects.raw(
+            'SELECT id, topology FROM (SELECT * FROM TopoDom WHERE uniprot = %s) AS tab WHERE topo_start <= %s and topo_end >= %s', [query_uni, query_var, query_var]
+        )
+
+        if query_uni and query_var:
+
+            results_variant = MissenseVarComCopy.objects.raw(
+                'SELECT * FROM Missense_Var_Com_Copy WHERE uniprot = %s and posuniprot = %s', [query_uni, query_var]
+            )
+        elif query_uni:
+            results_variant = MissenseVarComCopy.objects.raw(
+                'SELECT * FROM Missense_Var_Com_Copy WHERE uniprot = %s', [query_uni]
+            )
+            
+        context = {
+            'query_uni' : query_uni,
+            'query_var' : query_var,
+            'results_basic': results_basic,
+            'results_signal': results_signal,
+            'results_topo': results_topo,
+            'results_variant': results_variant,
+            }
+
+        return render(request, 'basic/main.html', context)
 

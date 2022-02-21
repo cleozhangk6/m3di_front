@@ -33,40 +33,90 @@
       </header>
       <div class="search-bar">
           <div class="container">
+            <form action="{% url 'basic:main' %}" method="get">
                 Uniprot/Gene ID:
-                <input id="input_uniprot" name="q" type="text" placeholder="" size="10px">
-                Residue NO.:
-                <input id="input_residue" name="q2" type="text" placeholder="" size="6px">
-                Mutation:
-                <input id="input_mut" name="q3" type="text" placeholder="" size="4px">
+                <input id="input_uni" name="q" type="text" placeholder="" size="10px">
+                Residue Position:
+                <input id="input_var" name="v" type="text" placeholder="" size="6px">
+                <!-- Mutation:
+                <input id="input_wt" name="wt" type="text" placeholder="" size="4px">
                 <i class="fa-solid fa-arrow-right"></i>
-                <input id="input_mut" name="q4s" type="text" placeholder="" size="4px">
+                <input id="input_mut" name="mut" type="text" placeholder="" size="4px"> -->
                 <a href="{% url 'basic:main' %}">
                   <button type="submit">Submit</button></a>
+            </form>
           </div>
     </div>
     </div>
     
     <section class="results">
-        <!-- <div class="container"> -->
-            <p>Search Results</p>
-            {% for object in object_list %}
-              <p>You searched for <a href="{{ object.protein_link }}">{{ object.uniprot_id }}</a></p> <br>
-              <div class="container">
-                <h3>Basic Info</h3>
-                  <ul>
-                    <li>Protein name: {{ object.protein_name }}</li>
-                    <li>Gene name: <a href="{{ object.gene_link }}">{{ object.gene_name }}</a></li>
-                  </ul>
-                <h3>Signal Peptide</h3>
-                  <ul>
-                    <li>Signal peptide: {{ object.signal_peptide }}</li>
-                  </ul>
-              </div>
-            {% endfor %}
+      <p><strong>Search Results</strong></p>
+      {% if query_uni and query_var %}
+      <p>You searched for {{ query_uni }}</p>
+      <p>Variant position {{ query_var }}</p>
+      </p>
+      
+      {% elif query_uni %}
+      <p>You searched for {{ query_uni }}</p>
+      <p>No variant specified</p>
+
+      {% else %}
+      <p>No search submitted</p>
+      
+      {% endif %}
+        
+      <div class="container">
+
+        <h3>Basic Info</h3>
+        {% for object in results_basic %}
+          <ul>
+            <li>Protein name: <a href="{{ object.protein_link }}">{{ object.protein_name }}</a></li>
+            <li>Gene name: <a href="{{ object.gene_link }}">{{ object.gene_name }}</a></li>
+          </ul>
+          {% endfor %}
+
+          <h3>Signal Peptide</h3>
+          {% for object in results_signal %}
+          <ul>
+            <li>Signal peptide: 1-{{ object.signal_peptide }}</li>
+          </ul>
+          {% endfor %}
+
+        <h3>Variants</h3>
+          <table class="variant-table">
+            <tr>
+              <th>UniprotID</th>
+              <th>Position</th>
+              <th>Wildtype</th>
+              <th>Mutant</th>
+              <th>Prediction</th>
+              <th>Reason</th>
+            </tr>
+            {% for object in results_variant %}
+            <tr>
+              <td>{{ object.uniprot }}</td>
+              <td>{{ object.pdbpos }}</td>
+              <td>{{ object.res_wt }}</td>
+              <td>{{ object.res_mut }}</td>
+              <td>{{ object.missensepred }}</td>
+              <td>{{ object.missense_reason }}</td>
+            </tr>
+          {% endfor %}
+          </table>
+              
+        
+        <h3>Topology</h3>
+        {% for object in results_topo %}
+          <ul>
+            <li>Variant {{ query_var }} is located at the {{ object.topology }} region</li>
+          </ul>
+        {% endfor %}
+
+
+      </div>
+
+          <br/>
           <br>
-          <br>
-        <!-- </div> -->
     </section>
     
     <hr color="#CAC4D7">

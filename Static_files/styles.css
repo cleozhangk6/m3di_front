@@ -253,12 +253,23 @@ footer .container{
     border: 0.13em solid #7A7A7A;
 }
 
+.search-bar input {
+    display: table-cell;
+    font-size: small;
+    height: 1.8em;
+    text-align: start;
+    text-indent: 0.3em;
+    margin: 0.5em;
+    margin-left: 0.5em;
+    border: 0.13em solid #7A7A7A;
+}
+
 .search-bar button {
     background-color: #7F798B;
     color: #FFFFFF;
-    font-size:0.8em;
+    font-size:1em;
     border: none;
-    padding: 0.2em;
+    padding: 0.3em;
 }
 
 .search-bar button:hover {
@@ -266,3 +277,5 @@ footer .container{
     background-color: #EDE8F9;
     color: #7F798B;
 }
+
+

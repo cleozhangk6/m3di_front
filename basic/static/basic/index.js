@@ -1,6 +1,6 @@
 function populate_uniprot(){
-    document.getElementById('input_uniprot').value="Q9BYF1";
-    document.getElementById('input_residue').value="199";
+    document.getElementById('input_uni').value="Q9BYF1";
+    document.getElementById('input_var').value="199";
 }
 
 

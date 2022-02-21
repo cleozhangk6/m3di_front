@@ -5,7 +5,7 @@
 
     <h1>Basic Info</h1>
 
-    {% for object in object_list %}
+    {% for object in results_basic %}
         
         <p>You searched for <a href="{{ object.protein_link }}">{{ object.uniprot_id }}</a></p> <br>
         <li>Protein name: {{ object.protein_name }}</li>
@@ -14,7 +14,17 @@
 
     {% endfor %}
 
+    {% for object in results_topo %}
 
+    <li>Topology is {{ object.topology }}<li>
+
+    {% endfor %}
+
+    {% for object in results_variant %}
+
+        <li>Wild type variant is {{ object.res_wt }} and mutant variant is  {{ object.res_mut }}</li>
+
+    {% endfor %}
 
     <br>
     <br>

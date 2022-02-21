@@ -214,7 +214,6 @@ footer .container{
     height: 100px;
     margin-right:0;
     margin-left: auto;
-    position: relative;
     background-color: white;
 }
 
@@ -245,7 +244,7 @@ footer .container{
 .search-bar input {
     display: table-cell;
     font-size: small;
-    height: 1.2em;
+    height: 1.8em;
     text-align: start;
     text-indent: 0.3em;
     margin: 0.5em;
@@ -256,9 +255,9 @@ footer .container{
 .search-bar button {
     background-color: #7F798B;
     color: #FFFFFF;
-    font-size:0.8em;
+    font-size:1em;
     border: none;
-    padding: 0.2em;
+    padding: 0.3em;
 }
 
 .search-bar button:hover {
@@ -268,19 +267,28 @@ footer .container{
 }
 
 
+
 .results .container{
-    width: 50%;
-    height:300px;
+    width: auto;
+    height: auto;
     margin-right:auto;
     margin-left: 50px;
     padding-top: 20px;
     position: relative;
 }
 
-.results .container li {
+.results .container li, h3 {
     text-align: left;
 }
 
-.results .container h3 {
-    text-align: left;
+
+.results .variant-table{
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid;
+    padding: 0.5em;
+    padding-top: 0;
+}
+.results .variant-table th{
+    padding: 0.5em;
 }
