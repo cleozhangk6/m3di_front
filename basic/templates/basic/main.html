@@ -9,6 +9,7 @@
       <script src="https://kit.fontawesome.com/777bbb3675.js" crossorigin="anonymous"></script>
       <!--Link CSS stylesheet-->
       <link rel="stylesheet" href="{% static 'basic/styles.css' %}" />
+      <script src="{% static 'basic/cytoscape.js' %}"></script>
   </head>
 
   <body>
@@ -67,6 +68,11 @@
         
       <div class="container">
 
+        <h3>Interaction</h3>
+        <div id="cy"></div>
+        {{ results_interact_string|json_script:"interaction-data" }}
+
+
         <h3>Basic Info</h3>
         {% for object in results_basic %}
           <ul>
@@ -121,6 +127,8 @@
     
     <hr color="#CAC4D7">
     
+
+
     <footer>
       <div class="container">
         <span id="msc_left">MSc Bioinformatics and Systems Biology</span>
@@ -130,7 +138,8 @@
 
 
 
-    <script src="{% static 'basic/index.js' %}"></script>
+    <script src="{% static 'basic/scripts.js' %}"></script>
+    
 
   </body>
 </html>

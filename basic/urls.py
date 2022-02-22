@@ -13,3 +13,6 @@ urlpatterns = [
     # path('index/main/',MainView.as_view(),name='main'),
     path('index/main/',views.main_UniVar,name='main'),
 ]
+
+
+

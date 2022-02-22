@@ -279,3 +279,22 @@ footer .container{
 }
 
 
+.results .container{
+    width: 100%;
+    height: 100%;
+    margin-right:auto;
+    margin-left: auto;
+    padding-top: 20px;
+    position: relative;
+}
+
+
+#cy {
+    width: 100%;
+    height: 500px;
+    position: relative;
+    }
+
+.results canvas {
+    left: 0
+}

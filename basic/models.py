@@ -316,6 +316,7 @@ class StringInt(models.Model):
         db_table = 'String_int'
 
 
+
 class Topodom(models.Model):
     uniprot = models.ForeignKey(Pronameunique, models.DO_NOTHING, db_column='uniprot', blank=True, null=True)
     topology = models.CharField(max_length=30, blank=True, null=True)
@@ -545,3 +546,18 @@ class StringIdGeneName(models.Model):
     class Meta:
         managed = False
         db_table = 'string_id_gene_name'
+
+
+
+
+class StringInteractionUniprot(models.Model): 
+    id = models.IntegerField(primary_key=True)
+    uniprot_p1 = models.CharField(max_length=10, blank=True, null=True)
+    string_p1 = models.CharField(max_length=20, blank=True, null=True)
+    uniprot_p2 = models.CharField(max_length=10, blank=True, null=True)
+    string_p2 = models.CharField(max_length=20, blank=True, null=True)
+    combined_score = models.IntegerField(blank=True, null=True)
+    
+
+    class Meta:
+        managed = False

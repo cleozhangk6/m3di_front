@@ -112,7 +112,15 @@ def main_UniVar(request):
             results_variant = MissenseVarComCopy.objects.raw(
                 'SELECT * FROM Missense_Var_Com_Copy WHERE uniprot = %s', [query_uni]
             )
-            
+
+        results_interact = Pronameunique.objects.raw(
+            "SELECT uniprot_id, id, Json_object('uniprot_p1', uniprot_p1, 'uniprot_p2',  uniprot_p2) AS col_json FROM ProNameUnique LEFT JOIN string_interaction_uniprot ON uniprot_id=uniprot_p1 WHERE uniprot_id = %s LIMIT 10", [query_uni]
+        )
+        results_interact_list = []
+        for item in results_interact:
+            results_interact_list.append(item.col_json)
+        results_interact_string = '{"interactors": [' + ",".join(results_interact_list) + ']}'
+
         context = {
             'query_uni' : query_uni,
             'query_var' : query_var,
@@ -120,7 +128,8 @@ def main_UniVar(request):
             'results_signal': results_signal,
             'results_topo': results_topo,
             'results_variant': results_variant,
-            }
+            'results_interact_string': results_interact_string
+        }
 
         return render(request, 'basic/main.html', context)
 
