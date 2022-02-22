@@ -33,7 +33,7 @@ class IndexView(generic.TemplateView):
 
 #             return queryset_chain
 #         return ProNameUnique.objects.none()
-#testinggit123
+# testinggit123
 
 
 # class SearchView(generic.ListView):
@@ -55,13 +55,16 @@ def search_view(request):
         query_var = request.GET['v']
 
         results_basic = Basicinfo2.objects.raw(
-            'SELECT * FROM BasicInfo2 LEFT JOIN SignalPeptide ON uniprot_id=sp_uniprot_id WHERE uniprot_id = %s', [query_uni]
+            'SELECT * FROM BasicInfo2 LEFT JOIN SignalPeptide ON uniprot_id=sp_uniprot_id WHERE uniprot_id = %s', [
+                query_uni]
         )
         results_topo = Topodom.objects.raw(
-            'SELECT id, topology FROM (SELECT * FROM TopoDom WHERE uniprot = %s) AS tab WHERE topo_start <= %s and topo_end >= %s', [query_uni, query_var, query_var]
+            'SELECT id, topology FROM (SELECT * FROM TopoDom WHERE uniprot = %s) AS tab WHERE topo_start <= %s and topo_end >= %s', [
+                query_uni, query_var, query_var]
         )
         results_variant = MissenseVarCom.objects.raw(
-            'SELECT * FROM Missense_Var_Com WHERE uniprot = %s and posuniprot = %s', [query_uni, query_var]
+            'SELECT * FROM Missense_Var_Com WHERE uniprot = %s and posuniprot = %s', [
+                query_uni, query_var]
         )
         context = {
             'results_basic': results_basic,
@@ -85,7 +88,6 @@ def search_view(request):
 #         return Basicinfo2.objects.none()
 
 
-
 def main_UniVar(request):
     if request.method == "GET":
         query_uni = request.GET['q']
@@ -96,34 +98,44 @@ def main_UniVar(request):
         )
 
         results_signal = Pronameunique.objects.raw(
-            'SELECT * FROM ProNameUnique LEFT JOIN SignalPeptide ON uniprot_id=sp_uniprot_id WHERE uniprot_id = %s', [query_uni]
+            '''SELECT * FROM ProNameUnique LEFT JOIN SignalPeptide 
+            ON uniprot_id=sp_uniprot_id WHERE uniprot_id = %s''', [
+                query_uni]
         )
 
         results_topo = Topodom.objects.raw(
-            'SELECT id, topology FROM (SELECT * FROM TopoDom WHERE uniprot = %s) AS tab WHERE topo_start <= %s and topo_end >= %s', [query_uni, query_var, query_var]
+            '''SELECT id, topology FROM (SELECT * FROM TopoDom WHERE uniprot = %s) AS tab 
+            WHERE topo_start <= %s and topo_end >= %s''', [
+                query_uni, query_var, query_var]
         )
 
         if query_uni and query_var:
 
             results_variant = MissenseVarComCopy.objects.raw(
-                'SELECT * FROM Missense_Var_Com_Copy WHERE uniprot = %s and posuniprot = %s', [query_uni, query_var]
+                'SELECT * FROM Missense_Var_Com_Copy WHERE uniprot = %s and posuniprot = %s', [
+                    query_uni, query_var]
             )
         elif query_uni:
             results_variant = MissenseVarComCopy.objects.raw(
-                'SELECT * FROM Missense_Var_Com_Copy WHERE uniprot = %s', [query_uni]
+                'SELECT * FROM Missense_Var_Com_Copy WHERE uniprot = %s', [
+                    query_uni]
             )
 
         results_interact = Pronameunique.objects.raw(
-            "SELECT uniprot_id, id, Json_object('uniprot_p1', uniprot_p1, 'uniprot_p2',  uniprot_p2) AS col_json FROM ProNameUnique LEFT JOIN string_interaction_uniprot ON uniprot_id=uniprot_p1 WHERE uniprot_id = %s LIMIT 10", [query_uni]
+            """SELECT uniprot_id, id, Json_object('uniprot_p1', uniprot_p1, 'uniprot_p2',  uniprot_p2) 
+            AS col_json FROM ProNameUnique LEFT JOIN string_interaction_uniprot 
+            ON uniprot_id=uniprot_p1 WHERE uniprot_id = %s LIMIT 10""", [
+                query_uni]
         )
         results_interact_list = []
         for item in results_interact:
             results_interact_list.append(item.col_json)
-        results_interact_string = '{"interactors": [' + ",".join(results_interact_list) + ']}'
+        results_interact_string = '{"interactors": [' + \
+            ",".join(results_interact_list) + ']}'
 
         context = {
-            'query_uni' : query_uni,
-            'query_var' : query_var,
+            'query_uni': query_uni,
+            'query_var': query_var,
             'results_basic': results_basic,
             'results_signal': results_signal,
             'results_topo': results_topo,
@@ -132,4 +144,3 @@ def main_UniVar(request):
         }
 
         return render(request, 'basic/main.html', context)
-
