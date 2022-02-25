@@ -58,10 +58,10 @@ def search_view(request):
             'SELECT * FROM BasicInfo2 LEFT JOIN SignalPeptide ON uniprot_id=sp_uniprot_id WHERE uniprot_id = %s', [
                 query_uni]
         )
-        results_topo = Topodom.objects.raw(
-            'SELECT id, topology FROM (SELECT * FROM TopoDom WHERE uniprot = %s) AS tab WHERE topo_start <= %s and topo_end >= %s', [
-                query_uni, query_var, query_var]
-        )
+        # results_topo = Topodom.objects.raw(
+        #     'SELECT id, topology FROM (SELECT * FROM TopoDom WHERE uniprot = %s) AS tab WHERE topo_start <= %s and topo_end >= %s', [
+        #         query_uni, query_var, query_var]
+        # )
         results_variant = MissenseVarCom.objects.raw(
             'SELECT * FROM Missense_Var_Com WHERE uniprot = %s and posuniprot = %s', [
                 query_uni, query_var]
@@ -97,11 +97,7 @@ def main_UniVar(request):
             'SELECT * FROM BasicInfo2 WHERE uniprot_id = %s', [query_uni]
         )
 
-        results_signal = Pronameunique.objects.raw(
-            '''SELECT * FROM ProNameUnique LEFT JOIN SignalPeptide 
-            ON uniprot_id=sp_uniprot_id WHERE uniprot_id = %s''', [
-                query_uni]
-        )
+        
 
         results_topo = Topodom.objects.raw(
             '''SELECT id, topology FROM (SELECT * FROM TopoDom WHERE uniprot = %s) AS tab 
@@ -111,27 +107,59 @@ def main_UniVar(request):
 
         if query_uni and query_var:
 
-            results_variant = MissenseVarComCopy.objects.raw(
-                'SELECT * FROM Missense_Var_Com_Copy WHERE uniprot = %s and posuniprot = %s', [
+            results_variant = MissenseVarCom.objects.raw(
+                'SELECT * FROM Missense_Var_Com WHERE uniprot = %s and posuniprot = %s', [
                     query_uni, query_var]
             )
+
+            results_signal = Signalpeptide.objects.raw(
+               '''SELECT sp_uniprot_id, pos, CASE WHEN pos >= %s THEN \'true\' ELSE \'false\' END FROM 
+               (SELECT sp_uniprot_id, signal_peptide as pos 
+               from SignalPeptide WHERE sp_uniprot_id = %s) AS tab;''', [query_var, query_uni]
+            )
+
+            results_transmem = Transmem.objects.raw(
+                '''SELECT * from TransMem WHERE tm_uniprot_id = %s AND tm_start <= %s AND tm_end >= %s 
+            ;''', [query_uni, query_var, query_var]
+            )
+
+
         elif query_uni:
             results_variant = MissenseVarComCopy.objects.raw(
                 'SELECT * FROM Missense_Var_Com_Copy WHERE uniprot = %s', [
                     query_uni]
             )
-
-        results_interact = Pronameunique.objects.raw(
-            """SELECT uniprot_id, id, Json_object('uniprot_p1', uniprot_p1, 'uniprot_p2',  uniprot_p2) 
-            AS col_json FROM ProNameUnique LEFT JOIN string_interaction_uniprot 
-            ON uniprot_id=uniprot_p1 WHERE uniprot_id = %s LIMIT 10""", [
-                query_uni]
+        results_interact = StringInteractionUniprot.objects.raw(
+            '''SELECT id, Json_object('uniprot_p1', uniprot_p1, 'uniprot_p2',  uniprot_p2) 
+             AS col_json FROM string_interaction_uniprot WHERE uniprot_p1 = %s order by combined_score limit 10;''', [query_uni]
         )
+
+        results_interact_additional = StringInteractionUniprot.objects.raw(
+            '''WITH t AS (SELECT uniprot_p2 FROM string_interaction_uniprot WHERE uniprot_p1 = %s ORDER BY combined_score limit 10)
+            SELECT id, Json_object('uniprot_p1', uniprot_p1, 'uniprot_p2',  uniprot_p2) AS col_json_additional FROM string_interaction_uniprot WHERE uniprot_p1 in (select * from t) and uniprot_p2 in (select * from t);''', [query_uni]
+        )
+        # results_interact_list = []
+        # for item in results_interact:
+        #     results_interact_list.append('{\'p1\','+str(item.uniprot_p1)+',\'p2\','+ str(item.uniprot_p2)+'}')
+
+        # results_interact_string = '{"interactors": [' + \
+        #     ",".join(results_interact_list) + ']}'
+        
+        # results_interact = Pronameunique.objects.raw(
+        #     """SELECT uniprot_p1, uniprot_p2, id, Json_object('uniprot_p1', uniprot_p1, 'uniprot_p2',  uniprot_p2) 
+        #     AS col_json FROM ProNameUnique LEFT JOIN string_interaction_uniprot 
+        #     ON uniprot_id=uniprot_p1 WHERE uniprot_id = %s LIMIT 10""", [
+        #         query_uni]
+        # )
         results_interact_list = []
         for item in results_interact:
             results_interact_list.append(item.col_json)
+        for item in results_interact_additional:
+            results_interact_list.append(item.col_json_additional)
         results_interact_string = '{"interactors": [' + \
             ",".join(results_interact_list) + ']}'
+
+
 
         context = {
             'query_uni': query_uni,
@@ -140,7 +168,8 @@ def main_UniVar(request):
             'results_signal': results_signal,
             'results_topo': results_topo,
             'results_variant': results_variant,
-            'results_interact_string': results_interact_string
+            'results_interact_string': results_interact_string,
+            'results_transmem': results_transmem
         }
 
         return render(request, 'basic/main.html', context)

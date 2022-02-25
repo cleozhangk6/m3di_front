@@ -280,7 +280,7 @@ class Sequences(models.Model):
 
 
 class Signalpeptide(models.Model):
-    sp_uniprot_id = models.CharField(max_length=100, blank=True, null=True)
+    sp_uniprot_id = models.CharField(max_length=100, blank=True, null=False, primary_key=True)
     signal_peptide = models.CharField(max_length=5, blank=True, null=True)
 
     class Meta:

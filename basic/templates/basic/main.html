@@ -84,7 +84,23 @@
           <h3>Signal Peptide</h3>
           {% for object in results_signal %}
           <ul>
-            <li>Signal peptide: 1-{{ object.signal_peptide }}</li>
+            {%if results_signal.pos == 'true' %}
+            <p>The variant is in the signal peptide- position {{results_signal.pos}}</p>
+            {% else%}
+            <p>The variant is not in the signal peptide</p>
+            {%endif%}
+
+          </ul>
+          {% endfor %}
+
+          <h3>Transmembrane Domain</h3>
+          {% for object in results_transmem %}
+            <p>The variant is in a transmembrane domain. The domain range is from {{objects.tm_end}}</p>
+            {%empty%}
+            <p>Not in domain</p>
+          <ul>
+
+
           </ul>
           {% endfor %}
 
