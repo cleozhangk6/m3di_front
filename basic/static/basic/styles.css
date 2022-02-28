@@ -269,25 +269,27 @@ footer .container{
 
 
 .results .container{
-    width: 100%;
+    width: 90%;
     height: 100%;
     margin-right:auto;
-    margin-left: 50px;
+    margin-left: auto;
     padding-top: 20px;
     position: relative;
 }
 
 #cy {
-    width: 100%;
+    width: 80%;
     height: 500px;
+    margin-left: auto;
+    padding-top: auto;
     position: relative;
     }
 
 .results canvas {
-    left: 0
+    left: 0;
 }
 
-.results .container li, h3 {
+.results .container li, h3, ul {
     text-align: left;
 }
 

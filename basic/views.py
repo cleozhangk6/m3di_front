@@ -93,31 +93,50 @@ def main_UniVar(request):
         query_uni = request.GET['q']
         query_var = request.GET['v']
 
-        results_basic = Basicinfo2.objects.raw(
-            'SELECT * FROM BasicInfo2 WHERE uniprot_id = %s', [query_uni]
+        results_protein = Pronameunique.objects.raw(
+            'SELECT * FROM ProNameUnique join ProteinLink on ProNameUnique.uniprot_id = ProteinLink.uniprot_id where ProNameUnique.uniprot_id = %s' , [query_uni]
         )
 
-        results_signal = Pronameunique.objects.raw(
-            '''SELECT * FROM ProNameUnique LEFT JOIN SignalPeptide 
-            ON uniprot_id=sp_uniprot_id WHERE uniprot_id = %s''', [
-                query_uni]
+        results_gene = Geneinfo.objects.raw(
+            'SELECT * from GeneInfo where uniprot_id = %s', [query_uni]
         )
 
-        results_topo = Topodom.objects.raw(
-            '''SELECT id, topology FROM (SELECT * FROM TopoDom WHERE uniprot = %s) AS tab 
-            WHERE topo_start <= %s and topo_end >= %s''', [
-                query_uni, query_var, query_var]
+        results_loc = Topocellcomp.objects.raw( 
+            'SELECT * from TopoCellComp where uniprot_id = %s', [query_uni]
         )
+        
+        
+
+    
 
         if query_uni and query_var:
 
-            results_variant = MissenseVarComCopy.objects.raw(
-                'SELECT * FROM Missense_Var_Com_Copy WHERE uniprot = %s and posuniprot = %s', [
+            results_variant = MissenseVarCom.objects.raw(
+                'SELECT * FROM Missense_Var_Com WHERE uniprot = %s and posuniprot = %s', [
                     query_uni, query_var]
             )
+
+            results_signal = Signalpeptide.objects.raw(
+            'SELECT * FROM SignalPeptide where sp_uniprot_id = %s', [query_uni]
+            )
+
+            results_signal_var = Signalpeptide.objects.raw(
+            'SELECT * FROM SignalPeptide where sp_uniprot_id = %s and signal_peptide > %s ', [query_uni, query_var]
+            )   
+
+            trans_dom_var = Transmem.objects.raw(
+            'SELECT * FROM TransMem where tm_start <= %s AND tm_end >= %s AND tm_uniprot_id = %s ', [query_var, query_var, query_uni]
+            )
+
+            results_topo = Topodom.objects.raw(
+            '''SELECT id, topology FROM (SELECT * FROM TopoDom WHERE uniprot = %s) AS tab 
+            WHERE topo_start <= %s and topo_end >= %s''', [
+                query_uni, query_var, query_var]
+            )
+
         elif query_uni:
-            results_variant = MissenseVarComCopy.objects.raw(
-                'SELECT * FROM Missense_Var_Com_Copy WHERE uniprot = %s', [
+            results_variant = MissenseVarCom.objects.raw(
+                'SELECT * FROM Missense_Var_Com WHERE uniprot = %s', [
                     query_uni]
             )
 
@@ -136,9 +155,13 @@ def main_UniVar(request):
         context = {
             'query_uni': query_uni,
             'query_var': query_var,
-            'results_basic': results_basic,
+            'results_protein' : results_protein, 
+            'results_gene': results_gene, 
             'results_signal': results_signal,
+            'results_signal_var' : results_signal_var,
+            'trans_dom_var' : trans_dom_var, 
             'results_topo': results_topo,
+            'results_loc': results_loc,
             'results_variant': results_variant,
             'results_interact_string': results_interact_string
         }

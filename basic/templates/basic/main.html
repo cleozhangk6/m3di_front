@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
   <head> 
-      <title>M3DI | Results</title>
+      <title>M3DI | Results </title>
       <!--Font Awesome kit's code-->
       <script src="https://kit.fontawesome.com/777bbb3675.js" crossorigin="anonymous"></script>
       <!--Link CSS stylesheet-->
@@ -74,19 +74,21 @@
 
 
         <h3>Basic Info</h3>
-        {% for object in results_basic %}
-          <ul>
-            <li>Protein name: <a href="{{ object.protein_link }}">{{ object.protein_name }}</a></li>
-            <li>Gene name: <a href="{{ object.gene_link }}">{{ object.gene_name }}</a></li>
-          </ul>
-          {% endfor %}
 
-          <h3>Signal Peptide</h3>
-          {% for object in results_signal %}
+        {% for object in results_protein %}
           <ul>
-            <li>Signal peptide: 1-{{ object.signal_peptide }}</li>
+            <li> Protein name: <a href="{{ object.protein_link }}">{{ object.protein_name }}</a></li>
           </ul>
-          {% endfor %}
+        {% endfor %}
+
+        {% for object in results_gene %}
+        <ul>
+          <li> Gene name(s): <a href="{{ object.gene_link}}">{{object.gene_name }}</a></li>
+        </ul>
+        {% endfor %}
+
+        
+      
 
         <h3>Variants</h3>
           <table class="variant-table">
@@ -110,12 +112,54 @@
           {% endfor %}
           </table>
               
-        
-        <h3>Topology</h3>
+          <h3>Signal Peptide</h3>
+          <ul>
+          {% for object in results_signal %}
+            <li>Signal peptide: 1-{{ object.signal_peptide }}</li>
+          
+          {% for object in results_signal_var %}
+            <li>Variant located in signal peptide</li>
+            {% empty %}
+            <li>Variant not located in signal peptide</li>
+          
+          {% endfor %}
+          {% endfor %}
+          </ul>
+
+
+          <h3>Transmembrane Domains</h3>
+          
+          <ul>
+            <li> Membrane localization:</li>
+            
+            {% for object in results_loc %} 
+            <a  href="{{ object.cellcomp_link}}">{{object.cellcomp_label }} , </a></li>
+            {% empty %} 
+            <li> </li>
+            <li> Protein type:<a href="{{ object.topo_link}}">{{object.topo_label }}</a> </li>
+            {% empty %} 
+            <li> </li>
+            {% endfor %}
+
+            {% for object in trans_dom_var %}
+            <li> Variant located in transmembrane domain: {{object.tm_start}} - {{object.tm_end}}</li>
+            {% empty %}
+            <li> Variant not located in transmembrane domain</li>
+            {% endfor %}
+          </ul>
+
+
+
+
+
+    
+        <h3>Topology domains</h3>
         {% for object in results_topo %}
           <ul>
             <li>Variant {{ query_var }} is located at the {{ object.topology }} region</li>
           </ul>
+          {% empty %}
+          <li> Variant not in topological domain(s) </li>
         {% endfor %}
 
 
