@@ -27,48 +27,53 @@ function stickyHead() {
 
 
 
-//Create a JavaScript string containing JSON sythax
-let test = '{"interactors": [' +
-  '{"uniprot_p1": "P84085", "uniprot_p2": "Q14123"},' +
-  '{"uniprot_p1": "P84085", "uniprot_p2": "Q13177"},' +
-  '{"uniprot_p1": "P84085", "uniprot_p2": "O95755"} ]}';
+// //Create a JavaScript string containing JSON sythax
+// let test = '{"interactors": [' +
+//   '{"uniprot_p1": "P84085", "uniprot_p2": "Q14123"},' +
+//   '{"uniprot_p1": "P84085", "uniprot_p2": "Q13177"},' +
+//   '{"uniprot_p1": "P84085", "uniprot_p2": "O95755"} ]}';
 
-//Use the JavaScript built-in function JSON.parse() to convert the string into a JavaScript object:
-const obj = JSON.parse(test);
+// //Use the JavaScript built-in function JSON.parse() to convert the string into a JavaScript object:
+// const obj = JSON.parse(test);
 
-//Create empty network with styles
-var cy = cytoscape({
-  container: document.getElementById('cy'),
-  style: [
-    {
-      selector: 'node',
-      style: {
-          shape: 'hexagon',
-          'background-color': 'red',
-          label: 'data(id)'
-      }
-    }],
-  elements: [
-    ]
-});
+// //Create empty network with styles
+// var cy = cytoscape({
+//   container: document.getElementById('cy'),
+//   style: [
+//     {
+//       selector: 'node',
+//       style: {
+//           shape: 'hexagon',
+//           'background-color': 'red',
+//           label: 'data(id)'
+//       }
+//     }],
+//   elements: [
+//     ]
+// });
 
-//Add nodes and edges using a loop
-for (var i = 0; i < obj.interactors.length; i++) {
-  cy.add(
-    { data: { id: obj.interactors[i].uniprot_p1 } }
-  );
-  cy.add(
-    { data: { id: obj.interactors[i].uniprot_p2 } }
-  );
-  cy.add(
-    { data: { id: i, source: obj.interactors[i].uniprot_p1, target: obj.interactors[i].uniprot_p2 } }
-  )
-};
+// //Add nodes and edges using a loop
+// for (var i = 0; i < obj.interactors.length; i++) {
+//   cy.add(
+//     { data: { id: obj.interactors[i].uniprot_p1 } }
+//   );
+//   cy.add(
+//     { data: { id: obj.interactors[i].uniprot_p2 } }
+//   );
+//   cy.add(
+//     { data: { id: i, source: obj.interactors[i].uniprot_p1, target: obj.interactors[i].uniprot_p2 } }
+//   )
+// };
 
-//Change layout
-cy.layout({
-  name: 'circle'
-});
+// //Change layout
+// cy.layout({
+//   name: 'circle'
+// });
+
+
+
+
+
 
 // var cy = cytoscape({
 //   container: document.getElementById('cy'),
@@ -96,5 +101,79 @@ cy.layout({
 
 
 
+// // 3 
+
+// Promise.all([
+//   fetch('cy-style.json')
+//     .then(function(res){
+//       return res.json()
+//     }),
+//   fetch('data.json')
+//     .then(function(res) {
+//       return res.json()
+//   })
+// ])
+//   .then(function(dataArray) {
+//     var cy = window.cy = cytoscape({
+//       container: document.getElementById('cy'),
+//       layout: {
+//         name: 'concentric'
+//       },
+//       style: dataArray[0],
+//       elements: dataArray[1]
+//     });
+//   });
 
 
+// 4
+
+//Create a JavaScript string containing JSON sythax
+let test = '{"interactors": [' +
+'{"uniprot_p1": "P84085", "uniprot_p2": "Q14123", "type": "structure"},' +
+'{"uniprot_p1": "P84085", "uniprot_p2": "Q13177", "type": "model"},' +
+'{"uniprot_p1": "P84085", "uniprot_p2": "O95755", "type": "none"} ]}';
+
+//Use the JavaScript built-in function JSON.parse() to convert the string into a JavaScript object:
+const obj = JSON.parse(test);
+
+//Create empty network with styles
+var cy = cytoscape({
+container: document.getElementById('cy'),
+style: [
+  {
+    selector: 'node',
+    style: {
+        shape: 'hexagon',
+        'background-color': 'red',
+        label: 'data(id)' }
+  }, {
+    selector: 'edge[type=\"structure\"]',
+    style: {
+      "line-color": "green"
+      } 
+    }
+  ],
+elements: [
+  ]
+});
+
+//Add nodes and edges using a loop
+for (var i = 0; i < obj.interactors.length; i++) {
+cy.add(
+  { data: { id: obj.interactors[i].uniprot_p1 } }
+);
+cy.add(
+  { data: { id: obj.interactors[i].uniprot_p2 } }
+);
+cy.add(
+  { data: { id: i, 
+    source: obj.interactors[i].uniprot_p1, 
+    target: obj.interactors[i].uniprot_p2,
+    type: obj.interactors[i].type,} }
+)
+};
+
+//Change layout
+cy.layout({
+name: 'concentric'
+});

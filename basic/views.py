@@ -111,27 +111,93 @@ def main_UniVar(request):
 
         if query_uni and query_var:
 
-            results_variant = MissenseVarComCopy.objects.raw(
-                'SELECT * FROM Missense_Var_Com_Copy WHERE uniprot = %s and posuniprot = %s', [
+            results_variant = MissenseVarCom.objects.raw(
+                'SELECT * FROM Missense_Var_Com WHERE uniprot = %s and posuniprot = %s', [
                     query_uni, query_var]
             )
         elif query_uni:
-            results_variant = MissenseVarComCopy.objects.raw(
-                'SELECT * FROM Missense_Var_Com_Copy WHERE uniprot = %s', [
+            results_variant = MissenseVarCom.objects.raw(
+                'SELECT * FROM Missense_Var_Com WHERE uniprot = %s', [
                     query_uni]
             )
+        else:
+            results_variant = MissenseVarCom.objects.none()
 
-        results_interact = Pronameunique.objects.raw(
-            """SELECT uniprot_id, id, Json_object('uniprot_p1', uniprot_p1, 'uniprot_p2',  uniprot_p2) 
-            AS col_json FROM ProNameUnique LEFT JOIN string_interaction_uniprot 
-            ON uniprot_id=uniprot_p1 WHERE uniprot_id = %s LIMIT 10""", [
-                query_uni]
+        # results_interact = Pronameunique.objects.raw(
+        #     """SELECT uniprot_id, id, Json_object('uniprot_p1', uniprot_p1, 'uniprot_p2',  uniprot_p2) 
+        #     AS col_json FROM ProNameUnique LEFT JOIN string_interaction_uniprot 
+        #     ON uniprot_id=uniprot_p1 WHERE uniprot_id = %s LIMIT 10""", [
+        #         query_uni]
+        # )
+        # results_interact_list = []
+        # for item in results_interact:
+        #     results_interact_list.append(item.col_json)
+        # results_interact_string = '{"interactors": [' + \
+        #     ",".join(results_interact_list) + ']}'
+
+        results_interact = Stringinteractions.objects.raw(
+            '''SELECT id, 
+                    s.string_p1, 
+                    a.uniprot_id as uniprot_p1, 
+                    s.string_p2, 
+                    b.uniprot_id as uniprot_p2, 
+                    experimental, 
+                    data_base, 
+                    combined_score, 
+                    Json_object('p1', a.uniprot_id, 'p2', b.uniprot_id, 'exp', experimental) 
+                    as col_json
+                FROM StringInteractions as s
+                LEFT JOIN StringToUniprot as a
+                    ON a.string_id = s.string_p1
+                LEFT JOIN StringToUniprot as b
+                    ON b.string_id = s.string_p2
+                WHERE a.uniprot_id = %s
+                    AND b.uniprot_id IS NOT NULL AND experimental > 0
+                ORDER BY s.combined_score
+                limit 10;''', [query_uni]
         )
+
+        results_interact_additional = Stringinteractions.objects.raw(
+            '''WITH t as 
+                    (SELECT b.uniprot_id as uniprot_p2
+                    FROM StringInteractions as s
+                    LEFT JOIN StringToUniprot as a
+                        ON a.string_id = s.string_p1
+                    LEFT JOIN StringToUniprot as b
+                        ON b.string_id = s.string_p2
+                    WHERE a.uniprot_id = %s
+                        AND b.uniprot_id IS NOT NULL
+                        AND experimental > 0
+                    ORDER BY s.combined_score
+                    limit 10)
+                SELECT id, 
+                    u.string_p1, 
+                    c.uniprot_id as uniprot_p1, 
+                    u.string_p2, 
+                    d.uniprot_id as uniprot_p2, 
+                    u.experimental, 
+                    u.data_base,  
+                    u.combined_score, 
+                    Json_object('p1', c.uniprot_id, 'p2', d.uniprot_id, 'exp', u.experimental) 
+                    AS col_json_additional
+                FROM StringInteractions as u
+                LEFT JOIN StringToUniprot as c
+                    ON c.string_id = u.string_p1
+                LEFT JOIN StringToUniprot as d
+                    ON d.string_id = u.string_p2
+                WHERE c.uniprot_id in (select * from t) 
+                    AND d.uniprot_id in (select * from t)
+                    AND c.uniprot_id > d.uniprot_id;''', [query_uni]
+        )
+
         results_interact_list = []
         for item in results_interact:
             results_interact_list.append(item.col_json)
+        for item in results_interact_additional:
+            results_interact_list.append(item.col_json_additional)
         results_interact_string = '{"interactors": [' + \
             ",".join(results_interact_list) + ']}'
+
 
         context = {
             'query_uni': query_uni,
@@ -144,3 +210,5 @@ def main_UniVar(request):
         }
 
         return render(request, 'basic/main.html', context)
+
+

@@ -1,0 +1,26 @@
+[{
+    "selector": "node",
+    "style": {
+      "shape": "ellipse",
+      "background-color": "red",
+      "width": 4,
+      "label": "data(name)"
+    }
+  }, {
+    "selector": "node[?query]",
+    "style": {
+      "background-color": "blue"
+    }
+  }, {
+    "selector": "edge",
+    "style": {
+      }
+  }, {
+    "selector": "edge[group=\"structure\"]",
+    "style": {
+      "line-color": "green"}
+  }, {
+    "selector": "edge[exp > 0]",
+    "style": {
+      "line-color": "red"}
+  }]

@@ -25,7 +25,7 @@ function stickyHead() {
 
 
 
-
+// 1
 
 // //Create a JavaScript string containing JSON sythax
 // let test = '{"interactors": [' +
@@ -72,6 +72,8 @@ function stickyHead() {
 
 
 
+//2
+
 let test2 = document.getElementById('interaction-data').textContent;
 // remove all backward slashes
 let test3 = test2.replaceAll('\\','');
@@ -87,10 +89,20 @@ var cy = cytoscape({
     {
       selector: 'node',
       style: {
-          shape: 'hexagon',
-          'background-color': 'red',
+          shape: 'ellipse',
+          'border-width': 4,
+          'border-color': 'red',
+          'background-color': '#ffffff',
           label: 'data(id)'
-      }
+      }}, 
+      {
+        selector: "edge",
+        style: {
+          width: 4}}, 
+      {
+        selector: "edge[exp > 0]",
+        style: {
+          "line-color": "red"}
     }],
   elements: [
     ]
@@ -99,17 +111,52 @@ var cy = cytoscape({
 //Add nodes and edges using a loop
 for (var i = 0; i < obj.interactors.length; i++) {
   cy.add(
-    { data: { id: obj.interactors[i].uniprot_p1 } }
+    { data: { id: obj.interactors[i].p1 } }
   );
   cy.add(
-    { data: { id: obj.interactors[i].uniprot_p2 } }
+    { data: { id: obj.interactors[i].p2 } }
   );
   cy.add(
-    { data: { id: i, source: obj.interactors[i].uniprot_p1, target: obj.interactors[i].uniprot_p2 } }
+    { data: { id: i, 
+      source: obj.interactors[i].p1, 
+      target: obj.interactors[i].p2,
+      exp: obj.interactors[i].exp, } }
   )
 };
 
 //Change layout
 cy.layout({
-  name: 'circle'
+  name: 'concentric'
 });
+
+
+
+
+// 3
+
+// Promise.all([
+//   fetch('/static/basic/cy-style.json')
+//     .then(function(res){
+//       return res.json()
+//     }),
+//   fetch('/static/basic/data.json')
+//     .then(function(res) {
+//       return res.json()
+//   })
+// ])
+//   .then(function(dataArray) {
+//     var cy = cytoscape({
+//       container: document.getElementById('cy'),
+//       layout: {
+//         name: 'concentric'
+//       },
+//       style: dataArray[0],
+//       elements: dataArray[1]
+//     });
+//   });
+
+
+
+
+
+
