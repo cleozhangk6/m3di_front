@@ -125,19 +125,59 @@ def main_UniVar(request):
 
 
         elif query_uni:
-            results_variant = MissenseVarComCopy.objects.raw(
+            results_variant = MissenseVarCom.objects.raw(
                 'SELECT * FROM Missense_Var_Com_Copy WHERE uniprot = %s', [
                     query_uni]
             )
-        results_interact = StringInteractionUniprot.objects.raw(
-            '''SELECT id, Json_object('uniprot_p1', uniprot_p1, 'uniprot_p2',  uniprot_p2) 
-             AS col_json FROM string_interaction_uniprot WHERE uniprot_p1 = %s order by combined_score limit 10;''', [query_uni]
+
+        results_interact = Stringinteractions.objects.raw(
+            '''SELECT id, s.string_p1, a.uniprot_id as uniprot_p1, s.string_p2, b.uniprot_id as uniprot_p2, experimental, data_base, combined_score, Json_object('uniprot_p1', a.uniprot_id, 'uniprot_p2',  b.uniprot_id) AS col_json
+                FROM StringInteractions as s
+                LEFT JOIN StringToUniprot as a
+                ON a.string_id = s.string_p1
+                LEFT JOIN StringToUniprot as b
+                ON b.string_id = s.string_p2
+                WHERE a.uniprot_id = %s
+                AND b.uniprot_id IS NOT NULL AND experimental > 0
+                ORDER BY s.combined_score
+                limit 10;''', [query_uni]
         )
 
-        results_interact_additional = StringInteractionUniprot.objects.raw(
-            '''WITH t AS (SELECT uniprot_p2 FROM string_interaction_uniprot WHERE uniprot_p1 = %s ORDER BY combined_score limit 10)
-            SELECT id, Json_object('uniprot_p1', uniprot_p1, 'uniprot_p2',  uniprot_p2) AS col_json_additional FROM string_interaction_uniprot WHERE uniprot_p1 in (select * from t) and uniprot_p2 in (select * from t);''', [query_uni]
+        results_interact_additional = Stringinteractions.objects.raw(
+            '''WITH t as (SELECT b.uniprot_id as uniprot_p2
+                FROM StringInteractions as s
+                LEFT JOIN StringToUniprot as a
+                ON a.string_id = s.string_p1
+                LEFT JOIN StringToUniprot as b
+                ON b.string_id = s.string_p2
+                WHERE a.uniprot_id = %s
+                AND b.uniprot_id IS NOT NULL
+                AND experimental > 0
+                ORDER BY s.combined_score
+                limit 10)
+                SELECT id, u.string_p1, c.uniprot_id as uniprot_p1, u.string_p2, d.uniprot_id as uniprot_p2, u.experimental, u.data_base, u.combined_score, 
+                Json_object('uniprot_p1', c.uniprot_id, 'uniprot_p2',  d.uniprot_id) AS col_json_additional
+                FROM StringInteractions as u
+                LEFT JOIN StringToUniprot as c
+                ON c.string_id = u.string_p1
+                LEFT JOIN StringToUniprot as d
+                ON d.string_id = u.string_p2
+                WHERE c.uniprot_id in (select * from t) AND d.uniprot_id in (select * from t);''', [query_uni]
         )
+
+
+         # ------This bit works (but querying from a denormalised table)-----
+        # results_interact = StringInteractionUniprot.objects.raw(
+        #     '''SELECT id, uniprot_p2, Json_object('uniprot_p1', uniprot_p1, 'uniprot_p2',  uniprot_p2) 
+        #      AS col_json FROM string_interaction_uniprot WHERE uniprot_p1 = %s order by combined_score limit 10;''', [query_uni]
+        # )
+
+        # results_interact_additional = StringInteractionUniprot.objects.raw(
+        #     '''WITH t AS (SELECT uniprot_p2 FROM string_interaction_uniprot WHERE uniprot_p1 = %s ORDER BY combined_score limit 10)
+        #     SELECT id, Json_object('uniprot_p1', uniprot_p1, 'uniprot_p2',  uniprot_p2) AS col_json_additional FROM string_interaction_uniprot WHERE uniprot_p1 in (select * from t) and uniprot_p2 in (select * from t);''', [query_uni]
+        # )
+        #  ------This bit works-----
+
         # results_interact_list = []
         # for item in results_interact:
         #     results_interact_list.append('{\'p1\','+str(item.uniprot_p1)+',\'p2\','+ str(item.uniprot_p2)+'}')

@@ -87,7 +87,7 @@ var cy = cytoscape({
     {
       selector: 'node',
       style: {
-          shape: 'hexagon',
+          shape: 'elipse',
           'background-color': 'red',
           label: 'data(id)'
       }
@@ -111,5 +111,5 @@ for (var i = 0; i < obj.interactors.length; i++) {
 
 //Change layout
 cy.layout({
-  name: 'circle'
+  name: 'concentric'
 });

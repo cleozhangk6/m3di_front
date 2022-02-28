@@ -9,7 +9,7 @@ from django.db import models
 
 
 class Basicinfo2(models.Model):
-    uniprot_id = models.CharField(max_length=10, blank=True, primary_key= True)
+    uniprot_id = models.CharField(max_length=10, blank=True, null=True)
     protein_link = models.TextField(blank=True, null=True)
     protein_name = models.TextField(blank=True, null=True)
     gene_name = models.TextField(blank=True, null=True)
@@ -30,29 +30,6 @@ class Bindsite(models.Model):
     class Meta:
         managed = False
         db_table = 'BindSite'
-
-
-class Domainnameunique(models.Model):
-    dm_id = models.AutoField(primary_key=True)
-    domain_name = models.CharField(max_length=50, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'DomainNameUnique'
-
-
-class Domains2(models.Model):
-    uniprot_id = models.CharField(max_length=10, blank=True, null=True)
-    protein_name = models.TextField(blank=True, null=True)
-    domain_name = models.TextField(blank=True, null=True)
-    dom_start = models.IntegerField(blank=True, null=True)
-    dom_end = models.IntegerField(blank=True, null=True)
-    eco = models.CharField(max_length=20, blank=True, null=True)
-    source = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'Domains2'
 
 
 class Domainsrev(models.Model):
@@ -77,25 +54,50 @@ class Evicodes(models.Model):
         db_table = 'EviCodes'
 
 
-class Genelink(models.Model):
+class Geneinfo(models.Model):
+    uniprot_id = models.CharField(max_length=10, blank=True, null=True)
     gene_name = models.TextField(blank=True, null=True)
     gene_link = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'GeneLink'
+        db_table = 'GeneInfo'
 
 
-class Genename(models.Model):
-    g_uniprot = models.ForeignKey('Pronameunique', models.DO_NOTHING, blank=True, null=True)
-    gene_name = models.CharField(max_length=150, blank=True, null=True)
+class Mss3D(models.Model):
+    id = models.IntegerField(primary_key=True)
+    uniprot = models.CharField(max_length=10, blank=True, null=True)
+    gene_name = models.TextField(blank=True, null=True)
+    structure = models.CharField(max_length=10, blank=True, null=True)
+    structure_type = models.CharField(max_length=100, blank=True, null=True)
+    posuniprot = models.IntegerField(blank=True, null=True)
+    pdbpos = models.IntegerField(blank=True, null=True)
+    res_wt = models.CharField(max_length=4, blank=True, null=True)
+    res_mut = models.CharField(max_length=4, blank=True, null=True)
+    missensepred = models.CharField(max_length=50, blank=True, null=True)
+    missense_reason = models.CharField(max_length=100, blank=True, null=True)
+    annotationh = models.CharField(db_column='annotationH', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    annotationc = models.CharField(db_column='annotationC', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    maf = models.CharField(db_column='MAF', max_length=10, blank=True, null=True)  # Field name made lowercase.
+    dbsnp = models.CharField(max_length=20, blank=True, null=True)
+    sift = models.CharField(max_length=20, blank=True, null=True)
+    polyphen = models.CharField(max_length=20, blank=True, null=True)
+    ensemble = models.CharField(max_length=20, blank=True, null=True)
+    interface = models.CharField(max_length=20, blank=True, null=True)
+    pfam = models.CharField(max_length=20, blank=True, null=True)
+    missense3did = models.CharField(max_length=20, blank=True, null=True)
+    foldx = models.CharField(max_length=20, blank=True, null=True)
+    ch37 = models.CharField(max_length=20, blank=True, null=True)
+    ccr = models.CharField(max_length=20, blank=True, null=True)
+    ch38 = models.CharField(max_length=20, blank=True, null=True)
+    gerp = models.CharField(max_length=20, blank=True, null=True)
+    pli = models.CharField(db_column='pLI', max_length=20, blank=True, null=True)  # Field name made lowercase.
+    rvisscore = models.CharField(db_column='rvisScore', max_length=20, blank=True, null=True)  # Field name made lowercase.
+    rvispercent = models.CharField(db_column='rvisPercent', max_length=20, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
-        db_table = 'GeneName'
-
-
-
+        db_table = 'MSS3D'
 
 
 class Missense3DVar(models.Model):
@@ -125,20 +127,6 @@ class MissenseVarCom(models.Model):
     class Meta:
         managed = False
         db_table = 'Missense_Var_Com'
-
-class MissenseVarComCopy(models.Model):
-    uniprot = models.CharField(max_length=10, blank=True, null=True)
-    posuniprot = models.IntegerField(blank=True, null=True)
-    pdbpos = models.IntegerField(blank=True, null=True)
-    res_wt = models.CharField(max_length=4, blank=True, null=True)
-    res_mut = models.CharField(max_length=4, blank=True, null=True)
-    missensepred = models.CharField(max_length=50, blank=True, null=True)
-    missense_reason = models.CharField(max_length=100, blank=True, null=True)
-    comment = models.CharField(max_length=500, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'Missense_Var_Com_Copy'
 
 
 class Ptms(models.Model):
@@ -170,19 +158,6 @@ class Ptmsdemo(models.Model):
         db_table = 'PTMsDemo'
 
 
-class PtmsOld(models.Model):
-    ptm_uniprot_id = models.CharField(max_length=100, blank=True, null=True)
-    pos = models.IntegerField(blank=True, null=True)
-    aa = models.CharField(max_length=1, blank=True, null=True)
-    ptm_type = models.CharField(max_length=100, blank=True, null=True)
-    evidence_code = models.ForeignKey(Evicodes, models.DO_NOTHING, db_column='evidence_code', blank=True, null=True)
-    source_link = models.CharField(max_length=300, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'PTMs_old'
-
-
 class Pfam(models.Model):
     pf_uniprot_id = models.CharField(max_length=10, blank=True, null=True)
     env_s = models.IntegerField(blank=True, null=True)
@@ -197,27 +172,6 @@ class Pfam(models.Model):
     class Meta:
         managed = False
         db_table = 'Pfam'
-
-
-class Pfamdemo(models.Model):
-    pf_uniprot_id = models.CharField(max_length=10, blank=True, null=True)
-    align_s = models.IntegerField(blank=True, null=True)
-    align_e = models.IntegerField(blank=True, null=True)
-    env_s = models.IntegerField(blank=True, null=True)
-    env_e = models.IntegerField(blank=True, null=True)
-    pfam_id = models.CharField(max_length=10, blank=True, null=True)
-    pfam_name = models.CharField(max_length=50, blank=True, null=True)
-    type = models.CharField(max_length=50, blank=True, null=True)
-    hmm_s = models.IntegerField(blank=True, null=True)
-    hmm_e = models.IntegerField(blank=True, null=True)
-    hmm_len = models.IntegerField(blank=True, null=True)
-    bit = models.IntegerField(blank=True, null=True)
-    e_value = models.CharField(max_length=30, blank=True, null=True)
-    clan = models.CharField(max_length=20, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'PfamDemo'
 
 
 class Primtoalias(models.Model):
@@ -260,8 +214,8 @@ class Proteinlink(models.Model):
 
 class SeqCanonical(models.Model):
     uniprot_id = models.CharField(max_length=10, blank=True, null=True)
-    source = models.TextField(blank=True, null=True)
     sequence = models.TextField(blank=True, null=True)
+    source = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -280,7 +234,7 @@ class Sequences(models.Model):
 
 
 class Signalpeptide(models.Model):
-    sp_uniprot_id = models.CharField(max_length=100, blank=True, null=False, primary_key=True)
+    sp_uniprot_id = models.CharField(primary_key=True, max_length=100)
     signal_peptide = models.CharField(max_length=5, blank=True, null=True)
 
     class Meta:
@@ -288,33 +242,73 @@ class Signalpeptide(models.Model):
         db_table = 'SignalPeptide'
 
 
-class StringidToUniprot(models.Model):
-    uniprot_id = models.CharField(max_length=10, blank=True, null=True)
-    str_id = models.CharField(db_column='Str_id', max_length=25, blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'StringID_to_Uniprot'
-
-
-class StringAcAll(models.Model):
-    str_id = models.CharField(db_column='Str_id', max_length=25, blank=True, null=True)  # Field name made lowercase.
-    uniprot_id = models.CharField(max_length=10, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'String_AC_all'
-
-
-class StringInt(models.Model):
+class Stringdetailed(models.Model):
     string_p1 = models.CharField(max_length=20, blank=True, null=True)
+    uniprot_p1 = models.CharField(max_length=10, blank=True, null=True)
     string_p2 = models.CharField(max_length=20, blank=True, null=True)
+    uniprot_p2 = models.CharField(max_length=10, blank=True, null=True)
+    neighbourhood = models.IntegerField(blank=True, null=True)
+    fusion = models.IntegerField(blank=True, null=True)
+    cooccurence = models.IntegerField(blank=True, null=True)
+    coexpression = models.IntegerField(blank=True, null=True)
+    experimental = models.IntegerField(blank=True, null=True)
+    data_base = models.IntegerField(blank=True, null=True)
+    textmining = models.IntegerField(blank=True, null=True)
     combined_score = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'String_int'
+        db_table = 'StringDetailed'
 
+
+class Stringinteractions(models.Model):
+    string_p1 = models.CharField(max_length=20, blank=True, null=True)
+    string_p2 = models.CharField(max_length=20, blank=True, null=True)
+    experimental = models.IntegerField(blank=True, null=True)
+    data_base = models.IntegerField(blank=True, null=True)
+    combined_score = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'StringInteractions'
+
+
+class Stringraw(models.Model):
+    string_p1 = models.CharField(max_length=20, blank=True, null=True)
+    string_p2 = models.CharField(max_length=20, blank=True, null=True)
+    neighbourhood = models.IntegerField(blank=True, null=True)
+    fusion = models.IntegerField(blank=True, null=True)
+    cooccurence = models.IntegerField(blank=True, null=True)
+    coexpression = models.IntegerField(blank=True, null=True)
+    experimental = models.IntegerField(blank=True, null=True)
+    data_base = models.IntegerField(blank=True, null=True)
+    textmining = models.IntegerField(blank=True, null=True)
+    combined_score = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'StringRaw'
+
+
+class Stringtouniprot(models.Model):
+    uniprot_id = models.CharField(max_length=10, blank=True, null=True)
+    string_id = models.CharField(primary_key=True, max_length=25)
+
+    class Meta:
+        managed = False
+        db_table = 'StringToUniprot'
+
+
+class Topocellcomp(models.Model):
+    uniprot_id = models.CharField(max_length=10, blank=True, null=True)
+    topo_link = models.TextField(blank=True, null=True)
+    topo_label = models.TextField(blank=True, null=True)
+    cellcomp_link = models.TextField(blank=True, null=True)
+    cellcomp_label = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'TopoCellComp'
 
 
 class Topodom(models.Model):
@@ -331,6 +325,7 @@ class Topodom(models.Model):
 
 
 class Transmem(models.Model):
+    id = models.IntegerField(primary_key=True)
     tm_uniprot_id = models.CharField(max_length=10, blank=True, null=True)
     tm_start = models.IntegerField(blank=True, null=True)
     tm_end = models.IntegerField(blank=True, null=True)
@@ -343,13 +338,17 @@ class Transmem(models.Model):
         db_table = 'TransMem'
 
 
-class Uniprotstringgenename(models.Model):
-    uniprot_id = models.CharField(max_length=10, blank=True, null=True)
-    string_id = models.CharField(max_length=20, blank=True, null=True)
+class TransmemOld(models.Model):
+    tm_uniprot_id = models.CharField(max_length=10, blank=True, null=True)
+    tm_start = models.IntegerField(blank=True, null=True)
+    tm_end = models.IntegerField(blank=True, null=True)
+    text = models.TextField(blank=True, null=True)
+    eco = models.CharField(max_length=15, blank=True, null=True)
+    source = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'UniprotStringGeneName'
+        db_table = 'TransMem_old'
 
 
 class Variantlinks(models.Model):
@@ -373,19 +372,6 @@ class Variants(models.Model):
     class Meta:
         managed = False
         db_table = 'Variants'
-
-
-class Variantsdemo(models.Model):
-    var_id = models.CharField(max_length=100, blank=True, null=True)
-    var_uniprot_id = models.CharField(max_length=100, blank=True, null=True)
-    var_pos = models.IntegerField(blank=True, null=True)
-    aa_original = models.CharField(max_length=2, blank=True, null=True)
-    aa_substituion = models.CharField(max_length=2, blank=True, null=True)
-    comment = models.CharField(max_length=500, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'VariantsDemo'
 
 
 class AaConversion(models.Model):
@@ -524,10 +510,72 @@ class FkProDom(models.Model):
         db_table = 'fk_Pro_Dom'
 
 
+class Int3DExtras(models.Model):
+    prot2 = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'int3D_extras'
 
 
+class Interactome3D(models.Model):
+    id = models.IntegerField(primary_key=True)
+    prot1 = models.CharField(max_length=10, blank=True, null=True)
+    prot2 = models.CharField(max_length=100, blank=True, null=True)
+    rank_maj = models.IntegerField(blank=True, null=True)
+    rank_min = models.IntegerField(blank=True, null=True)
+    type = models.TextField(blank=True, null=True)
+    pdb_id = models.CharField(db_column='PDB_id', max_length=10, blank=True, null=True)  # Field name made lowercase.
+    bio_unit = models.CharField(max_length=5, blank=True, null=True)
+    chain_1 = models.CharField(max_length=5, blank=True, null=True)
+    model_1 = models.CharField(max_length=5, blank=True, null=True)
+    seq_ident1 = models.IntegerField(blank=True, null=True)
+    coverage1 = models.IntegerField(blank=True, null=True)
+    seq_begin1 = models.IntegerField(blank=True, null=True)
+    seq_end1 = models.IntegerField(blank=True, null=True)
+    domain1 = models.IntegerField(blank=True, null=True)
+    chain_2 = models.CharField(max_length=5, blank=True, null=True)
+    model_2 = models.CharField(max_length=5, blank=True, null=True)
+    seq_ident2 = models.IntegerField(blank=True, null=True)
+    coverage2 = models.IntegerField(blank=True, null=True)
+    seq_begin2 = models.IntegerField(blank=True, null=True)
+    seq_end2 = models.IntegerField(blank=True, null=True)
+    domain2 = models.IntegerField(blank=True, null=True)
+    filename = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'interactome3D'
 
 
+class Interactome3D1(models.Model):
+    id = models.IntegerField(primary_key=True)
+    prot1 = models.CharField(max_length=10, blank=True, null=True)
+    prot2 = models.CharField(max_length=100, blank=True, null=True)
+    rank_maj = models.IntegerField(blank=True, null=True)
+    rank_min = models.IntegerField(blank=True, null=True)
+    type = models.TextField(blank=True, null=True)
+    pdb_id = models.CharField(db_column='PDB_id', max_length=10, blank=True, null=True)  # Field name made lowercase.
+    bio_unit = models.CharField(max_length=5, blank=True, null=True)
+    chain_1 = models.CharField(max_length=5, blank=True, null=True)
+    model_1 = models.CharField(max_length=5, blank=True, null=True)
+    seq_ident1 = models.IntegerField(blank=True, null=True)
+    coverage1 = models.IntegerField(blank=True, null=True)
+    seq_begin1 = models.IntegerField(blank=True, null=True)
+    seq_end1 = models.IntegerField(blank=True, null=True)
+    domain1 = models.IntegerField(blank=True, null=True)
+    chain_2 = models.CharField(max_length=5, blank=True, null=True)
+    model_2 = models.CharField(max_length=5, blank=True, null=True)
+    seq_ident2 = models.IntegerField(blank=True, null=True)
+    coverage2 = models.IntegerField(blank=True, null=True)
+    seq_begin2 = models.IntegerField(blank=True, null=True)
+    seq_end2 = models.IntegerField(blank=True, null=True)
+    domain2 = models.IntegerField(blank=True, null=True)
+    filename = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'interactome3D_1'
 
 
 class Prosite(models.Model):
@@ -539,25 +587,13 @@ class Prosite(models.Model):
         db_table = 'prosite'
 
 
-class StringIdGeneName(models.Model):
-    string_id = models.CharField(max_length=20, blank=True, null=True)
-    gene_name = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'string_id_gene_name'
-
-
-
-
-class StringInteractionUniprot(models.Model): 
-    id = models.IntegerField(primary_key=True)
+class StringInteractionUniprot(models.Model):
     uniprot_p1 = models.CharField(max_length=10, blank=True, null=True)
     string_p1 = models.CharField(max_length=20, blank=True, null=True)
     uniprot_p2 = models.CharField(max_length=10, blank=True, null=True)
     string_p2 = models.CharField(max_length=20, blank=True, null=True)
     combined_score = models.IntegerField(blank=True, null=True)
-    
 
     class Meta:
         managed = False
+        db_table = 'string_interaction_uniprot'
