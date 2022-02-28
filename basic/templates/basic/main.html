@@ -72,6 +72,15 @@
         <div id="cy"></div>
         {{ results_interact_string|json_script:"interaction-data" }}
 
+        <h3>Interactome3d</h3>
+        {%for object in results_interactome3d %}
+          {%if object.prot1 == query_uni%}
+          <p>{{object.type}} available for PDB complex: <a href='https://www.rcsb.org/structure/{{ object.pdb_id }}'>{{ object.pdb_id }}</a>({{object.prot1}}/{{object.prot2}})</p>
+          {%elif object.prot2 == query_uni%}
+          <p>{{object.type}} available for PDB complex: <a href='https://www.rcsb.org/structure/{{ object.pdb_id }}'>{{ object.pdb_id }}</a> ({{object.prot2}}/{{object.prot1}})</p>
+          {%endif%}
+
+        {%endfor%}
 
         <h3>Basic Info</h3>
         {% for object in results_basic %}

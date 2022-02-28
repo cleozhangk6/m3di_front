@@ -262,6 +262,7 @@ class Stringdetailed(models.Model):
 
 
 class Stringinteractions(models.Model):
+    
     string_p1 = models.CharField(max_length=20, blank=True, null=True)
     string_p2 = models.CharField(max_length=20, blank=True, null=True)
     experimental = models.IntegerField(blank=True, null=True)

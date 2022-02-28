@@ -63,8 +63,7 @@ def search_view(request):
         #         query_uni, query_var, query_var]
         # )
         results_variant = MissenseVarCom.objects.raw(
-            'SELECT * FROM Missense_Var_Com WHERE uniprot = %s and posuniprot = %s', [
-                query_uni, query_var]
+            'SELECT * FROM Missense_Var_Com WHERE uniprot = %s and posuniprot = %s', [query_uni, query_var]
         )
         context = {
             'results_basic': results_basic,
@@ -162,9 +161,17 @@ def main_UniVar(request):
                 ON c.string_id = u.string_p1
                 LEFT JOIN StringToUniprot as d
                 ON d.string_id = u.string_p2
-                WHERE c.uniprot_id in (select * from t) AND d.uniprot_id in (select * from t);''', [query_uni]
+                WHERE c.uniprot_id in (select * from t) AND d.uniprot_id in (select * from t) AND c.uniprot_id > d.uniprot_id;''', [query_uni]
         )
 
+        # need to change to limit here, 100 is for testing
+        results_interactome3d = Interactome3D1.objects.raw(
+            '''
+            SELECT id, prot1, prot2, type, PDB_id as pdb_id
+            FROM interactome3D_1
+            WHERE prot1 = %s OR prot2 =%s;
+                ''', [query_uni,query_uni]
+        )
 
          # ------This bit works (but querying from a denormalised table)-----
         # results_interact = StringInteractionUniprot.objects.raw(
@@ -209,7 +216,8 @@ def main_UniVar(request):
             'results_topo': results_topo,
             'results_variant': results_variant,
             'results_interact_string': results_interact_string,
-            'results_transmem': results_transmem
+            'results_transmem': results_transmem,
+            'results_interactome3d': results_interactome3d
         }
 
         return render(request, 'basic/main.html', context)
