@@ -188,8 +188,16 @@ Promise.all([
         { data: { id: i, 
           source: obj.interactors[i].p1, 
           target: obj.interactors[i].p2,
-          exp: obj.interactors[i].exp, } }
-      )
+          exp: obj.interactors[i].exp} }
+      );
+      if (obj.interactors[i].type != null) {
+        cy.add(
+          { data: { id: "i3d_" + i, 
+            source: obj.interactors[i].p1, 
+            target: obj.interactors[i].p2,
+            type: obj.interactors[i].type} }
+        );
+      }
     };
     cy.layout({
       name: 'cose'

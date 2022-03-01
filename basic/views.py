@@ -135,25 +135,64 @@ def main_UniVar(request):
         # results_interact_string = '{"interactors": [' + \
         #     ",".join(results_interact_list) + ']}'
 
+
+
+        # results_interact = Stringinteractions.objects.raw(
+        #     '''SELECT id, 
+        #             s.string_p1, 
+        #             a.uniprot_id as uniprot_p1, 
+        #             s.string_p2, 
+        #             b.uniprot_id as uniprot_p2, 
+        #             experimental, 
+        #             data_base, 
+        #             combined_score, 
+        #             Json_object('p1', a.uniprot_id, 'p2', b.uniprot_id, 'exp', experimental) 
+        #             as col_json
+        #         FROM StringInteractions as s
+        #         LEFT JOIN StringToUniprot as a
+        #             ON a.string_id = s.string_p1
+        #         LEFT JOIN StringToUniprot as b
+        #             ON b.string_id = s.string_p2
+        #         WHERE a.uniprot_id = %s
+        #             AND b.uniprot_id IS NOT NULL AND experimental > 0
+        #         ORDER BY s.combined_score desc
+        #         limit 10;''', [query_uni]
+        # )
+
         results_interact = Stringinteractions.objects.raw(
-            '''SELECT id, 
+            '''SELECT s.id, 
                     s.string_p1, 
                     a.uniprot_id as uniprot_p1, 
                     s.string_p2, 
                     b.uniprot_id as uniprot_p2, 
                     experimental, 
                     data_base, 
-                    combined_score, 
-                    Json_object('p1', a.uniprot_id, 'p2', b.uniprot_id, 'exp', experimental) 
+                    combined_score,
+                    c.type, 
+                    Json_object('p1', a.uniprot_id, 
+                                'p2', b.uniprot_id, 
+                                'exp', experimental,
+                                'type', c.type) 
                     as col_json
                 FROM StringInteractions as s
                 LEFT JOIN StringToUniprot as a
                     ON a.string_id = s.string_p1
                 LEFT JOIN StringToUniprot as b
                     ON b.string_id = s.string_p2
+                LEFT JOIN (
+                    select * from (
+                        select *, row_number() over (
+                            partition by prot1, prot2
+                            order by id desc
+                        ) as row_num
+                        from interactome3D
+                    ) as c_pre
+                    where c_pre.row_num = 1
+                ) as c
+                    ON c.prot1 = a.uniprot_id AND c.prot2 = b.uniprot_id
                 WHERE a.uniprot_id = %s
                     AND b.uniprot_id IS NOT NULL AND experimental > 0
-                ORDER BY s.combined_score
+                ORDER BY s.combined_score desc
                 limit 10;''', [query_uni]
         )
 
@@ -168,7 +207,7 @@ def main_UniVar(request):
                     WHERE a.uniprot_id = %s
                         AND b.uniprot_id IS NOT NULL
                         AND experimental > 0
-                    ORDER BY s.combined_score
+                    ORDER BY s.combined_score desc
                     limit 10)
                 SELECT id, 
                     u.string_p1, 

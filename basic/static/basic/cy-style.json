@@ -22,18 +22,31 @@
     "selector": "edge",
     "style": {
       "width": 4,
-      "line-color": "#ffeee6"}
+      "line-color": "#ffbb99",
+      "opacity":"0.7"}
+  }, {
+    "selector": "edge[exp = 0]",
+    "style": {
+      "opacity": "0"}
   }, {
     "selector": "edge[exp > 0]",
     "style": {
-      "line-color": "#ffbb99"}
+      "line-color": "#ffeee6"}
   }, {
     "selector": "edge[exp > 300]",
     "style": {
-      "line-color": "#ff7733"}
+      "line-color": "#ffaa80"}
   }, {
     "selector": "edge[exp > 600]",
     "style": {
-      "line-color": "#cc4400"}
+      "line-color": "#e64d00"}
+  }, {
+    "selector": "edge[type=\"Model\"]",
+    "style": {
+      "line-color": "#99d6ff"}
+  }, {
+    "selector": "edge[type=\"Structure\"]",
+    "style": {
+      "line-color": "#006bb3"}
   }
 ]
