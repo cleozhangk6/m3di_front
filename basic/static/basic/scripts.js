@@ -72,67 +72,67 @@ function stickyHead() {
 
 
 
-//2
+// //2
 
-let test2 = document.getElementById('interaction-data').textContent;
-// remove all backward slashes
-let test3 = test2.replaceAll('\\','');
-// remove boundary quotation marks 
-let test4 = test3.replace(/^"|"$/g, '');
-const obj = JSON.parse(test4);
-
-
-//Create empty network with styles
-var cy = cytoscape({
-  container: document.getElementById('cy'),
-  style: [
-    {
-      selector: 'node',
-      style: {
-          shape: 'ellipse',
-          'border-width': 4,
-          'border-color': 'red',
-          'background-color': '#ffffff',
-          label: 'data(id)'
-      }}, 
-      {
-        selector: "edge",
-        style: {
-          width: 4}}, 
-      {
-        selector: "edge[exp > 0]",
-        style: {
-          "line-color": "red"}
-    }],
-  elements: [
-    ]
-});
-
-//Add nodes and edges using a loop
-for (var i = 0; i < obj.interactors.length; i++) {
-  cy.add(
-    { data: { id: obj.interactors[i].p1 } }
-  );
-  cy.add(
-    { data: { id: obj.interactors[i].p2 } }
-  );
-  cy.add(
-    { data: { id: i, 
-      source: obj.interactors[i].p1, 
-      target: obj.interactors[i].p2,
-      exp: obj.interactors[i].exp, } }
-  )
-};
-
-//Change layout
-cy.layout({
-  name: 'concentric'
-});
+// let test2 = document.getElementById('interaction-data').textContent;
+// // remove all backward slashes
+// let test3 = test2.replaceAll('\\','');
+// // remove boundary quotation marks 
+// let test4 = test3.replace(/^"|"$/g, '');
+// const obj = JSON.parse(test4);
 
 
+// //Create empty network with styles
+// var cy = cytoscape({
+//   container: document.getElementById('cy'),
+//   style: [
+//     {
+//       selector: 'node',
+//       style: {
+//           shape: 'ellipse',
+//           'border-width': 4,
+//           'border-color': 'red',
+//           'background-color': '#ffffff',
+//           label: 'data(id)'
+//       }}, 
+//       {
+//         selector: "edge",
+//         style: {
+//           width: 4}}, 
+//       {
+//         selector: "edge[exp > 0]",
+//         style: {
+//           "line-color": "red"}
+//     }],
+//   elements: [
+//     ]
+// });
+
+// //Add nodes and edges using a loop
+// for (var i = 0; i < obj.interactors.length; i++) {
+//   cy.add(
+//     { data: { id: obj.interactors[i].p1 } }
+//   );
+//   cy.add(
+//     { data: { id: obj.interactors[i].p2 } }
+//   );
+//   cy.add(
+//     { data: { id: i, 
+//       source: obj.interactors[i].p1, 
+//       target: obj.interactors[i].p2,
+//       exp: obj.interactors[i].exp, } }
+//   )
+// };
+
+// //Change layout
+// cy.layout({
+//   name: 'concentric'
+// });
 
 
-// 3
+
+
+// 3 Use external data and style files
 
 // Promise.all([
 //   fetch('/static/basic/cy-style.json')
@@ -154,6 +154,49 @@ cy.layout({
 //       elements: dataArray[1]
 //     });
 //   });
+
+
+
+//4 Cleans up codes from 2 and adopt 3
+
+function convertJson(cont) {
+  var cont_strip = cont.replaceAll('\\','').replace(/^"|"$/g, '')
+  return JSON.parse(cont_strip)
+}
+const obj = convertJson(document.getElementById('interaction-data').textContent);
+
+Promise.all([
+  fetch('/static/basic/cy-style.json')
+  .then(function(res) {
+    return res.json()
+  })
+])
+  .then(function(dataArray) {
+    var cy = cytoscape({
+      container: document.getElementById('cy'),
+      style: dataArray[0],
+      elements: [],
+      });
+    for (var i = 0; i < obj.interactors.length; i++) {
+      cy.add(
+        { data: { id: obj.interactors[i].p1, "idInt": i } }
+      );
+      cy.add(
+        { data: { id: obj.interactors[i].p2 } }
+      );
+      cy.add(
+        { data: { id: i, 
+          source: obj.interactors[i].p1, 
+          target: obj.interactors[i].p2,
+          exp: obj.interactors[i].exp, } }
+      )
+    };
+    cy.layout({
+      name: 'cose'
+    });
+
+  });
+
 
 
 

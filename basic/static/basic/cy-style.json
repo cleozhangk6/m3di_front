@@ -2,25 +2,38 @@
     "selector": "node",
     "style": {
       "shape": "ellipse",
-      "background-color": "red",
-      "width": 4,
-      "label": "data(name)"
-    }
+      "width": "40px",
+      "height": "40px",
+      "background-color": "#605C69",
+      "border-color": "#605C69",
+      "border-width": 4,
+      "content": "data(id)",
+      "text-valign": "center",
+      "text-halign": "center",
+      "text-outline-color": "#605C69",
+      "text-outline-width": "2px",
+      "color": "#fff"}
   }, {
-    "selector": "node[?query]",
+    "selector": "node[idInt=0]",
     "style": {
-      "background-color": "blue"
-    }
+      "width": "70px",
+      "height": "70px"}
   }, {
     "selector": "edge",
     "style": {
-      }
-  }, {
-    "selector": "edge[group=\"structure\"]",
-    "style": {
-      "line-color": "green"}
+      "width": 4,
+      "line-color": "#ffeee6"}
   }, {
     "selector": "edge[exp > 0]",
     "style": {
-      "line-color": "red"}
-  }]
+      "line-color": "#ffbb99"}
+  }, {
+    "selector": "edge[exp > 300]",
+    "style": {
+      "line-color": "#ff7733"}
+  }, {
+    "selector": "edge[exp > 600]",
+    "style": {
+      "line-color": "#cc4400"}
+  }
+]
