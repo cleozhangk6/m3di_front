@@ -277,13 +277,22 @@ footer .container{
     position: relative;
 }
 
+.results .container .interaction-inline span{
+    display: inline-block;
+    border: 2px solid #d9d9d9;
+    height: 500px;
+}
+
+#selection-box {
+    width: 15%;
+}
 
 #cy {
-    width: 80%;
-    height: 500px;
-    margin-right:auto;
-    margin-left: auto;
-    position: relative;
+    width: 55%;
+}
+
+#detail-box {
+    width: 25%;
 }
 
 .results canvas {

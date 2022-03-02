@@ -69,9 +69,12 @@
       <div class="container">
 
         <h3>Interaction</h3>
-        <div id="cy"></div>
-        {{ results_interact_string|json_script:"interaction-data" }}
-
+        <div class="interaction-inline">
+          <span id="selection-box"></span>
+          <span id="cy"></span>
+          {{ results_interact_string|json_script:"interaction-data" }}
+          <span id="detail-box"></span>
+        </div>
 
         <h3>Basic Info</h3>
         {% for object in results_basic %}

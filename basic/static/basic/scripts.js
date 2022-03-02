@@ -157,7 +157,61 @@ function stickyHead() {
 
 
 
-//4 Cleans up codes from 2 and adopt 3
+// //4 Cleans up codes from 2 and adopt 3
+
+// function convertJson(cont) {
+//   var cont_strip = cont.replaceAll('\\','').replace(/^"|"$/g, '')
+//   return JSON.parse(cont_strip)
+// }
+// const obj = convertJson(document.getElementById('interaction-data').textContent);
+
+// Promise.all([
+//   fetch('/static/basic/cy-style.json')
+//   .then(function(res) {
+//     return res.json()
+//   })
+// ])
+//   .then(function(dataArray) {
+//     var cy = cytoscape({
+//       container: document.getElementById('cy'),
+//       style: dataArray[0],
+//       elements: [],
+//       });
+//     for (var i = 0; i < obj.interactors.length; i++) {
+//       cy.add(
+//         { data: { id: obj.interactors[i].p1, "idInt": i } }
+//       );
+//       cy.add(
+//         { data: { id: obj.interactors[i].p2 } }
+//       );
+//       cy.add(
+//         { data: { id: i, 
+//           source: obj.interactors[i].p1, 
+//           target: obj.interactors[i].p2,
+//           exp: obj.interactors[i].exp} }
+//       );
+//       if (obj.interactors[i].type != null) {
+//         cy.add(
+//           { data: { id: "i3d_" + i, 
+//             source: obj.interactors[i].p1, 
+//             target: obj.interactors[i].p2,
+//             type: obj.interactors[i].type} }
+//         );
+//       }
+//     };
+//     cy.layout({
+//       name: 'cose'
+//     });
+
+//   });
+
+
+
+
+
+
+
+//5 Single edges (interactome3D or string)
 
 function convertJson(cont) {
   var cont_strip = cont.replaceAll('\\','').replace(/^"|"$/g, '')
@@ -179,35 +233,25 @@ Promise.all([
       });
     for (var i = 0; i < obj.interactors.length; i++) {
       cy.add(
-        { data: { id: obj.interactors[i].p1, "idInt": i } }
+        { data: { id: obj.interactors[i].p1, 
+                  idInt: i,
+                  gene: obj.interactors[i].p1_gene} }
       );
       cy.add(
-        { data: { id: obj.interactors[i].p2 } }
+        { data: { id: obj.interactors[i].p2,
+                  gene: obj.interactors[i].p2_gene } }
       );
       cy.add(
         { data: { id: i, 
           source: obj.interactors[i].p1, 
           target: obj.interactors[i].p2,
-          exp: obj.interactors[i].exp} }
+          exp: obj.interactors[i].exp,
+          type: obj.interactors[i].type} }
       );
-      if (obj.interactors[i].type != null) {
-        cy.add(
-          { data: { id: "i3d_" + i, 
-            source: obj.interactors[i].p1, 
-            target: obj.interactors[i].p2,
-            type: obj.interactors[i].type} }
-        );
-      }
     };
     cy.layout({
       name: 'cose'
     });
 
   });
-
-
-
-
-
-
 

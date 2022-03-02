@@ -2,12 +2,10 @@
     "selector": "node",
     "style": {
       "shape": "ellipse",
-      "width": "40px",
-      "height": "40px",
+      "width": "50px",
+      "height": "50px",
       "background-color": "#605C69",
-      "border-color": "#605C69",
-      "border-width": 4,
-      "content": "data(id)",
+      "content": "data(gene)",
       "text-valign": "center",
       "text-halign": "center",
       "text-outline-color": "#605C69",
@@ -19,34 +17,50 @@
       "width": "70px",
       "height": "70px"}
   }, {
+    "selector": "node:selected",
+    "style": {
+      "border-width": 6,
+      "border-opacity": 0.6,
+      "border-color": "#cccccc",
+      "background-color": "#77828C"}
+  }, {
     "selector": "edge",
     "style": {
       "width": 4,
       "line-color": "#ffbb99",
-      "opacity":"0.7"}
-  }, {
-    "selector": "edge[exp = 0]",
-    "style": {
-      "opacity": "0"}
+      "opacity": 0.7}
   }, {
     "selector": "edge[exp > 0]",
     "style": {
-      "line-color": "#ffeee6"}
+      "line-color": "#e6e6e6"}
   }, {
     "selector": "edge[exp > 300]",
     "style": {
-      "line-color": "#ffaa80"}
+      "line-color": "#cccccc",
+      "z-index": 10}
   }, {
     "selector": "edge[exp > 600]",
     "style": {
-      "line-color": "#e64d00"}
+      "line-color": "#b3b3b3",
+      "z-index": 20}
+  }, {
+    "selector": "edge[?type]",
+    "style": {
+      "opacity": 0.9,
+      "z-index": 100}
   }, {
     "selector": "edge[type=\"Model\"]",
     "style": {
-      "line-color": "#99d6ff"}
+      "line-color": "#ffbf80"}
   }, {
     "selector": "edge[type=\"Structure\"]",
     "style": {
-      "line-color": "#006bb3"}
+      "line-color": "#d96226"}
+  }, {
+    "selector": "edge:selected",
+    "style": {
+      "width": 6,
+      "opacity": 1,
+      "z-index": 200}
   }
 ]
