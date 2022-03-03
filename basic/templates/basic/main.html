@@ -1,149 +1,106 @@
-{% load static %}
+{% extends "basic/base.html" %}
 
+{% block Title %}
+  <title>M3DI | Results</title>
+{% endblock %}
 
-<!DOCTYPE html>
-<html>
-  <head> 
-      <title>M3DI | Results</title>
-      <!--Font Awesome kit's code-->
-      <script src="https://kit.fontawesome.com/777bbb3675.js" crossorigin="anonymous"></script>
-      <!--Link CSS stylesheet-->
-      <link rel="stylesheet" href="{% static 'basic/styles.css' %}" />
-      <!--Import JQuery library -->
-      <script src="https://code.jquery.com/jquery-2.0.3.min.js"></script>
-      <!--Load cytoscape.js -->
-      <script src="{% static 'basic/cytoscape.js' %}"></script>
-  </head>
-
-  <body>
-
-    <div id="stick-to-top">
-      <div class="top_bar">
-        <div class="container"></div>
-      </div>
-      <header class="main-header">
-        <div class="container">
-          <a id="m3di_logo_left" href="{% url 'basic:index' %}">
-            <img src="{% static 'basic/images/logo.png' %}" width="100"></a>
-          <nav class="nav main-nav">            
-            <ul>
-              <li><a href="{% url 'basic:index' %}">Home</a></li>
-              <li><a href="about.html">About</a></li>
-              <li><a href="dataset.html">Dataset</a></li>
-              <li><a href="contact.html">Contact us</a></li>
-            </ul>
-          </nav>
-        </div>      
-      </header>
-      <div class="search-bar">
-          <div class="container">
-            <form action="{% url 'basic:main' %}" method="get">
-                Uniprot/Gene ID:
-                <input id="input_uni" name="q" type="text" placeholder="" size="10px">
-                Residue Position:
-                <input id="input_var" name="v" type="text" placeholder="" size="6px">
-                <!-- Mutation:
-                <input id="input_wt" name="wt" type="text" placeholder="" size="4px">
-                <i class="fa-solid fa-arrow-right"></i>
-                <input id="input_mut" name="mut" type="text" placeholder="" size="4px"> -->
-                <a href="{% url 'basic:main' %}">
-                  <button type="submit">Submit</button></a>
-            </form>
-          </div>
+{% block Search-bar %}
+  <div class="search-bar">
+    <div class="container">
+      <form action="{% url 'basic:main' %}" method="get">
+          Uniprot/Gene ID:
+          <input id="input_uni" name="q" type="text" placeholder="" size="10px">
+          Residue Position:
+          <input id="input_var" name="v" type="text" placeholder="" size="6px">
+          <!-- Mutation:
+          <input id="input_wt" name="wt" type="text" placeholder="" size="4px">
+          <i class="fa-solid fa-arrow-right"></i>
+          <input id="input_mut" name="mut" type="text" placeholder="" size="4px"> -->
+          <a href="{% url 'basic:main' %}">
+            <button type="submit">Submit</button></a>
+      </form>
     </div>
-    </div>
+  </div>
+{% endblock %}
+
+{% block Content %}
+  <section class="results">
+    <p><strong>Search Results</strong></p>
+    <p>You searched for {{ query_uni }} ({{ results_basic.0.gene_name }})</p>
+    {% if query_uni and query_var %}
+    <p>Residue position {{ query_var }}</p>
+    </p>
     
-    <section class="results">
-      <p><strong>Search Results</strong></p>
-      <p>You searched for {{ query_uni }} ({{ results_basic.0.gene_name }})</p>
-      {% if query_uni and query_var %}
-      <p>Residue position {{ query_var }}</p>
-      </p>
-      
-      {% elif query_uni %}
-      <p>No variant specified</p>
+    {% elif query_uni %}
+    <p>No variant specified</p>
 
-      {% else %}
-      <p>No search submitted</p>
+    {% else %}
+    <p>No search submitted</p>
+    
+    {% endif %}
       
-      {% endif %}
-        
-      <div class="container">
+    <div class="container">
 
-        <h3>Interaction</h3>
-        <div class="interaction">
-          <div id="cy">
-          {{ results_interact_string|json_script:"interaction-data" }}
-          </div>
-          <div class="side-window">
-            <h3 class="node-operation"></h3>
-            <h3 class="edge-operation"></h3>
-          </div>
+      <h3>Interaction</h3>
+      <div class="interaction">
+        <div id="cy">
+        {{ results_interact_string|json_script:"interaction-data" }}
         </div>
-
-      <br>
-
-        <h3>Basic Info</h3>
-          <ul>
-            <li>Protein name: <a href="{{ object.protein_link }}">{{ results_basic.0.protein_name }}</a></li>
-            <li>Gene name: <a href="{{ object.gene_link }}">{{ results_basic.0.gene_name }}</a></li>
-          </ul>
-
-          <h3>Signal Peptide</h3>
-          <ul>
-            <li>Signal peptide: {{ results_signal.0.signal_peptide }}</li>
-          </ul>
-
-        <h3>Variants</h3>
-          <table class="variant-table">
-            <tr>
-              <th>UniprotID</th>
-              <th>Position</th>
-              <th>Wildtype</th>
-              <th>Mutant</th>
-              <th>Prediction</th>
-              <th>Reason</th>
-            </tr>
-            {% for object in results_variant %}
-            <tr>
-              <td>{{ object.uniprot }}</td>
-              <td>{{ object.pdbpos }}</td>
-              <td>{{ object.res_wt }}</td>
-              <td>{{ object.res_mut }}</td>
-              <td>{{ object.missensepred }}</td>
-              <td>{{ object.missense_reason }}</td>
-            </tr>
-          {% endfor %}
-          </table>
-              
-        {% if query_var %}
-        <h3>Topology</h3>
-          <ul>
-            <li>Variant {{ query_var }} is located at the {{ results_topo.0.topology }} region</li>
-          </ul>
-        {% endif %}
-
-
+        <div class="side-window">
+          <h3 class="node-operation"></h3>
+          <h3 class="edge-operation"></h3>
+        </div>
       </div>
 
-          <br/>
-          <br>
-    </section>
+    <br>
+
+      <h3>Basic Info</h3>
+        <ul>
+          <li>Protein name: <a href="{{ object.protein_link }}">{{ results_basic.0.protein_name }}</a></li>
+          <li>Gene name: <a href="{{ object.gene_link }}">{{ results_basic.0.gene_name }}</a></li>
+        </ul>
+
+        <h3>Signal Peptide</h3>
+        <ul>
+          <li>Signal peptide: {{ results_signal.0.signal_peptide }}</li>
+        </ul>
+
+      <h3>Variants</h3>
+        <table class="variant-table">
+          <tr>
+            <th>UniprotID</th>
+            <th>Position</th>
+            <th>Wildtype</th>
+            <th>Mutant</th>
+            <th>Prediction</th>
+            <th>Reason</th>
+          </tr>
+          {% for object in results_variant %}
+          <tr>
+            <td>{{ object.uniprot }}</td>
+            <td>{{ object.pdbpos }}</td>
+            <td>{{ object.res_wt }}</td>
+            <td>{{ object.res_mut }}</td>
+            <td>{{ object.missensepred }}</td>
+            <td>{{ object.missense_reason }}</td>
+          </tr>
+        {% endfor %}
+        </table>
+            
+      {% if query_var %}
+      <h3>Topology</h3>
+        <ul>
+          <li>Variant {{ query_var }} is located at the {{ results_topo.0.topology }} region</li>
+        </ul>
+      {% endif %}
+
+
+    </div>
+
+        <br/>
+        <br>
+  </section>
+
+  <hr color="#CAC4D7">
     
-    <hr color="#CAC4D7">
-    
-
-
-    <footer>
-      <div class="container">
-        <span id="msc_left">MSc Bioinformatics and Systems Biology</span>
-        <img id="ic_logo_right" src="{% static 'basic/images/Imperial.png' %}" width="200">
-      </div>
-    </footer>
-
-
-    <script src="{% static 'basic/scripts.js' %}"></script>
-    
-
-  </body>
-</html>
+{% endblock %}
