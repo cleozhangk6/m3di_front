@@ -9,6 +9,9 @@
       <script src="https://kit.fontawesome.com/777bbb3675.js" crossorigin="anonymous"></script>
       <!--Link CSS stylesheet-->
       <link rel="stylesheet" href="{% static 'basic/styles.css' %}" />
+      <!--Import JQuery library -->
+      <script src="https://code.jquery.com/jquery-2.0.3.min.js"></script>
+      <!--Load cytoscape.js -->
       <script src="{% static 'basic/cytoscape.js' %}"></script>
   </head>
 
@@ -69,12 +72,11 @@
 
         <h3>Interaction</h3>
         <div class="interaction-inline">
-          <span id="cy"></span>
+          <div id="cy">
           {{ results_interact_string|json_script:"interaction-data" }}
-          <span class="cy-detail">
-            <!-- <div id="selection-box"></div>
-            <div id="detail-box"></div> -->
-          </span>
+          </div>
+          <div id="side-window">
+          </div>
         </div>
 
         <h3>Basic Info</h3>

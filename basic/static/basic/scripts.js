@@ -1,6 +1,6 @@
 function populate_uniprot(){
-    document.getElementById('input_uni').value="Q9BYF1";
-    document.getElementById('input_var').value="199";
+    $('input_uni').value="Q9BYF1";
+    $('input_var').value="199";
 }
 
 
@@ -261,7 +261,7 @@ function convertJson(cont) {
   var cont_strip = cont.replaceAll('\\','').replace(/^"|"$/g, '')
   return JSON.parse(cont_strip)
 }
-const cyData = convertJson(document.getElementById('interaction-data').textContent);
+const cyData = convertJson($('interaction-data').textContent);
 
 Promise.all([
   fetch('/static/basic/cy-style.json')
@@ -271,7 +271,7 @@ Promise.all([
 ])
   .then(function(dataArray) {
     var cy = window.cy = cytoscape({
-      container: document.getElementById('cy'),
+      container: $('cy'),
       style: dataArray[0],
       elements: [],
       minZoom: 0.5,
@@ -305,3 +305,5 @@ Promise.all([
     });
 
   });
+
+  // var selectedNodeHandler = function()

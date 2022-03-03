@@ -284,7 +284,7 @@ footer .container{
     position: relative;
 }
 
-.results .container .interaction-inline span{
+.results .container .interaction-inline div{
     display: inline-block;
     height: 500px;
     margin-right: 2%;
@@ -292,20 +292,14 @@ footer .container{
 
 #cy {
     width: 55%;
+    border: 2px solid #d9d9d9;
 }
 
-.cy-detail {
+#side-window {
     width: 35%;
     border: 2px solid #d9d9d9;
-    display: block;
+    border-radius: 30px;
 }
-
-/* .cy-detail div {
-    display: block;
-    width: 0%;
-    height: 5px;
-    border: 2px solid #d9d9d9;
-} */
 
 .results canvas {
     left: 0;
