@@ -42,12 +42,19 @@ html, body {
     background-color: white;
 }
 
+
 /* The sticky class is added to the header with JS when it reaches its scroll position */
-.sticky {
+/* .sticky {
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 100;
+} */
+
+#stick-to-top {
+    position: sticky;
+    top:0;
+    z-index: 10000;
 }
   
 
@@ -281,10 +288,12 @@ footer .container{
     display: inline-block;
     border: 2px solid #d9d9d9;
     height: 500px;
+    margin-right: 2%;
 }
 
 #selection-box {
     width: 15%;
+    margin-left: 0%;
 }
 
 #cy {
@@ -293,6 +302,7 @@ footer .container{
 
 #detail-box {
     width: 25%;
+    margin-right: 0%;
 }
 
 .results canvas {

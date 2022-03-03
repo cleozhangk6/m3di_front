@@ -6,7 +6,7 @@ app_name = 'basic'
 
 urlpatterns = [    
     path('',IndexView.as_view(),name='index'),
-    path('/main/',views.main_UniVar,name='main'),
+    path('main/',views.main_UniVar,name='main'),
 ]
 
 

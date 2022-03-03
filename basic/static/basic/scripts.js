@@ -4,24 +4,24 @@ function populate_uniprot(){
 }
 
 
-//Sticky header
-//When the user scrolls the page, execute stickyHead
-window.onscroll = function() {stickyHead()};
+// //Sticky header
+// //When the user scrolls the page, execute stickyHead
+// window.onscroll = function() {stickyHead()};
 
-//Get the header
-var header = document.getElementById("stick-to-top");
+// //Get the header
+// var header = document.getElementById("stick-to-top");
 
-//Get the offset position of the navbar
-var sticky = header.offsetTop;
+// //Get the offset position of the navbar
+// var sticky = header.offsetTop;
 
-// Add the sticky class to the header when you reach its scroll position. Remove "sticky" when you leave the scroll position
-function stickyHead() {
-    if (window.pageYOffset > sticky) {
-      header.classList.add("sticky");
-    } else {
-      header.classList.remove("sticky");
-    }
-  };
+// // Add the sticky class to the header when you reach its scroll position. Remove "sticky" when you leave the scroll position
+// function stickyHead() {
+//     if (window.pageYOffset > sticky) {
+//       header.classList.add("sticky");
+//     } else {
+//       header.classList.remove("sticky");
+//     }
+//   };
 
 
 
@@ -213,6 +213,50 @@ function stickyHead() {
 
 //5 Single edges (interactome3D or string)
 
+// function convertJson(cont) {
+//   var cont_strip = cont.replaceAll('\\','').replace(/^"|"$/g, '')
+//   return JSON.parse(cont_strip)
+// }
+// const obj = convertJson(document.getElementById('interaction-data').textContent);
+
+// Promise.all([
+//   fetch('/static/basic/cy-style.json')
+//   .then(function(res) {
+//     return res.json()
+//   })
+// ])
+//   .then(function(dataArray) {
+//     var cy = window.cy = cytoscape({
+//       container: document.getElementById('cy'),
+//       style: dataArray[0],
+//       elements: [],
+//       });
+//     for (var i = 0; i < obj.interactors.length; i++) {
+//       cy.add(
+//         { data: { id: obj.interactors[i].p1, 
+//                   idInt: i,
+//                   gene: obj.interactors[i].p1_gene} }
+//       );
+//       cy.add(
+//         { data: { id: obj.interactors[i].p2,
+//                   gene: obj.interactors[i].p2_gene } }
+//       );
+//       cy.add(
+//         { data: { id: i, 
+//           source: obj.interactors[i].p1, 
+//           target: obj.interactors[i].p2,
+//           exp: obj.interactors[i].exp,
+//           type: obj.interactors[i].type} }
+//       );
+//     };
+//     cy.layout({
+//       name: 'cose'
+//     });
+
+//   });
+
+
+//6 Add interactors only once to avoid error
 function convertJson(cont) {
   var cont_strip = cont.replaceAll('\\','').replace(/^"|"$/g, '')
   return JSON.parse(cont_strip)
@@ -226,21 +270,26 @@ Promise.all([
   })
 ])
   .then(function(dataArray) {
-    var cy = cytoscape({
+    var cy = window.cy = cytoscape({
       container: document.getElementById('cy'),
       style: dataArray[0],
       elements: [],
       });
+    //Add query protein
+    cy.add(
+      { data: { id: obj.interactors[0].p1, 
+                query: true,
+                gene: obj.interactors[0].p1_gene} }
+    );
+    //Add the top primary interactors
     for (var i = 0; i < obj.interactors.length; i++) {
-      cy.add(
-        { data: { id: obj.interactors[i].p1, 
-                  idInt: i,
-                  gene: obj.interactors[i].p1_gene} }
-      );
-      cy.add(
-        { data: { id: obj.interactors[i].p2,
-                  gene: obj.interactors[i].p2_gene } }
-      );
+      if (i < 10) {
+        cy.add(
+          { data: { id: obj.interactors[i].p2,
+                    gene: obj.interactors[i].p2_gene } }
+        );
+      };
+    //Add edges
       cy.add(
         { data: { id: i, 
           source: obj.interactors[i].p1, 
@@ -254,4 +303,3 @@ Promise.all([
     });
 
   });
-
