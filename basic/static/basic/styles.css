@@ -284,10 +284,14 @@ footer .container{
     position: relative;
 }
 
-.results .container .interaction-inline div{
+.results .container .interaction div{
     display: inline-block;
     height: 500px;
     margin-right: 2%;
+}
+
+.results canvas {
+    left: 0;
 }
 
 #cy {
@@ -295,15 +299,18 @@ footer .container{
     border: 2px solid #d9d9d9;
 }
 
-#side-window {
+.side-window {
     width: 35%;
     border: 2px solid #d9d9d9;
     border-radius: 30px;
 }
 
-.results canvas {
-    left: 0;
+.side-window div{
+    display: block;
+    float:left
 }
+
+
 
 .results .container li, h3 {
     text-align: left;
