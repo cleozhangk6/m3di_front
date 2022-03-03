@@ -280,7 +280,7 @@ var unselectededgeHandler = function() {
 }
 
 Promise.all([
-  fetch('/static/basic/cy-style.json')
+  fetch('/static/m3di/cy-style.json')
   .then(function(res) {
     return res.json()
   })
