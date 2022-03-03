@@ -284,7 +284,7 @@ footer .container{
     position: relative;
 }
 
-.results .container .interaction div{
+/* .results .container .interaction div{
     display: inline-block;
     height: 500px;
     margin-right: 2%;
@@ -308,8 +308,36 @@ footer .container{
 .side-window div{
     display: block;
     float:left
+} */
+
+
+.results .container .interaction div{
+    height: 500px;
+    margin-right: 0%;
+    float: left;
 }
 
+.results canvas {
+    left: 0;
+}
+
+#cy {
+    width: 55%;
+}
+
+.side-window {
+    width: 45%;
+    border: 2px solid #d9d9d9;
+    border-radius: 30px;
+}
+
+.side-window div{
+    padding: 10px;
+}
+
+br {
+    clear: left;
+}
 
 
 .results .container li, h3 {
