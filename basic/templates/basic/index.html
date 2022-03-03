@@ -70,25 +70,41 @@
             <tr>
               <td class="right"><label>Residue Position:</label></td>
               <td class="left">
-                <input id="input_var" name="v" type="text" placeholder="e.g. 199"  size="14px">
+                <input id="input_var" name="v" type="integer" placeholder="e.g. 199"  size="14px">
               </td>
             </tr>
-            <!-- <tr>
-              <td class="right"><label>Mutation:</label></td>
-              <td class="left">
-                <input id="input_wt" name="wt" type="text" placeholder="e.g. TYR" size="8px">
-                <i class="fa-solid fa-arrow-right"></i>
-                <input id="input_mut" name="mut" type="text" placeholder="e.g. HIS" size="8px">
-              </td>
-            </tr> -->
             <tr>
-              <td></td>
+              {% comment %} <button class = "collapsible">Advance search</button>
+              <div class = "content"> {% endcomment %}
+              <table>
+                <tr>
+                  <td><label>Max number of interactors:</label></td>
+                  <td >
+                    <input id="input_num" name="n" type="text" placeholder="e.g. 10" size="8px" value = "10">
+                  </td>
+                </tr>
+                  <td ><label>Experimentally determined interaction only:</label></td>
+                  <td>
+                    <select id="input_exp" name="e">
+                      <option value='0'>Yes</option>
+                      <option value='-1'>No</option>
+                    </select>
+              </td>
+            <tr> 
+            </tr>
+            
+            <tr>
               <td class="left">
                 <a href="{% url 'basic:main' %}">
                   <button type="submit">Submit</button></a>
               </td>
             </tr>
           </table>
+        
+
+
+          </table>
+          </div>
         </form>
 
 
@@ -114,6 +130,21 @@
 
 
     <script src="{% static 'basic/scripts.js' %}"></script>
-
+    <script>
+      var coll = document.getElementsByClassName("collapsible");
+      var i;
+      
+      for (i = 0; i < coll.length; i++) {
+          coll[i].addEventListener("click", function() {
+          this.classList.toggle("active");
+          var content = this.nextElementSibling;
+          if (content.style.maxHeight){
+              content.style.maxHeight = null;
+          } else {
+              content.style.maxHeight = content.scrollHeight + "px";
+          } 
+          });
+      }
+    </script>
   </body>
 </html>

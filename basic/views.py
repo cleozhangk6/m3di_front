@@ -53,6 +53,7 @@ def search_view(request):
     if request.method == "GET":
         query_uni = request.GET['q']
         query_var = request.GET['v']
+        query_num = request.GET['n']
 
         results_basic = Basicinfo2.objects.raw(
             'SELECT * FROM BasicInfo2 LEFT JOIN SignalPeptide ON uniprot_id=sp_uniprot_id WHERE uniprot_id = %s', [
@@ -91,6 +92,8 @@ def main_UniVar(request):
     if request.method == "GET":
         query_uni = request.GET['q']
         query_var = request.GET['v']
+        query_num = request.GET['n']
+        query_exp = request.GET['e']
 
         results_basic = Basicinfo2.objects.raw(
             'SELECT * FROM BasicInfo2 WHERE uniprot_id = %s', [query_uni]
@@ -130,16 +133,17 @@ def main_UniVar(request):
             )
 
         results_interact = Stringinteractions.objects.raw(
-            '''SELECT id, s.string_p1, a.uniprot_id as uniprot_p1, s.string_p2, b.uniprot_id as uniprot_p2, experimental, data_base, combined_score, Json_object('uniprot_p1', a.uniprot_id, 'uniprot_p2',  b.uniprot_id) AS col_json
+            '''SELECT id, s.string_p1, a.uniprot_id as uniprot_p1, s.string_p2, b.uniprot_id as uniprot_p2, 
+            experimental, data_base, combined_score, Json_object('uniprot_p1', a.uniprot_id, 'uniprot_p2',  b.uniprot_id) AS col_json
                 FROM StringInteractions as s
                 LEFT JOIN StringToUniprot as a
                 ON a.string_id = s.string_p1
                 LEFT JOIN StringToUniprot as b
                 ON b.string_id = s.string_p2
                 WHERE a.uniprot_id = %s
-                AND b.uniprot_id IS NOT NULL AND experimental > 0
-                ORDER BY s.combined_score
-                limit 10;''', [query_uni]
+                AND b.uniprot_id IS NOT NULL AND experimental > %s
+                ORDER BY s.combined_score desc
+                limit %s ''', [query_uni, int(query_exp), int(query_num)]
         )
 
         results_interact_additional = Stringinteractions.objects.raw(
@@ -151,26 +155,40 @@ def main_UniVar(request):
                 ON b.string_id = s.string_p2
                 WHERE a.uniprot_id = %s
                 AND b.uniprot_id IS NOT NULL
-                AND experimental > 0
-                ORDER BY s.combined_score
-                limit 10)
-                SELECT id, u.string_p1, c.uniprot_id as uniprot_p1, u.string_p2, d.uniprot_id as uniprot_p2, u.experimental, u.data_base, u.combined_score, 
+                AND experimental > %s
+                ORDER BY s.combined_score desc
+                limit %s)
+                SELECT id, u.string_p1, c.uniprot_id as uniprot_p1, u.string_p2, d.uniprot_id as uniprot_p2, u.experimental,
+                u.data_base, u.combined_score,
                 Json_object('uniprot_p1', c.uniprot_id, 'uniprot_p2',  d.uniprot_id) AS col_json_additional
                 FROM StringInteractions as u
                 LEFT JOIN StringToUniprot as c
                 ON c.string_id = u.string_p1
                 LEFT JOIN StringToUniprot as d
                 ON d.string_id = u.string_p2
-                WHERE c.uniprot_id in (select * from t) AND d.uniprot_id in (select * from t) AND c.uniprot_id > d.uniprot_id;''', [query_uni]
+                WHERE c.uniprot_id in (select * from t) AND d.uniprot_id in (select * from t) AND c.uniprot_id > d.uniprot_id;''', [query_uni, int(query_exp),int(query_num)]
         )
 
-        # need to change to limit here, 100 is for testing
+        
         results_interactome3d = Interactome3D1.objects.raw(
             '''
-            SELECT id, prot1, prot2, type, PDB_id as pdb_id
+            WITH t as (SELECT b.uniprot_id as uniprot_p2
+            FROM StringInteractions as s
+            LEFT JOIN StringToUniprot as a
+            ON a.string_id = s.string_p1
+            LEFT JOIN StringToUniprot as b
+            ON b.string_id = s.string_p2
+            WHERE a.uniprot_id = %s
+            AND b.uniprot_id IS NOT NULL
+            AND experimental %s
+            ORDER BY s.combined_score DESC
+            limit %s )
+            SELECT id, seq_begin1 AS p1_coverage_begin, seq_end1 AS p1_coverage_end, coverage1 AS p1_coverage,
+            seq_begin2 AS p2_coverage_begin,  seq_end2 AS p2_coverage_end, coverage2 AS p2_coverage,
+            PDB_id AS pdb, Json_object('uniprot_p1', prot1, 'uniprot_p2',  prot2, 'type', type ) AS col_jason_interactome
             FROM interactome3D_1
-            WHERE prot1 = %s OR prot2 =%s;
-                ''', [query_uni,query_uni]
+            WHERE (prot1 = %s AND prot2 in (select * from t)) or (prot1 in (select * from t) AND prot2 = %s);
+                ''', [query_uni,int(query_exp), int(query_num), query_uni]
         )
 
          # ------This bit works (but querying from a denormalised table)-----

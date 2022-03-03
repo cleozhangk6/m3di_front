@@ -2,6 +2,7 @@
 
 
 <!DOCTYPE html>
+
 <html>
   <head> 
       <title>M3DI | Results</title>
@@ -72,15 +73,16 @@
         <div id="cy"></div>
         {{ results_interact_string|json_script:"interaction-data" }}
 
-        <h3>Interactome3d</h3>
+        {% comment %} <h3>Interactome3d</h3>
         {%for object in results_interactome3d %}
           {%if object.prot1 == query_uni%}
-          <p>{{object.type}} available for PDB complex: <a href='https://www.rcsb.org/structure/{{ object.pdb_id }}'>{{ object.pdb_id }}</a>({{object.prot1}}/{{object.prot2}})</p>
+          <p>{{object.type}} available for PDB complex: 
+            <a href='https://www.rcsb.org/structure/{{ object.pdb_id }}'>{{ object.pdb_id }}</a>({{object.prot1}}/{{object.prot2}})</p>
           {%elif object.prot2 == query_uni%}
-          <p>{{object.type}} available for PDB complex: <a href='https://www.rcsb.org/structure/{{ object.pdb_id }}'>{{ object.pdb_id }}</a> ({{object.prot2}}/{{object.prot1}})</p>
+          <p>{{object.type}} available for PDB complex: 
+            <a href='https://www.rcsb.org/structure/{{ object.pdb_id }}'>{{ object.pdb_id }}</a> ({{object.prot2}}/{{object.prot1}})</p>
           {%endif%}
-
-        {%endfor%}
+        {%endfor%} {% endcomment %}
 
         <h3>Basic Info</h3>
         {% for object in results_basic %}
@@ -164,7 +166,22 @@
 
 
     <script src="{% static 'basic/scripts.js' %}"></script>
-    
+    <script>
+      var coll = document.getElementsByClassName("collapsible");
+      var i;
+      
+      for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+          this.classList.toggle("active");
+          var content = this.nextElementSibling;
+          if (content.style.display === "block") {
+            content.style.display = "none";
+          } else {
+            content.style.display = "block";
+          }
+        });
+      }
+      </script>
 
   </body>
 </html>
