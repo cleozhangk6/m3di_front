@@ -286,24 +286,26 @@ footer .container{
 
 .results .container .interaction-inline span{
     display: inline-block;
-    border: 2px solid #d9d9d9;
     height: 500px;
     margin-right: 2%;
-}
-
-#selection-box {
-    width: 15%;
-    margin-left: 0%;
 }
 
 #cy {
     width: 55%;
 }
 
-#detail-box {
-    width: 25%;
-    margin-right: 0%;
+.cy-detail {
+    width: 35%;
+    border: 2px solid #d9d9d9;
+    display: block;
 }
+
+/* .cy-detail div {
+    display: block;
+    width: 0%;
+    height: 5px;
+    border: 2px solid #d9d9d9;
+} */
 
 .results canvas {
     left: 0;

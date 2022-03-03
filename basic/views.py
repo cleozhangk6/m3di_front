@@ -31,33 +31,35 @@ def main_UniVar(request):
         query_uni = request.GET['q']
         query_var = request.GET['v']
 
-        results_basic = Basicinfo2.objects.raw(
-            'SELECT * FROM BasicInfo2 WHERE uniprot_id = %s', [query_uni]
-        )
 
-        results_signal = Pronameunique.objects.raw(
-            '''SELECT * FROM ProNameUnique LEFT JOIN SignalPeptide 
-            ON uniprot_id=sp_uniprot_id WHERE uniprot_id = %s''', [
-                query_uni]
-        )
+        # results_basic = Basicinfo2.objects.raw(
+        #     f'SELECT * FROM BasicInfo2 WHERE uniprot_id = "{query_uni}"'
+        # )
+        
+        results_basic = Basicinfo2.objects.filter(uniprot_id__icontains=query_uni).values()
 
-        results_topo = Topodom.objects.raw(
-            '''SELECT id, topology FROM (SELECT * FROM TopoDom WHERE uniprot = %s) AS tab 
-            WHERE topo_start <= %s and topo_end >= %s''', [
-                query_uni, query_var, query_var]
-        )
+        results_signal = Signalpeptide.objects.raw(
+            f'''SELECT * FROM ProNameUnique LEFT JOIN SignalPeptide 
+            ON uniprot_id=sp_uniprot_id WHERE uniprot_id = "{query_uni}"''')
+
+
 
         if query_uni and query_var:
 
             results_variant = MissenseVarCom.objects.raw(
                 'SELECT * FROM Missense_Var_Com WHERE uniprot = %s and posuniprot = %s', [
-                    query_uni, query_var]
-            )
+                    query_uni, query_var])
+            results_topo = Topodom.objects.raw(
+            '''SELECT id, topology FROM (SELECT * FROM TopoDom WHERE uniprot = %s) AS tab 
+            WHERE topo_start <= %s and topo_end >= %s''', [query_uni, query_var, query_var])
+
         elif query_uni:
             results_variant = MissenseVarCom.objects.raw(
-                'SELECT * FROM Missense_Var_Com WHERE uniprot = %s', [
-                    query_uni]
-            )
+                'SELECT * FROM Missense_Var_Com WHERE uniprot = %s LIMIT 10', [
+                    query_uni])
+            results_topo = Topodom.objects.none()
+
+
         else:
             results_variant = MissenseVarCom.objects.none()
 
@@ -70,7 +72,7 @@ def main_UniVar(request):
                                 'type', i.type,
                                 'p1_gene', g1.gene_name, 
                                 'p2_gene', g2.gene_name) 
-                    as col_json
+                    as cyData
                 FROM StringInteractions as s
                 LEFT JOIN StringToUniprot as su1
                     ON su1.string_id = s.string_p1
@@ -108,7 +110,7 @@ def main_UniVar(request):
                                     'type',i.type,
                                     'p1_gene', g1.gene_name, 
                                     'p2_gene', g2.gene_name)
-                        AS col_json_additional
+                        AS cyData_additional
                     FROM StringInteractions as s
                     LEFT JOIN StringToUniprot as su1
                         ON su1.string_id = s.string_p1
@@ -128,11 +130,11 @@ def main_UniVar(request):
 
         results_interact_list = []
         for item in results_interact:
-            results_interact_list.append(item.col_json)
+            results_interact_list.append(item.cyData)
         for item in results_interact_additional:
-            results_interact_list.append(item.col_json_additional)
-        results_interact_string = '{"interactors": [' + \
-            ",".join(results_interact_list) + ']}'
+            results_interact_list.append(item.cyData_additional)
+        results_interact_string = '[' + \
+            ",".join(results_interact_list) + ']'
 
 
         context = {

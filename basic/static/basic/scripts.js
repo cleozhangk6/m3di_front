@@ -256,12 +256,12 @@ function populate_uniprot(){
 //   });
 
 
-//6 Add interactors only once to avoid error
+//6 Add interactors only once to avoid error, deleted 'interactors'
 function convertJson(cont) {
   var cont_strip = cont.replaceAll('\\','').replace(/^"|"$/g, '')
   return JSON.parse(cont_strip)
 }
-const obj = convertJson(document.getElementById('interaction-data').textContent);
+const cyData = convertJson(document.getElementById('interaction-data').textContent);
 
 Promise.all([
   fetch('/static/basic/cy-style.json')
@@ -274,28 +274,30 @@ Promise.all([
       container: document.getElementById('cy'),
       style: dataArray[0],
       elements: [],
+      minZoom: 0.5,
+      maxZoom: 5
       });
     //Add query protein
     cy.add(
-      { data: { id: obj.interactors[0].p1, 
+      { data: { id: cyData[0].p1, 
                 query: true,
-                gene: obj.interactors[0].p1_gene} }
+                gene: cyData[0].p1_gene} }
     );
-    //Add the top primary interactors
-    for (var i = 0; i < obj.interactors.length; i++) {
+    //Add the top 10 primary interactors
+    for (var i = 0; i < cyData.length; i++) {
       if (i < 10) {
         cy.add(
-          { data: { id: obj.interactors[i].p2,
-                    gene: obj.interactors[i].p2_gene } }
+          { data: { id: cyData[i].p2,
+                    gene: cyData[i].p2_gene } }
         );
       };
     //Add edges
       cy.add(
-        { data: { id: i, 
-          source: obj.interactors[i].p1, 
-          target: obj.interactors[i].p2,
-          exp: obj.interactors[i].exp,
-          type: obj.interactors[i].type} }
+        { data: { id: "edge_" + i, 
+          source: cyData[i].p1, 
+          target: cyData[i].p2,
+          exp: cyData[i].exp,
+          type: cyData[i].type} }
       );
     };
     cy.layout({
