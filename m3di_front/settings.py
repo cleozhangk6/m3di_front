@@ -32,7 +32,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'basic.apps.BasicConfig',
+    'm3di.apps.M3diConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
