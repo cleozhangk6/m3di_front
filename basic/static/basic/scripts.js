@@ -257,11 +257,27 @@ function populate_uniprot(){
 
 
 //6 Add interactors only once to avoid error, deleted 'interactors'
+
 function convertJson(cont) {
   var cont_strip = cont.replaceAll('\\','').replace(/^"|"$/g, '')
   return JSON.parse(cont_strip)
 }
 const cyData = convertJson(document.getElementById('interaction-data').textContent);
+
+var selectedNodeHandler = function(evt) {
+  $('.node-operation').show();
+  $(".node-operation").text("Node selected: " + evt.cyTarget.id());
+}
+var unselectedNodeHandler = function() {
+  $('.node-operation').hide();
+}
+var selectededgeHandler = function(evt) {
+  $('.edge-operation').show();
+  $(".edge-operation").text("Edge selected: " + evt.cyTarget.id());
+}
+var unselectededgeHandler = function() {
+  $('.edge-operation').hide();
+}
 
 Promise.all([
   fetch('/static/basic/cy-style.json')
@@ -293,7 +309,7 @@ Promise.all([
       };
     //Add edges
       cy.add(
-        { data: { id: "edge_" + i, 
+        { data: { id: cyData[i].p1 + "--" + cyData[i].p2, 
           source: cyData[i].p1, 
           target: cyData[i].p2,
           exp: cyData[i].exp,
@@ -304,6 +320,9 @@ Promise.all([
       name: 'cose'
     });
 
-  });
+    cy.on('select','node', selectedNodeHandler)
+    cy.on('unselect','node', unselectedNodeHandler)
+    cy.on('select','edge', selectededgeHandler)
+    cy.on('unselect','edge', unselectededgeHandler)
 
-  // var selectedNodeHandler = function()
+  });

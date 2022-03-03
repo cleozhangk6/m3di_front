@@ -313,7 +313,6 @@ footer .container{
 
 .results .container .interaction div{
     height: 500px;
-    margin-right: 0%;
     float: left;
 }
 
@@ -331,8 +330,9 @@ footer .container{
     border-radius: 30px;
 }
 
-.side-window div{
+.side-window h3{
     padding: 10px;
+    text-align: center;
 }
 
 br {

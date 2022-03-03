@@ -76,11 +76,13 @@
           {{ results_interact_string|json_script:"interaction-data" }}
           </div>
           <div class="side-window">
-            <div id="node-operation">Node Operations</div>
+            <h3 class="node-operation"></h3>
+            <h3 class="edge-operation"></h3>
           </div>
         </div>
 
       <br>
+
         <h3>Basic Info</h3>
           <ul>
             <li>Protein name: <a href="{{ object.protein_link }}">{{ results_basic.0.protein_name }}</a></li>
