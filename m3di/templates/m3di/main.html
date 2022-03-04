@@ -26,18 +26,16 @@
 {% block Content %}
   <section class="results">
     <!-- <p><strong>Search Results</strong></p> -->
-    <p>You searched for {{ query_uni }} ({{ results_basic.0.gene_name }})</p>
-    {% if query_uni and query_var %}
-    <p>Residue position {{ query_var }}</p>
-    </p>
-    
-    {% elif query_uni %}
-    <p>No variant specified</p>
-
-    {% else %}
-    <p>No search submitted</p>
-    
-    {% endif %}
+    <div id="you-searched-for">
+      <p>You searched for {{ query_uni }} ({{ results_basic.0.gene_name }})</p>
+      {% if query_uni and query_var %}
+      <p>Residue position {{ query_var }}</p>
+      {% elif query_uni %}
+      <p>No variant specified</p>
+      {% else %}
+      <p>No search submitted</p>
+      {% endif %}
+    </div>
       
     <div class="container">
 

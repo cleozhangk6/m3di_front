@@ -135,11 +135,6 @@ def main_UniVar(request):
         results_interact_string = '[' + \
             ",".join(results_interact_list) + ']'
 
-
-
-
-
-
         context = {
             'query_uni': query_uni,
             'query_var': query_var,
