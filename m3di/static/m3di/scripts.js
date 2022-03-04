@@ -269,7 +269,7 @@ $('.node-operation').hide();
 var selectedNodeHandler = function(evt) {
   $('.node-operation').show();
   var node_id = evt.cyTarget.id();
-  $(".node-operation").text("Node selected: " + node_id);
+  $(".node-operation").text("UniprotID: " + node_id);
 }
 var unselectedNodeHandler = function() {
   $('.node-operation').hide();
@@ -277,9 +277,9 @@ var unselectedNodeHandler = function() {
 var selectededgeHandler = function(evt) {
   $('.edge-operation').show();
   var edge_id = evt.cyTarget.id();
-  $(".edge-operation").text("Edge selected: " + cyData[edge_id].p1 + '_' + cyData[edge_id].p2);
+  $(".edge-operation").text("Interaction: " + cyData[edge_id].p1 + ' - ' + cyData[edge_id].p2);
   $(".edge-operation").append(`<p>Experimental evidence score: ${cyData[edge_id].exp}</p> 
-  <p>Model/structure: ${cyData[edge_id].type}</p>`);
+  <p>Model/Structure: ${cyData[edge_id].type}</p>`);
 }
 var unselectededgeHandler = function() {
   $('.edge-operation').hide();

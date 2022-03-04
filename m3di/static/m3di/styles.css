@@ -340,7 +340,6 @@ footer .container{
 
 
 .results .container .interaction div{
-    height: 500px;
     float: left;
 }
 
@@ -350,10 +349,12 @@ footer .container{
 
 #cy {
     width: 55%;
+    height: 500px;
 }
 
 .side-window {
-    width: 45%;
+    width: 30%;
+    height: auto;
     border: 2px solid #d9d9d9;
     border-radius: 30px;
 }
