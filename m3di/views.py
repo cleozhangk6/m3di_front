@@ -19,6 +19,17 @@ def raw_to_json(RawQuerySet, fields):
         i += 1
     return json.dumps(array)
 
+def raw_to_json2(RawQuerySet, fields):
+    array = []
+    i = 0
+    for item in RawQuerySet:
+        array.append({})
+        for ii in range(len(fields)):
+            array[i][fields[ii]] = getattr(item, fields[ii])
+        i += 1
+    return json.dumps(array)
+
+
 
 # Create your views here.
 
@@ -100,7 +111,7 @@ def main_UniVar(request):
                     ON b2.uniprot_id = su2.uniprot_id
                 WHERE su1.uniprot_id = %s
                     AND su2.uniprot_id IS NOT NULL AND s.experimental > 0
-                ORDER BY s.combined_score desc
+                ORDER BY s.combined_score desc, s.id
             limit 10;''', [query_uni]
         )
 
@@ -115,7 +126,7 @@ def main_UniVar(request):
                     WHERE stu1.uniprot_id = %s
                         AND stu2.uniprot_id IS NOT NULL
                         AND st.experimental > 0
-                    ORDER BY st.combined_score desc
+                    ORDER BY st.combined_score desc, st.id
                     limit 10)
                 SELECT s.id, 
                         Json_object('p1', su1.uniprot_id, 
@@ -166,13 +177,11 @@ def main_UniVar(request):
                     ON b2.uniprot_id = su2.uniprot_id
                 WHERE su1.uniprot_id = %s
                     AND su2.uniprot_id IS NOT NULL AND s.experimental > 0
-                ORDER BY s.combined_score desc
+                ORDER BY s.combined_score desc, s.id
                 limit 10;''', [query_uni])
         
         field_list = ["uniprot","gene"]
-
         test1_json = raw_to_json(test1,field_list)
-
 
 
         context = {

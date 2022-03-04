@@ -353,19 +353,19 @@ $('.edge-operation').hide();
 
 var selectedNodeHandler = function(evt) {
   $('.node-operation').show();
-  var node_id = evt.cyTarget.id();
+  var node = evt.cyTarget.data();
   // $("#node").text("UniprotID: " + node_id);
-  $("#node").html(`Uniprot ID: ${node_id}`);
+  $("#node").html(`Uniprot ID: ${node.gene}`);
 }
 var unselectedNodeHandler = function() {
   $('.node-operation').hide();
 }
 var selectededgeHandler = function(evt) {
   $('.edge-operation').show();
-  var edge_id = evt.cyTarget.id();
-  $("#edge").text("Interaction: " + cyData[edge_id].p1 + ' - ' + cyData[edge_id].p2);
-  $("#exp").text("Experimental evidence score: " + cyData[edge_id].exp);
-  $("#type").text("Model/Structure: " + cyData[edge_id].type);
+  var edge = evt.cyTarget.data();
+  $("#edge").text("Interaction: " + edge.p1 + ' - ' + edge.p2);
+  $("#exp").text("Experimental evidence score: " + edge.exp);
+  $("#type").text("Model/Structure: " + edge.type);
 }
 var unselectededgeHandler = function() {
   $('.edge-operation').hide();
