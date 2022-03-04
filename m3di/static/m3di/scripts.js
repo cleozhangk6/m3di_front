@@ -278,8 +278,8 @@ var selectededgeHandler = function(evt) {
   $('.edge-operation').show();
   var edge_id = evt.cyTarget.id();
   $(".edge-operation").text("Edge selected: " + cyData[edge_id].p1 + '_' + cyData[edge_id].p2);
-  $(".edge-operation").append(`<p>Experimental evidence score: ${cyData[edge_id].exp}</p>
-                              <p>Model/structure: ${cyData[edge_id].type}</p>`);
+  $(".edge-operation").append(`<p>Experimental evidence score: ${cyData[edge_id].exp}</p> 
+  <p>Model/structure: ${cyData[edge_id].type}</p>`);
 }
 var unselectededgeHandler = function() {
   $('.edge-operation').hide();

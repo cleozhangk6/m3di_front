@@ -159,6 +159,34 @@ html, body {
 .fa-solid {
     color: #CAC4D7;
     font-size: 1.3em;
+    cursor: pointer
+}
+
+#info-box {
+    position: absolute;
+    width: 150px;
+    height: 160px;
+    border-radius: 10px;
+    background-color: #CAC4D7;
+    color: white;
+    padding: 1em;
+    visibility: hidden;
+}
+
+#info-box::before {
+    content: "";
+    position: absolute;
+    left: 0%;
+    top: 20%;
+    transform: translateX(-90%);
+    border: 12px solid;
+    border-color: #0000 #CAC4D7 #0000 #0000;
+}
+
+.fa-solid:hover + #info-box{
+    top: 24%;
+    left:83%;
+    visibility: visible;
 }
 
 .home-search label {
