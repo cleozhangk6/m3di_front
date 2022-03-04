@@ -264,16 +264,22 @@ function convertJson(cont) {
 }
 const cyData = convertJson(document.getElementById('interaction-data').textContent);
 
+$('.node-operation').hide();
+
 var selectedNodeHandler = function(evt) {
   $('.node-operation').show();
-  $(".node-operation").text("Node selected: " + evt.cyTarget.id());
+  var node_id = evt.cyTarget.id();
+  $(".node-operation").text("Node selected: " + node_id);
 }
 var unselectedNodeHandler = function() {
   $('.node-operation').hide();
 }
 var selectededgeHandler = function(evt) {
   $('.edge-operation').show();
-  $(".edge-operation").text("Edge selected: " + evt.cyTarget.id());
+  var edge_id = evt.cyTarget.id();
+  $(".edge-operation").text("Edge selected: " + cyData[edge_id].p1 + '_' + cyData[edge_id].p2);
+  $(".edge-operation").append(`<p>Experimental evidence score: ${cyData[edge_id].exp}</p>
+                              <p>Model/structure: ${cyData[edge_id].type}</p>`);
 }
 var unselectededgeHandler = function() {
   $('.edge-operation').hide();
@@ -309,7 +315,7 @@ Promise.all([
       };
     //Add edges
       cy.add(
-        { data: { id: cyData[i].p1 + "--" + cyData[i].p2, 
+        { data: { id: i, 
           source: cyData[i].p1, 
           target: cyData[i].p2,
           exp: cyData[i].exp,
@@ -326,3 +332,5 @@ Promise.all([
     cy.on('unselect','edge', unselectededgeHandler)
 
   });
+
+  // cyData[i].p1 + "--" + cyData[i].p2
