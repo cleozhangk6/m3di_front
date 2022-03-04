@@ -70,8 +70,8 @@ def main_UniVar(request):
                                 'p2', su2.uniprot_id,
                                 'exp', s.experimental,
                                 'type', i.type,
-                                'p1_gene', g1.gene_name, 
-                                'p2_gene', g2.gene_name) 
+                                'p1_gene', b1.gene_name, 
+                                'p2_gene', b2.gene_name) 
                     as cyData
                 FROM StringInteractions as s
                 LEFT JOIN StringToUniprot as su1
@@ -80,10 +80,10 @@ def main_UniVar(request):
                     ON su2.string_id = s.string_p2
                 LEFT JOIN interactome3D_1 as i
                     ON i.prot1 = su1.uniprot_id AND i.prot2 = su2.uniprot_id
-                LEFT JOIN GeneInfo as g1
-                    ON g1.uniprot_id = su1.uniprot_id
-                LEFT JOIN GeneInfo as g2
-                    ON g2.uniprot_id = su2.uniprot_id
+                LEFT JOIN BasicInfo2 as b1
+                    ON b1.uniprot_id = su1.uniprot_id
+                LEFT JOIN BasicInfo2 as b2
+                    ON b2.uniprot_id = su2.uniprot_id
                 WHERE su1.uniprot_id = %s
                     AND su2.uniprot_id IS NOT NULL AND s.experimental > 0
                 ORDER BY s.combined_score desc
@@ -108,8 +108,8 @@ def main_UniVar(request):
                                     'p2', su2.uniprot_id, 
                                     'exp', s.experimental,
                                     'type',i.type,
-                                    'p1_gene', g1.gene_name, 
-                                    'p2_gene', g2.gene_name)
+                                    'p1_gene', b1.gene_name, 
+                                    'p2_gene', b2.gene_name)
                         AS cyData_additional
                     FROM StringInteractions as s
                     LEFT JOIN StringToUniprot as su1
@@ -118,15 +118,14 @@ def main_UniVar(request):
                         ON su2.string_id = s.string_p2
                     LEFT JOIN interactome3D_1 as i
                         ON i.prot1 = su2.uniprot_id AND i.prot2 = su1.uniprot_id
-                    LEFT JOIN GeneInfo as g1
-                        ON g1.uniprot_id = su1.uniprot_id
-                    LEFT JOIN GeneInfo as g2
-                        ON g2.uniprot_id = su2.uniprot_id        
+                    LEFT JOIN BasicInfo2 as b1
+                        ON b1.uniprot_id = su1.uniprot_id
+                    LEFT JOIN BasicInfo2 as b2
+                        ON b2.uniprot_id = su2.uniprot_id        
                     WHERE su1.uniprot_id in (select * from t) 
                         AND su2.uniprot_id in (select * from t)
                         AND su1.uniprot_id > su2.uniprot_id
-                        AND experimental > 0;''', [query_uni]
-        )
+                        AND experimental > 0;''', [query_uni])
 
         results_interact_list = []
         for item in results_interact:
@@ -135,6 +134,10 @@ def main_UniVar(request):
             results_interact_list.append(item.cyData_additional)
         results_interact_string = '[' + \
             ",".join(results_interact_list) + ']'
+
+
+
+
 
 
         context = {
