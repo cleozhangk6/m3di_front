@@ -1,15 +1,29 @@
+from cgi import test
+from dataclasses import fields
 from django.shortcuts import render
 from django.views import generic
+from pandas import array
 from .models import *
 from itertools import chain
+import json
+
+
+
+def raw_to_json(RawQuerySet, fields):
+    array = []
+    i = 0
+    for item in RawQuerySet:
+        array.append({})
+        for ii in range(len(fields)):
+            array[i][fields[ii]] = getattr(item, fields[ii])
+        i += 1
+    return json.dumps(array)
+
 
 # Create your views here.
 
-
 class IndexView(generic.TemplateView):
     template_name = 'm3di/index.html'
-
-
 
 # class MainView(generic.ListView):
 #     template_name = 'm3di/main.html'
@@ -127,13 +141,39 @@ def main_UniVar(request):
                         AND su1.uniprot_id > su2.uniprot_id
                         AND experimental > 0;''', [query_uni])
 
-        results_interact_list = []
+        results_interact_list = []      
         for item in results_interact:
             results_interact_list.append(item.cyData)
         for item in results_interact_additional:
             results_interact_list.append(item.cyData_additional)
         results_interact_string = '[' + \
             ",".join(results_interact_list) + ']'
+
+        # another way of writing a list
+        # results_interact_list = [item.cyData for item in results_interact]
+
+
+        test1 = Stringinteractions.objects.raw('''
+                SELECT s.id,
+                    su2.uniprot_id AS uniprot,
+                    b2.gene_name AS gene
+                FROM StringInteractions as s
+                LEFT JOIN StringToUniprot as su1
+                    ON su1.string_id = s.string_p1
+                LEFT JOIN StringToUniprot as su2
+                    ON su2.string_id = s.string_p2
+                LEFT JOIN BasicInfo2 as b2
+                    ON b2.uniprot_id = su2.uniprot_id
+                WHERE su1.uniprot_id = %s
+                    AND su2.uniprot_id IS NOT NULL AND s.experimental > 0
+                ORDER BY s.combined_score desc
+                limit 10;''', [query_uni])
+        
+        field_list = ["uniprot","gene"]
+
+        test1_json = raw_to_json(test1,field_list)
+
+
 
         context = {
             'query_uni': query_uni,
@@ -142,7 +182,8 @@ def main_UniVar(request):
             'results_signal': results_signal,
             'results_topo': results_topo,
             'results_variant': results_variant,
-            'results_interact_string': results_interact_string
+            'results_interact_string': results_interact_string,
+            'test1_json': test1_json
         }
 
         return render(request, 'm3di/main.html', context)
