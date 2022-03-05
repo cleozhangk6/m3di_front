@@ -19,16 +19,6 @@ def raw_to_json(RawQuerySet, fields):
         i += 1
     return json.dumps(array)
 
-def raw_to_json2(RawQuerySet, fields):
-    array = []
-    i = 0
-    for item in RawQuerySet:
-        array.append({})
-        for ii in range(len(fields)):
-            array[i][fields[ii]] = getattr(item, fields[ii])
-        i += 1
-    return json.dumps(array)
-
 
 
 # Create your views here.
@@ -57,9 +47,7 @@ def main_UniVar(request):
         query_var = request.GET['v']
 
 
-        # results_basic = Basicinfo2.objects.raw(
-        #     f'SELECT * FROM BasicInfo2 WHERE uniprot_id = "{query_uni}"'
-        # )
+
         
         results_basic = Basicinfo2.objects.filter(uniprot_id__icontains=query_uni).values()
 
@@ -94,9 +82,7 @@ def main_UniVar(request):
                     Json_object('p1', su1.uniprot_id,
                                 'p2', su2.uniprot_id,
                                 'exp', s.experimental,
-                                'type', i.type,
-                                'p1_gene', b1.gene_name, 
-                                'p2_gene', b2.gene_name) 
+                                'type', i.type) 
                     as cyData
                 FROM StringInteractions as s
                 LEFT JOIN StringToUniprot as su1
@@ -132,9 +118,7 @@ def main_UniVar(request):
                         Json_object('p1', su1.uniprot_id, 
                                     'p2', su2.uniprot_id, 
                                     'exp', s.experimental,
-                                    'type',i.type,
-                                    'p1_gene', b1.gene_name, 
-                                    'p2_gene', b2.gene_name)
+                                    'type',i.type)
                         AS cyData_additional
                     FROM StringInteractions as s
                     LEFT JOIN StringToUniprot as su1
@@ -157,14 +141,14 @@ def main_UniVar(request):
             results_interact_list.append(item.cyData)
         for item in results_interact_additional:
             results_interact_list.append(item.cyData_additional)
-        results_interact_string = '[' + \
+        cyEdges_json = '[' + \
             ",".join(results_interact_list) + ']'
 
         # another way of writing a list
         # results_interact_list = [item.cyData for item in results_interact]
 
 
-        test1 = Stringinteractions.objects.raw('''
+        cyNodes_raw = Stringinteractions.objects.raw('''
                 SELECT s.id,
                     su2.uniprot_id AS uniprot,
                     b2.gene_name AS gene
@@ -179,10 +163,17 @@ def main_UniVar(request):
                     AND su2.uniprot_id IS NOT NULL AND s.experimental > 0
                 ORDER BY s.combined_score desc, s.id
                 limit 10;''', [query_uni])
-        
-        field_list = ["uniprot","gene"]
-        test1_json = raw_to_json(test1,field_list)
 
+        cyNodes_q_raw = Basicinfo2.objects.raw(
+            f'''SELECT uniprot_id AS uniprot,
+                gene_name AS gene,
+                id 
+                FROM BasicInfo2 WHERE uniprot_id = "{query_uni}"'''
+        )
+        
+        cyNodes_fields = ["uniprot","gene"]
+        cyNodes_json = raw_to_json(cyNodes_raw, cyNodes_fields)
+        cyNodes_q_json = raw_to_json(cyNodes_q_raw, cyNodes_fields)
 
         context = {
             'query_uni': query_uni,
@@ -191,8 +182,9 @@ def main_UniVar(request):
             'results_signal': results_signal,
             'results_topo': results_topo,
             'results_variant': results_variant,
-            'results_interact_string': results_interact_string,
-            'test1_json': test1_json
+            'cyEdges_json': cyEdges_json,
+            'cyNodes_json': cyNodes_json,
+            'cyNodes_q_json': cyNodes_q_json
         }
 
         return render(request, 'm3di/main.html', context)

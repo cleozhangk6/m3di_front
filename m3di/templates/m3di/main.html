@@ -42,8 +42,9 @@
       <h3>Interaction</h3>
       <div class="interaction">
         <div id="cy">
-        {{ results_interact_string|json_script:"interaction-data" }}
-        {{ test1_json|json_script:"interactors" }}
+        {{ cyEdges_json|json_script:"cyEdges" }}
+        {{ cyNodes_json|json_script:"cyNodes" }}
+        {{ cyNodes_q_json|json_script:"cyNodes_q" }}
         </div>
         <div class="side-window">
           <h3>Select a node or an edge</h3>

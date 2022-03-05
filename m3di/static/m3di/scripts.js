@@ -340,13 +340,14 @@ function populate_uniprot(){
 
 //7 Added interactor json
 
-function convertJson(cont) {
-  var cont_strip = cont.replaceAll('\\','').replace(/^"|"$/g, '')
-  return JSON.parse(cont_strip)
+function convertJson(myId) {
+  var cont = document.getElementById(myId).textContent
+  return JSON.parse(cont.replaceAll('\\','').replace(/^"|"$/g, ''))
 }
-const cyNodes = convertJson(document.getElementById('interactors').textContent);
-const cyData = convertJson(document.getElementById('interaction-data').textContent);
 
+const cyEdges = convertJson('cyEdges');
+const cyNodes = convertJson('cyNodes');
+const cyNodes_q = convertJson('cyNodes_q');
 
 $('.node-operation').hide();
 $('.edge-operation').hide();
@@ -363,7 +364,7 @@ var unselectedNodeHandler = function() {
 var selectededgeHandler = function(evt) {
   $('.edge-operation').show();
   var edge = evt.cyTarget.data();
-  $("#edge").text("Interaction: " + edge.p1 + ' - ' + edge.p2);
+  $("#edge").text("Interaction: " + edge.source + ' - ' + edge.target);
   $("#exp").text("Experimental evidence score: " + edge.exp);
   $("#type").text("Model/Structure: " + edge.type);
 }
@@ -387,12 +388,12 @@ Promise.all([
       });
     //Add query protein
     cy.add(
-      { data: { id: cyData[0].p1, 
+      { data: { id: cyNodes_q[0].uniprot, 
                 query: true,
-                gene: cyData[0].p1_gene} }
+                gene: cyNodes_q[0].gene} }
     );
     //Add the primary interactors
-    for (var i = 0; i < cyData.length; i++) {
+    for (var i = 0; i < cyEdges.length; i++) {
       if (i < cyNodes.length) {
         cy.add(
           { data: { id: cyNodes[i].uniprot,
@@ -402,10 +403,10 @@ Promise.all([
     //Add edges
       cy.add(
         { data: { id: i, 
-          source: cyData[i].p1, 
-          target: cyData[i].p2,
-          exp: cyData[i].exp,
-          type: cyData[i].type} }
+          source: cyEdges[i].p1, 
+          target: cyEdges[i].p2,
+          exp: cyEdges[i].exp,
+          type: cyEdges[i].type} }
       );
     };
     cy.layout({
