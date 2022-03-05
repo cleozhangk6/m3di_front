@@ -12,7 +12,7 @@
       "text-outline-width": "2px",
       "color": "#fff"}
   }, {
-    "selector": "node[?query]",
+    "selector": "node[idInt=0]",
     "style": {
       "width": "70px",
       "height": "70px"}

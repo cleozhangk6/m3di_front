@@ -77,13 +77,12 @@ def main_UniVar(request):
             results_variant = MissenseVarCom.objects.none()
 
 
-        results_interact = Stringinteractions.objects.raw(
-            '''SELECT s.id, 
-                    Json_object('p1', su1.uniprot_id,
-                                'p2', su2.uniprot_id,
-                                'exp', s.experimental,
-                                'type', i.type) 
-                    as cyData
+        cyEdges_raw = Stringinteractions.objects.raw(
+            '''SELECT s.id,
+                    su1.uniprot_id AS p1,
+                    su2.uniprot_id AS p2,
+                    s.experimental AS exp,
+                    i.type AS type
                 FROM StringInteractions as s
                 LEFT JOIN StringToUniprot as su1
                     ON su1.string_id = s.string_p1
@@ -91,17 +90,13 @@ def main_UniVar(request):
                     ON su2.string_id = s.string_p2
                 LEFT JOIN interactome3D_1 as i
                     ON i.prot1 = su1.uniprot_id AND i.prot2 = su2.uniprot_id
-                LEFT JOIN BasicInfo2 as b1
-                    ON b1.uniprot_id = su1.uniprot_id
-                LEFT JOIN BasicInfo2 as b2
-                    ON b2.uniprot_id = su2.uniprot_id
                 WHERE su1.uniprot_id = %s
                     AND su2.uniprot_id IS NOT NULL AND s.experimental > 0
                 ORDER BY s.combined_score desc, s.id
             limit 10;''', [query_uni]
         )
 
-        results_interact_additional = Stringinteractions.objects.raw(
+        cyEdges_add_raw = Stringinteractions.objects.raw(
             '''WITH t as 
                     (SELECT stu2.uniprot_id as uniprot_p2
                     FROM StringInteractions as st
@@ -115,34 +110,29 @@ def main_UniVar(request):
                     ORDER BY st.combined_score desc, st.id
                     limit 10)
                 SELECT s.id, 
-                        Json_object('p1', su1.uniprot_id, 
-                                    'p2', su2.uniprot_id, 
-                                    'exp', s.experimental,
-                                    'type',i.type)
-                        AS cyData_additional
+                        su1.uniprot_id AS p1,
+                        su2.uniprot_id AS p2,
+                        s.experimental AS exp,
+                        i.type AS type
                     FROM StringInteractions as s
                     LEFT JOIN StringToUniprot as su1
                         ON su1.string_id = s.string_p1
                     LEFT JOIN StringToUniprot as su2
                         ON su2.string_id = s.string_p2
                     LEFT JOIN interactome3D_1 as i
-                        ON i.prot1 = su2.uniprot_id AND i.prot2 = su1.uniprot_id
-                    LEFT JOIN BasicInfo2 as b1
-                        ON b1.uniprot_id = su1.uniprot_id
-                    LEFT JOIN BasicInfo2 as b2
-                        ON b2.uniprot_id = su2.uniprot_id        
+                        ON i.prot1 = su2.uniprot_id AND i.prot2 = su1.uniprot_id      
                     WHERE su1.uniprot_id in (select * from t) 
                         AND su2.uniprot_id in (select * from t)
                         AND su1.uniprot_id > su2.uniprot_id
                         AND experimental > 0;''', [query_uni])
 
-        results_interact_list = []      
-        for item in results_interact:
-            results_interact_list.append(item.cyData)
-        for item in results_interact_additional:
-            results_interact_list.append(item.cyData_additional)
-        cyEdges_json = '[' + \
-            ",".join(results_interact_list) + ']'
+        # results_interact_list = []      
+        # for item in results_interact:
+        #     results_interact_list.append(item.cyData)
+        # for item in results_interact_additional:
+        #     results_interact_list.append(item.cyData_additional)
+        # cyEdges_json = '[' + \
+        #     ",".join(results_interact_list) + ']'
 
         # another way of writing a list
         # results_interact_list = [item.cyData for item in results_interact]
@@ -175,6 +165,12 @@ def main_UniVar(request):
         cyNodes_json = raw_to_json(cyNodes_raw, cyNodes_fields)
         cyNodes_q_json = raw_to_json(cyNodes_q_raw, cyNodes_fields)
 
+        cyEdges_fields = ["p1","p2","exp","type"]
+        cyEdges_json = raw_to_json(cyEdges_raw, cyEdges_fields)
+        cyEdges_add_json = raw_to_json(cyEdges_add_raw, cyEdges_fields)
+
+
+
         context = {
             'query_uni': query_uni,
             'query_var': query_var,
@@ -184,7 +180,8 @@ def main_UniVar(request):
             'results_variant': results_variant,
             'cyEdges_json': cyEdges_json,
             'cyNodes_json': cyNodes_json,
-            'cyNodes_q_json': cyNodes_q_json
+            'cyNodes_q_json': cyNodes_q_json,
+            'cyEdges_add_json': cyEdges_add_json            
         }
 
         return render(request, 'm3di/main.html', context)

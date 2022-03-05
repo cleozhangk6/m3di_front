@@ -157,197 +157,15 @@ function populate_uniprot(){
 
 
 
-// //4 Cleans up codes from 2 and adopt 3
-
-// function convertJson(cont) {
-//   var cont_strip = cont.replaceAll('\\','').replace(/^"|"$/g, '')
-//   return JSON.parse(cont_strip)
-// }
-// const obj = convertJson(document.getElementById('interaction-data').textContent);
-
-// Promise.all([
-//   fetch('/static/basic/cy-style.json')
-//   .then(function(res) {
-//     return res.json()
-//   })
-// ])
-//   .then(function(dataArray) {
-//     var cy = cytoscape({
-//       container: document.getElementById('cy'),
-//       style: dataArray[0],
-//       elements: [],
-//       });
-//     for (var i = 0; i < obj.interactors.length; i++) {
-//       cy.add(
-//         { data: { id: obj.interactors[i].p1, "idInt": i } }
-//       );
-//       cy.add(
-//         { data: { id: obj.interactors[i].p2 } }
-//       );
-//       cy.add(
-//         { data: { id: i, 
-//           source: obj.interactors[i].p1, 
-//           target: obj.interactors[i].p2,
-//           exp: obj.interactors[i].exp} }
-//       );
-//       if (obj.interactors[i].type != null) {
-//         cy.add(
-//           { data: { id: "i3d_" + i, 
-//             source: obj.interactors[i].p1, 
-//             target: obj.interactors[i].p2,
-//             type: obj.interactors[i].type} }
-//         );
-//       }
-//     };
-//     cy.layout({
-//       name: 'cose'
-//     });
-
-//   });
-
-
-
-
-
-
-
-//5 Single edges (interactome3D or string)
-
-// function convertJson(cont) {
-//   var cont_strip = cont.replaceAll('\\','').replace(/^"|"$/g, '')
-//   return JSON.parse(cont_strip)
-// }
-// const obj = convertJson(document.getElementById('interaction-data').textContent);
-
-// Promise.all([
-//   fetch('/static/basic/cy-style.json')
-//   .then(function(res) {
-//     return res.json()
-//   })
-// ])
-//   .then(function(dataArray) {
-//     var cy = window.cy = cytoscape({
-//       container: document.getElementById('cy'),
-//       style: dataArray[0],
-//       elements: [],
-//       });
-//     for (var i = 0; i < obj.interactors.length; i++) {
-//       cy.add(
-//         { data: { id: obj.interactors[i].p1, 
-//                   idInt: i,
-//                   gene: obj.interactors[i].p1_gene} }
-//       );
-//       cy.add(
-//         { data: { id: obj.interactors[i].p2,
-//                   gene: obj.interactors[i].p2_gene } }
-//       );
-//       cy.add(
-//         { data: { id: i, 
-//           source: obj.interactors[i].p1, 
-//           target: obj.interactors[i].p2,
-//           exp: obj.interactors[i].exp,
-//           type: obj.interactors[i].type} }
-//       );
-//     };
-//     cy.layout({
-//       name: 'cose'
-//     });
-
-//   });
-
-
-// //6 Add interactors only once to avoid error, deleted 'interactors'
-
-// function convertJson(cont) {
-//   var cont_strip = cont.replaceAll('\\','').replace(/^"|"$/g, '')
-//   return JSON.parse(cont_strip)
-// }
-// const cyData = convertJson(document.getElementById('interaction-data').textContent);
-
-
-// $('.node-operation').hide();
-// $('.edge-operation').hide();
-
-// var selectedNodeHandler = function(evt) {
-//   $('.node-operation').show();
-//   var node_id = evt.cyTarget.id();
-//   // $("#node").text("UniprotID: " + node_id);
-//   $("#node").html(`Uniprot ID: ${node_id}`);
-// }
-// var unselectedNodeHandler = function() {
-//   $('.node-operation').hide();
-// }
-// var selectededgeHandler = function(evt) {
-//   $('.edge-operation').show();
-//   var edge_id = evt.cyTarget.id();
-//   $("#edge").text("Interaction: " + cyData[edge_id].p1 + ' - ' + cyData[edge_id].p2);
-//   $("#exp").text("Experimental evidence score: " + cyData[edge_id].exp);
-//   $("#type").text("Model/Structure: " + cyData[edge_id].type);
-// }
-// var unselectededgeHandler = function() {
-//   $('.edge-operation').hide();
-// }
-
-// Promise.all([
-//   fetch('/static/m3di/cy-style.json')
-//   .then(function(res) {
-//     return res.json()
-//   })
-// ])
-//   .then(function(dataArray) {
-//     var cy = window.cy = cytoscape({
-//       container: document.getElementById('cy'),
-//       style: dataArray[0],
-//       elements: [],
-//       minZoom: 0.5,
-//       maxZoom: 5
-//       });
-//     //Add query protein
-//     cy.add(
-//       { data: { id: cyData[0].p1, 
-//                 query: true,
-//                 gene: cyData[0].p1_gene} }
-//     );
-//     //Add the top 10 primary interactors
-//     for (var i = 0; i < cyData.length; i++) {
-//       if (i < 10) {
-//         cy.add(
-//           { data: { id: cyData[i].p2,
-//                     gene: cyData[i].p2_gene } }
-//         );
-//       };
-//     //Add edges
-//       cy.add(
-//         { data: { id: i, 
-//           source: cyData[i].p1, 
-//           target: cyData[i].p2,
-//           exp: cyData[i].exp,
-//           type: cyData[i].type} }
-//       );
-//     };
-//     cy.layout({
-//       name: 'cose'
-//     });
-
-//     cy.on('select','node', selectedNodeHandler)
-//     cy.on('unselect','node', unselectedNodeHandler)
-//     cy.on('select','edge', selectededgeHandler)
-//     cy.on('unselect','edge', unselectededgeHandler)
-
-//   });
-
-
-
-//7 Added interactor json
+// 8
 
 function convertJson(myId) {
   var cont = document.getElementById(myId).textContent
   return JSON.parse(cont.replaceAll('\\','').replace(/^"|"$/g, ''))
 }
 
-const cyEdges = convertJson('cyEdges');
-const cyNodes = convertJson('cyNodes');
-const cyNodes_q = convertJson('cyNodes_q');
+const cyEdges = convertJson('cyEdges').concat(convertJson('cyEdges_add'));
+const cyNodes = convertJson('cyNodes_q').concat(convertJson('cyNodes'));
 
 $('.node-operation').hide();
 $('.edge-operation').hide();
@@ -356,7 +174,7 @@ var selectedNodeHandler = function(evt) {
   $('.node-operation').show();
   var node = evt.cyTarget.data();
   // $("#node").text("UniprotID: " + node_id);
-  $("#node").html(`Uniprot ID: ${node.gene}`);
+  $("#node").html(`Uniprot ID: ${node.id}`);
 }
 var unselectedNodeHandler = function() {
   $('.node-operation').hide();
@@ -386,23 +204,18 @@ Promise.all([
       minZoom: 0.5,
       maxZoom: 5
       });
-    //Add query protein
-    cy.add(
-      { data: { id: cyNodes_q[0].uniprot, 
-                query: true,
-                gene: cyNodes_q[0].gene} }
-    );
-    //Add the primary interactors
-    for (var i = 0; i < cyEdges.length; i++) {
-      if (i < cyNodes.length) {
+    //Add nodes
+    for (var i = 0; i < cyNodes.length; i++) {
         cy.add(
           { data: { id: cyNodes[i].uniprot,
+                    idInt: i,
                     gene: cyNodes[i].gene } }
         );
       };
     //Add edges
+    for (var i = 0; i < cyEdges.length; i++) {
       cy.add(
-        { data: { id: i, 
+        { data: { id: cyEdges[i].p1 + '-' + cyEdges[i].p2, 
           source: cyEdges[i].p1, 
           target: cyEdges[i].p2,
           exp: cyEdges[i].exp,
@@ -419,4 +232,5 @@ Promise.all([
     cy.on('unselect','edge', unselectededgeHandler)
 
   });
+
 
