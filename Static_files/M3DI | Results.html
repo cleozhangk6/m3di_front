@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head> 
+      <title>M3DI | Results</title>
+      <!--Font Awesome kit's code-->
+      <script src="https://kit.fontawesome.com/777bbb3675.js" crossorigin="anonymous"></script>
+      <!--Link CSS stylesheet-->
+      <link rel="stylesheet" href="styles.css" />
+      <script src='cytoscape.js'></script>
+    </head>
+
+  <body>
+
+    <div id="stick-to-top">
+      <div class="top_bar">
+        <div class="container"></div>
+      </div>
+      <header class="main-header">
+        <div class="container">
+          <a id="m3di_logo_left" href="index.html">
+            <img src="images/logo.png" width="100"></a>
+          <nav class="nav main-nav">            
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="about.html">About</a></li>
+              <li><a href="dataset.html">Dataset</a></li>
+              <li><a href="contact.html">Contact us</a></li>
+            </ul>
+          </nav>
+        </div>      
+      </header>
+      <div class="search-bar">
+          <div class="container">
+              <form>
+                Uniprot/Gene ID:
+                <input id="input_uniprot" name="q1" type="text" placeholder="" size="10px">
+                Residue NO.:
+                <input id="input_residue" name="q2" type="text" placeholder="" size="6px">
+                Mutation:
+                <!-- <input id="input_mut" name="q3" type="text" placeholder="" size="4px">
+                <i class="fa-solid fa-arrow-right"></i>
+                <input id="input_mut" name="q4s" type="text" placeholder="" size="4px">
+                <a href="main.html"> -->
+                  <button type="submit">Submit</button></a>
+              </form>
+          </div>
+    </div>
+    </div>
+    
+    <section class="results">
+        <div class="container">
+            <p>Search Results</p>
+            <div id="cy"></div>
+        </div>
+
+   
+        <script>
+          var cy = cytoscape({
+            container: document.getElementById('cy'),
+            elements: [
+              { data: { id: 'a' } },
+              { data: { id: 'b' } },
+              { data: { id: 'c' } },
+              { data: { id: 'ab', source: 'a', target: 'b' }}
+            ]
+          });
+        </script>
+
+    </section>
+    
+    <hr color="#CAC4D7">
+
+    <footer>
+      <div class="container">
+        <span id="msc_left">MSc Bioinformatics and Systems Biology</span>
+        <img id="ic_logo_right" src="images/Imperial.png" width="200">
+      </div>
+    </footer>
+
+    <!-- <script src='cytoscape.min.js'></script> -->
+    
+    <!-- <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="https://cdn.rawgit.com/cpettitt/dagre/v0.7.4/dist/dagre.js"></script>
+    <script src="https://raw.githubusercontent.com/cytoscape/cytoscape.js-dagre/master/cytoscape-dagre.js"></script> -->
+
+    <script src="index.js"></script>
+
+  <!-- Code injected by live-server -->
+<script type="text/javascript">
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script></body>
+</html>

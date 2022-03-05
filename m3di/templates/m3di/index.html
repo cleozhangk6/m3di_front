@@ -1,0 +1,80 @@
+{% extends "m3di/base.html" %}
+
+{% block Title %}
+  <title>M3DI | Home</title>
+  <meta name="description" content="Welcome to Missense3D-Interaction">
+{% endblock %}
+
+    
+{% block Content %}
+    <section class="hero">
+        <div class="container">
+          <h1 id="welcome"> Welcome to M3DI</h1>
+          <p>
+              Missense 3D interaction is Lorem ipsum dolor sit amet, consectetur
+              adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+              magna aliqua.
+          </p>
+          <br>
+          <a href="#home-search">
+          <button type="button">Start your search</button></a>  
+        </div>
+      </section>
+
+    <section id="home-search" class="home-search">
+        <div class="container">
+
+        <form action="{% url 'm3di:main' %}" method="get">
+          <table>
+            <tr>
+              <td></td>
+              <td class="left" id="example">
+                <a href="#home-search" onclick="populate_uniprot()">Example: Q9BYF1, 199</a>
+              </td>
+            </tr>
+              <tr>
+                <td class="right"><label>Uniprot ID/Gene ID:</label></td>
+                <td class="left">
+                  <input id="input_uni" name="q" type="text" placeholder="e.g. Q9BYF1 or ACE2" size="21px">
+                  <i class="fa-solid fa-circle-info"></i>
+                  <div id="info-box">Info Box</div>
+                </td>
+              </tr>
+            <tr>
+              <td class="right"><label>Residue Position:</label></td>
+              <td class="left">
+                <input id="input_var" name="v" type="text" placeholder="e.g. 199"  size="14px">
+              </td>
+            </tr>
+            <!-- <tr>
+              <td class="right"><label>Mutation:</label></td>
+              <td class="left">
+                <input id="input_wt" name="wt" type="text" placeholder="e.g. TYR" size="8px">
+                <i class="fa-solid fa-arrow-right"></i>
+                <input id="input_mut" name="mut" type="text" placeholder="e.g. HIS" size="8px">
+              </td>
+            </tr> -->
+            <tr>
+              <td></td>
+              <td class="left">
+                <a href="{% url 'm3di:main' %}">
+                  <button type="submit">Submit</button></a>
+              </td>
+            </tr>
+          </table>
+        </form>
+
+
+      </div>
+     </section>
+
+     
+
+    <section class="home-detail">
+      <div class="container">
+      </div>
+    </section>
+
+    <!-- <hr color="#CAC4D7"> -->
+    
+{% endblock %}

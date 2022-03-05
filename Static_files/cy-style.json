@@ -1,0 +1,25 @@
+[{
+    "selector": "node",
+    "style": {
+      "shape": "ellipse",
+      "background-color": "red",
+      "label": "data(id)"
+    }
+  }, {
+    "selector": "node[?query]",
+    "style": {
+      "background-color": "blue"
+    }
+  }, {
+    "selector": "edge",
+    "style": {
+      }
+  }, {
+    "selector": "edge[group=\"structure\"]",
+    "style": {
+      "line-color": "green"}
+  }, {
+    "selector": "edge[group=\"model\"]",
+    "style": {
+      "line-color": "black"}
+  }]
