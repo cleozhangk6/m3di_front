@@ -9,8 +9,20 @@ import json
 
 
 
-def raw_to_json(RawQuerySet, fields):
+# def raw_to_json(RawQuerySet, fields):
+#     array = []
+#     i = 0
+#     for item in RawQuerySet:
+#         array.append({})
+#         for ii in range(len(fields)):
+#             array[i][fields[ii]] = getattr(item, fields[ii])
+#         i += 1
+#     return json.dumps(array)
+
+
+def raw_to_json(RawQuerySet):
     array = []
+    fields = RawQuerySet.columns
     i = 0
     for item in RawQuerySet:
         array.append({})
@@ -46,16 +58,11 @@ def main_UniVar(request):
         query_uni = request.GET['q']
         query_var = request.GET['v']
 
-
-
-        
         results_basic = Basicinfo2.objects.filter(uniprot_id__icontains=query_uni).values()
 
         results_signal = Signalpeptide.objects.raw(
             f'''SELECT * FROM ProNameUnique LEFT JOIN SignalPeptide 
             ON uniprot_id=sp_uniprot_id WHERE uniprot_id = "{query_uni}"''')
-
-
 
         if query_uni and query_var:
 
@@ -126,18 +133,6 @@ def main_UniVar(request):
                         AND su1.uniprot_id > su2.uniprot_id
                         AND experimental > 0;''', [query_uni])
 
-        # results_interact_list = []      
-        # for item in results_interact:
-        #     results_interact_list.append(item.cyData)
-        # for item in results_interact_additional:
-        #     results_interact_list.append(item.cyData_additional)
-        # cyEdges_json = '[' + \
-        #     ",".join(results_interact_list) + ']'
-
-        # another way of writing a list
-        # results_interact_list = [item.cyData for item in results_interact]
-
-
         cyNodes_raw = Stringinteractions.objects.raw('''
                 SELECT s.id,
                     su2.uniprot_id AS uniprot,
@@ -155,19 +150,14 @@ def main_UniVar(request):
                 limit 10;''', [query_uni])
 
         cyNodes_q_raw = Basicinfo2.objects.raw(
-            f'''SELECT uniprot_id AS uniprot,
-                gene_name AS gene,
-                id 
+            f'''SELECT id, uniprot_id AS uniprot, gene_name AS gene 
                 FROM BasicInfo2 WHERE uniprot_id = "{query_uni}"'''
         )
         
-        cyNodes_fields = ["uniprot","gene"]
-        cyNodes_json = raw_to_json(cyNodes_raw, cyNodes_fields)
-        cyNodes_q_json = raw_to_json(cyNodes_q_raw, cyNodes_fields)
-
-        cyEdges_fields = ["p1","p2","exp","type"]
-        cyEdges_json = raw_to_json(cyEdges_raw, cyEdges_fields)
-        cyEdges_add_json = raw_to_json(cyEdges_add_raw, cyEdges_fields)
+        cyNodes_json = raw_to_json(cyNodes_raw)
+        cyNodes_q_json = raw_to_json(cyNodes_q_raw)
+        cyEdges_json = raw_to_json(cyEdges_raw)
+        cyEdges_add_json = raw_to_json(cyEdges_add_raw)
 
 
 
