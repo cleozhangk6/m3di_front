@@ -13,27 +13,29 @@ function convertJson(myId) {
 const cyEdges = convertJson('cyEdges');
 const cyNodes = convertJson('cyNodes');
 
-$('.node-operation').hide();
-$('.edge-operation').hide();
+$('#node').hide();
+$('#edge').hide();
 
 var selectedNodeHandler = function(evt) {
-  $('.node-operation').show();
+  $('#node').show();
   var node = evt.cyTarget.data();
-  // $("#node").text("UniprotID: " + node_id);
-  $("#node").html(`Uniprot ID: ${node.id}`);
+  $("#node").html(`
+  <p> Uniprot ID: ${node.id} </p>
+  <p> Gene name: ${node.gene} </p>`);
 }
 var unselectedNodeHandler = function() {
-  $('.node-operation').hide();
+  $('#node').hide();
 }
 var selectededgeHandler = function(evt) {
-  $('.edge-operation').show();
+  $('#edge').show();
   var edge = evt.cyTarget.data();
-  $("#edge").text("Interaction: " + edge.source + ' - ' + edge.target);
-  $("#exp").text("Experimental evidence score: " + edge.exp);
-  $("#type").text("Model/Structure: " + edge.type);
+  $("#edge").html(`
+  <p> Interaction: ${edge.source} - ${edge.target} </p>
+  <p> Experimental evidence score: ${edge.exp} </p>
+  <p> Model/Structure: ${edge.type} </p>`);
 }
 var unselectededgeHandler = function() {
-  $('.edge-operation').hide();
+  $('#edge').hide();
 }
 
 Promise.all([

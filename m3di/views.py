@@ -4,19 +4,8 @@ from .models import *
 import json
 
 
-# def raw_to_json(*RawQuerySets):
-#     array = []
-#     ii = 0
-#     for set in RawQuerySets:
-#         fields = set.columns
-#         for item in set:
-#             array.append({})
-#             for f in fields:
-#                 array[ii][f] = getattr(item, f)
-#             ii += 1
-#     return json.dumps(array)
+# Convert RawQuerySet to json format string for javascript parsing
 
-# cleaned up nested loops and unnesscary variables:
 def raw_to_json(*RawQuerySets):
     array = []
     for set in RawQuerySets:
