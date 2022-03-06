@@ -164,8 +164,8 @@ function convertJson(myId) {
   return JSON.parse(cont.replaceAll('\\','').replace(/^"|"$/g, ''))
 }
 
-const cyEdges = convertJson('cyEdges').concat(convertJson('cyEdges_add'));
-const cyNodes = convertJson('cyNodes_q').concat(convertJson('cyNodes'));
+const cyEdges = convertJson('cyEdges');
+const cyNodes = convertJson('cyNodes');
 
 $('.node-operation').hide();
 $('.edge-operation').hide();

@@ -8,9 +8,9 @@ from itertools import chain
 import json
 
 
-
-# def raw_to_json(RawQuerySet, fields):
+# def raw_to_json(RawQuerySet):
 #     array = []
+#     fields = RawQuerySet.columns
 #     i = 0
 #     for item in RawQuerySet:
 #         array.append({})
@@ -19,39 +19,23 @@ import json
 #         i += 1
 #     return json.dumps(array)
 
-
-def raw_to_json(RawQuerySet):
+def raw_to_json(*RawQuerySets):
     array = []
-    fields = RawQuerySet.columns
     i = 0
-    for item in RawQuerySet:
-        array.append({})
-        for ii in range(len(fields)):
-            array[i][fields[ii]] = getattr(item, fields[ii])
-        i += 1
+    for set in RawQuerySets:
+        fields = set.columns
+        for item in set:
+            array.append({})
+            for ii in range(len(fields)):
+                array[i][fields[ii]] = getattr(item, fields[ii])
+            i += 1
     return json.dumps(array)
-
 
 
 # Create your views here.
 
 class IndexView(generic.TemplateView):
     template_name = 'm3di/index.html'
-
-# class MainView(generic.ListView):
-#     template_name = 'm3di/main.html'
-
-#     def get_queryset(self):  # overwrite the get_queryset method
-#         query_uniprot = self.request.GET.get('q', None)
-#         query_residue = self.request.GET.get('q2', None)
-
-#         if query_uniprot is not None:
-#             basic_results = Basicinfo2.objects.raw(
-#                 'SELECT * FROM BasicInfo2 LEFT JOIN SignalPeptide ON uniprot_id=sp_uniprot_id WHERE uniprot_id = %s', [query_uniprot])
-
-#             return basic_results
-#         return Basicinfo2.objects.none()
-
 
 def main_UniVar(request):
     if request.method == "GET":
@@ -154,12 +138,8 @@ def main_UniVar(request):
                 FROM BasicInfo2 WHERE uniprot_id = "{query_uni}"'''
         )
         
-        cyNodes_json = raw_to_json(cyNodes_raw)
-        cyNodes_q_json = raw_to_json(cyNodes_q_raw)
-        cyEdges_json = raw_to_json(cyEdges_raw)
-        cyEdges_add_json = raw_to_json(cyEdges_add_raw)
-
-
+        cyNodes_json = raw_to_json(cyNodes_q_raw, cyNodes_raw)
+        cyEdges_json = raw_to_json(cyEdges_raw, cyEdges_add_raw)
 
         context = {
             'query_uni': query_uni,
@@ -169,9 +149,7 @@ def main_UniVar(request):
             'results_topo': results_topo,
             'results_variant': results_variant,
             'cyEdges_json': cyEdges_json,
-            'cyNodes_json': cyNodes_json,
-            'cyNodes_q_json': cyNodes_q_json,
-            'cyEdges_add_json': cyEdges_add_json            
+            'cyNodes_json': cyNodes_json
         }
 
         return render(request, 'm3di/main.html', context)
