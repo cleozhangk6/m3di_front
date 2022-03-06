@@ -1,34 +1,27 @@
-from cgi import test
-from dataclasses import fields
 from django.shortcuts import render
 from django.views import generic
-from pandas import array
 from .models import *
-from itertools import chain
 import json
 
 
-# def raw_to_json(RawQuerySet):
+# def raw_to_json(*RawQuerySets):
 #     array = []
-#     fields = RawQuerySet.columns
-#     i = 0
-#     for item in RawQuerySet:
-#         array.append({})
-#         for ii in range(len(fields)):
-#             array[i][fields[ii]] = getattr(item, fields[ii])
-#         i += 1
+#     ii = 0
+#     for set in RawQuerySets:
+#         fields = set.columns
+#         for item in set:
+#             array.append({})
+#             for f in fields:
+#                 array[ii][f] = getattr(item, f)
+#             ii += 1
 #     return json.dumps(array)
 
+# cleaned up nested loops and unnesscary variables:
 def raw_to_json(*RawQuerySets):
     array = []
-    i = 0
     for set in RawQuerySets:
-        fields = set.columns
         for item in set:
-            array.append({})
-            for ii in range(len(fields)):
-                array[i][fields[ii]] = getattr(item, fields[ii])
-            i += 1
+            array.append({field:getattr(item,field) for field in set.columns})
     return json.dumps(array)
 
 
