@@ -27,7 +27,7 @@
   <section class="results">
     <!-- <p><strong>Search Results</strong></p> -->
     <div id="you-searched-for">
-      <p>You searched for {{ query_uni }} ({{ results_basic.0.gene_name }})</p>
+      <p>You searched for {{ query_uni }}</p>
       {% if query_uni and query_var %}
       <p>Residue position {{ query_var }}</p>
       {% elif query_uni %}
@@ -55,10 +55,13 @@
     <br>
 
       <h3>Basic Info</h3>
+        {% for object in results_variant %}
         <ul>
-          <li>Protein name: <a href="{{ object.protein_link }}">{{ results_basic.0.protein_name }}</a></li>
-          <li>Gene name: <a href="{{ object.gene_link }}">{{ results_basic.0.gene_name }}</a></li>
+          <li>Protein name: <a href="{{ object.protein_link }}">{{ results_basic.protein_name }}</a></li>
+          <li>Gene name: <a href="{{ object.gene_link }}">{{ results_basic.gene_name }}</a></li>
         </ul>
+        {% endfor %}
+
 
         <h3>Signal Peptide</h3>
         <ul>
@@ -75,7 +78,7 @@
             <th>Prediction</th>
             <th>Reason</th>
           </tr>
-          {% for object in results_variant %}
+        {% for object in results_variant %}
           <tr>
             <td>{{ object.uniprot }}</td>
             <td>{{ object.pdbpos }}</td>

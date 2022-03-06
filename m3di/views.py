@@ -51,74 +51,49 @@ def main_UniVar(request):
 
 
         cyEdges_raw = Stringinteractions.objects.raw(
-            '''SELECT s.id,
-                    su1.uniprot_id AS p1,
-                    su2.uniprot_id AS p2,
-                    s.experimental AS exp,
-                    i.type AS type
-                FROM StringInteractions as s
-                LEFT JOIN StringToUniprot as su1
-                    ON su1.string_id = s.string_p1
-                LEFT JOIN StringToUniprot as su2
-                    ON su2.string_id = s.string_p2
-                LEFT JOIN interactome3D_1 as i
-                    ON i.prot1 = su1.uniprot_id AND i.prot2 = su2.uniprot_id
-                WHERE su1.uniprot_id = %s
-                    AND su2.uniprot_id IS NOT NULL AND s.experimental > 0
-                ORDER BY s.combined_score desc, s.id
-            limit 10;''', [query_uni]
-        )
-
-        cyEdges_add_raw = Stringinteractions.objects.raw(
-            '''WITH t as 
-                    (SELECT stu2.uniprot_id as uniprot_p2
-                    FROM StringInteractions as st
-                    LEFT JOIN StringToUniprot as stu1
-                        ON stu1.string_id = st.string_p1
-                    LEFT JOIN StringToUniprot as stu2
-                        ON stu2.string_id = st.string_p2
-                    WHERE stu1.uniprot_id = %s
-                        AND stu2.uniprot_id IS NOT NULL
-                        AND st.experimental > 0
-                    ORDER BY st.combined_score desc, st.id
-                    limit 10)
-                SELECT s.id, 
-                        su1.uniprot_id AS p1,
-                        su2.uniprot_id AS p2,
-                        s.experimental AS exp,
-                        i.type AS type
+            '''WITH t AS 
+                    (SELECT s.id, su1.uniprot_id AS p1, su2.uniprot_id AS p2, 
+                            s.experimental AS exp, i.type AS type
                     FROM StringInteractions as s
-                    LEFT JOIN StringToUniprot as su1
-                        ON su1.string_id = s.string_p1
-                    LEFT JOIN StringToUniprot as su2
-                        ON su2.string_id = s.string_p2
-                    LEFT JOIN interactome3D_1 as i
-                        ON i.prot1 = su2.uniprot_id AND i.prot2 = su1.uniprot_id      
-                    WHERE su1.uniprot_id in (select * from t) 
-                        AND su2.uniprot_id in (select * from t)
+                    LEFT JOIN StringToUniprot as su1 ON su1.string_id = s.string_p1
+                    LEFT JOIN StringToUniprot as su2 ON su2.string_id = s.string_p2
+                    LEFT JOIN interactome3D_1 as i ON i.prot1 = su1.uniprot_id 
+                        AND i.prot2 = su2.uniprot_id  
+                    WHERE su1.uniprot_id = %s
+                        AND su2.uniprot_id IS NOT NULL
+                        AND s.experimental > 0
+                    ORDER BY s.combined_score desc, s.id LIMIT 10)
+                SELECT * FROM t
+                UNION ALL
+                (SELECT s.id, su1.uniprot_id AS p1, su2.uniprot_id AS p2,
+                        s.experimental AS exp, i.type AS type
+                    FROM StringInteractions as s
+                    LEFT JOIN StringToUniprot as su1 ON su1.string_id = s.string_p1
+                    LEFT JOIN StringToUniprot as su2 ON su2.string_id = s.string_p2
+                    LEFT JOIN interactome3D_1 as i ON i.prot1 = su2.uniprot_id 
+                        AND i.prot2 = su1.uniprot_id      
+                    WHERE su1.uniprot_id in (select p2 from t) 
+                        AND su2.uniprot_id in (select p2 from t)
                         AND su1.uniprot_id > su2.uniprot_id
-                        AND experimental > 0;''', [query_uni])
+                        AND experimental > 0);''', [query_uni])
 
         cyNodes_raw = Stringinteractions.objects.raw('''
-                SELECT b.id, b.uniprot_id AS uniprot, b.gene_name AS gene 
-                    FROM BasicInfo2 AS b WHERE uniprot_id = %s
+                SELECT id, uniprot_id AS uniprot, gene_name AS gene 
+                    FROM BasicInfo2 WHERE uniprot_id = %s
                 UNION
                 (SELECT s.id, su2.uniprot_id AS uniprot,
                         b.gene_name AS gene
                 FROM StringInteractions as s
-                LEFT JOIN StringToUniprot as su1
-                    ON su1.string_id = s.string_p1
-                LEFT JOIN StringToUniprot as su2
-                    ON su2.string_id = s.string_p2
-                LEFT JOIN BasicInfo2 as b
-                    ON b.uniprot_id = su2.uniprot_id
+                LEFT JOIN StringToUniprot as su1 ON su1.string_id = s.string_p1
+                LEFT JOIN StringToUniprot as su2 ON su2.string_id = s.string_p2
+                LEFT JOIN BasicInfo2 as b ON b.uniprot_id = su2.uniprot_id
                 WHERE su1.uniprot_id = %s
                     AND su2.uniprot_id IS NOT NULL AND s.experimental > 0
-                ORDER BY s.combined_score desc, s.id
-                limit 10);''', [query_uni,query_uni])
+                ORDER BY s.combined_score desc, s.id 
+                LIMIT 10);''',[query_uni,query_uni])
         
         cyNodes_json = raw_to_json(cyNodes_raw)
-        cyEdges_json = raw_to_json(cyEdges_raw, cyEdges_add_raw)
+        cyEdges_json = raw_to_json(cyEdges_raw)
 
         context = {
             'query_uni': query_uni,
