@@ -100,27 +100,24 @@ def main_UniVar(request):
                         AND experimental > 0;''', [query_uni])
 
         cyNodes_raw = Stringinteractions.objects.raw('''
-                SELECT s.id,
-                    su2.uniprot_id AS uniprot,
-                    b2.gene_name AS gene
+                SELECT b.id, b.uniprot_id AS uniprot, b.gene_name AS gene 
+                    FROM BasicInfo2 AS b WHERE uniprot_id = %s
+                UNION
+                (SELECT s.id, su2.uniprot_id AS uniprot,
+                        b.gene_name AS gene
                 FROM StringInteractions as s
                 LEFT JOIN StringToUniprot as su1
                     ON su1.string_id = s.string_p1
                 LEFT JOIN StringToUniprot as su2
                     ON su2.string_id = s.string_p2
-                LEFT JOIN BasicInfo2 as b2
-                    ON b2.uniprot_id = su2.uniprot_id
+                LEFT JOIN BasicInfo2 as b
+                    ON b.uniprot_id = su2.uniprot_id
                 WHERE su1.uniprot_id = %s
                     AND su2.uniprot_id IS NOT NULL AND s.experimental > 0
                 ORDER BY s.combined_score desc, s.id
-                limit 10;''', [query_uni])
-
-        cyNodes_q_raw = Basicinfo2.objects.raw(
-            f'''SELECT id, uniprot_id AS uniprot, gene_name AS gene 
-                FROM BasicInfo2 WHERE uniprot_id = "{query_uni}"'''
-        )
+                limit 10);''', [query_uni,query_uni])
         
-        cyNodes_json = raw_to_json(cyNodes_q_raw, cyNodes_raw)
+        cyNodes_json = raw_to_json(cyNodes_raw)
         cyEdges_json = raw_to_json(cyEdges_raw, cyEdges_add_raw)
 
         context = {

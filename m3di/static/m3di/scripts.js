@@ -13,9 +13,6 @@ function convertJson(myId) {
 const cyEdges = convertJson('cyEdges');
 const cyNodes = convertJson('cyNodes');
 
-$('#node').hide();
-$('#edge').hide();
-
 var selectedNodeHandler = function(evt) {
   $('#node').show();
   var node = evt.cyTarget.data();
