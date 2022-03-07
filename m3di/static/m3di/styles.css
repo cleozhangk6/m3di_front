@@ -315,32 +315,6 @@ footer .container{
 #you-searched-for p{
     color: #777;
 }
-/* .results .container .interaction div{
-    display: inline-block;
-    height: 500px;
-    margin-right: 2%;
-}
-
-.results canvas {
-    left: 0;
-}
-
-#cy {
-    width: 55%;
-    border: 2px solid #d9d9d9;
-}
-
-.side-window {
-    width: 35%;
-    border: 2px solid #d9d9d9;
-    border-radius: 30px;
-}
-
-.side-window div{
-    display: block;
-    float:left
-} */
-
 
 .results .container .interaction div{
     float: left;
@@ -365,6 +339,12 @@ footer .container{
 .side-window h3{
     padding: 10px;
     text-align: center;
+}
+
+.side-window p{
+    margin-left: 40px;
+    margin-right: 20px;
+    text-align: left;
 }
 
 br {

@@ -17,7 +17,8 @@ var selectedNodeHandler = function(evt) {
   $('#node').show();
   var node = evt.cyTarget.data();
   $("#node").html(`
-  <p> Uniprot ID: ${node.id} </p>
+  <p> Uniprot ID: <a href="${node.link}">${node.id}</a></p>
+  <p> Protein name: ${node.name} </p>
   <p> Gene name: ${node.gene} </p>`);
 }
 var unselectedNodeHandler = function() {
@@ -28,8 +29,9 @@ var selectededgeHandler = function(evt) {
   var edge = evt.cyTarget.data();
   $("#edge").html(`
   <p> Interaction: ${edge.source} - ${edge.target} </p>
-  <p> Experimental evidence score: ${edge.exp} </p>
-  <p> Model/Structure: ${edge.type} </p>`);
+  <p> Experimental score: ${edge.exp} </p>
+  <p> Model/Structure: ${edge.type} </p>
+  <p> PDB: ${edge.pdb} </p>`);
 }
 var unselectededgeHandler = function() {
   $('#edge').hide();
@@ -52,9 +54,11 @@ Promise.all([
     //Add nodes
     for (var i = 0; i < cyNodes.length; i++) {
         cy.add(
-          { data: { id: cyNodes[i].uniprot,
+          { data: { id: cyNodes[i].uniprot_id,
                     idInt: i,
-                    gene: cyNodes[i].gene } }
+                    link: cyNodes[i].protein_link,
+                    name: cyNodes[i].protein_name,
+                    gene: cyNodes[i].gene_name} }
         );
       };
     //Add edges
@@ -63,8 +67,9 @@ Promise.all([
         { data: { id: cyEdges[i].p1 + '-' + cyEdges[i].p2, 
           source: cyEdges[i].p1, 
           target: cyEdges[i].p2,
-          exp: cyEdges[i].exp,
-          type: cyEdges[i].type} }
+          exp: cyEdges[i].experimental,
+          type: cyEdges[i].type,
+          pdb: cyEdges[i].PDB_id} }
       );
     };
     cy.layout({

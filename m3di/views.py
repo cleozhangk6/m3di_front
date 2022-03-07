@@ -53,7 +53,7 @@ def main_UniVar(request):
         cyEdges_raw = Stringinteractions.objects.raw(
             '''WITH t AS 
                     (SELECT s.id, su1.uniprot_id AS p1, su2.uniprot_id AS p2, 
-                            s.experimental AS exp, i.type AS type
+                            s.experimental, i.type, i.PDB_id
                     FROM StringInteractions as s
                     LEFT JOIN StringToUniprot as su1 ON su1.string_id = s.string_p1
                     LEFT JOIN StringToUniprot as su2 ON su2.string_id = s.string_p2
@@ -66,7 +66,7 @@ def main_UniVar(request):
                 SELECT * FROM t
                 UNION ALL
                 (SELECT s.id, su1.uniprot_id AS p1, su2.uniprot_id AS p2,
-                        s.experimental AS exp, i.type AS type
+                        s.experimental, i.type, i.PDB_id
                     FROM StringInteractions as s
                     LEFT JOIN StringToUniprot as su1 ON su1.string_id = s.string_p1
                     LEFT JOIN StringToUniprot as su2 ON su2.string_id = s.string_p2
@@ -78,12 +78,9 @@ def main_UniVar(request):
                         AND experimental > 0);''', [query_uni])
 
         cyNodes_raw = Stringinteractions.objects.raw('''
-                SELECT id, uniprot_id AS uniprot, gene_name AS gene 
-                    FROM BasicInfo2 WHERE uniprot_id = %s
+                SELECT * FROM BasicInfo2 WHERE uniprot_id = %s
                 UNION
-                (SELECT s.id, su2.uniprot_id AS uniprot,
-                        b.gene_name AS gene
-                FROM StringInteractions as s
+                (SELECT b.* FROM StringInteractions as s
                 LEFT JOIN StringToUniprot as su1 ON su1.string_id = s.string_p1
                 LEFT JOIN StringToUniprot as su2 ON su2.string_id = s.string_p2
                 LEFT JOIN BasicInfo2 as b ON b.uniprot_id = su2.uniprot_id
