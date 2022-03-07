@@ -24,7 +24,12 @@ def main_UniVar(request):
         query_uni = request.GET['q']
         query_var = request.GET['v']
 
-        results_basic = Basicinfo2.objects.filter(uniprot_id__icontains=query_uni).values()
+        # results_basic = Basicinfo2.objects.filter(uniprot_id__icontains=query_uni).values()
+
+        results_basic = Basicinfo2.objects.raw('''
+            SELECT id, uniprot_id AS uniprot, gene_name AS gene,
+            protein_name, protein_link, gene_link
+            FROM BasicInfo2 WHERE uniprot_id = %s''', [query_uni])
 
         results_signal = Signalpeptide.objects.raw(
             f'''SELECT * FROM ProNameUnique LEFT JOIN SignalPeptide 
@@ -78,10 +83,7 @@ def main_UniVar(request):
                         AND experimental > 0);''', [query_uni])
 
         cyNodes_raw = Stringinteractions.objects.raw('''
-                SELECT id, uniprot_id AS uniprot, gene_name AS gene 
-                    FROM BasicInfo2 WHERE uniprot_id = %s
-                UNION
-                (SELECT s.id, su2.uniprot_id AS uniprot,
+                SELECT s.id, su2.uniprot_id AS uniprot,
                         b.gene_name AS gene
                 FROM StringInteractions as s
                 LEFT JOIN StringToUniprot as su1 ON su1.string_id = s.string_p1
@@ -90,9 +92,9 @@ def main_UniVar(request):
                 WHERE su1.uniprot_id = %s
                     AND su2.uniprot_id IS NOT NULL AND s.experimental > 0
                 ORDER BY s.combined_score desc, s.id 
-                LIMIT 10);''',[query_uni,query_uni])
+                LIMIT 10;''',[query_uni])
         
-        cyNodes_json = raw_to_json(cyNodes_raw)
+        cyNodes_json = raw_to_json(results_basic, cyNodes_raw)
         cyEdges_json = raw_to_json(cyEdges_raw)
 
         context = {
