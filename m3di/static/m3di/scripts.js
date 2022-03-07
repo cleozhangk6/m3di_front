@@ -7,7 +7,7 @@ function populate_uniprot(){
 
 function convertJson(myId) {
   var cont = document.getElementById(myId).textContent
-  return JSON.parse(cont.replaceAll('\\','').replace(/^"|"$/g, ''))
+  return JSON.parse(cont.replace(/\\/g,'').replace(/^"|"$/g, ''))
 }
 
 const cyEdges = convertJson('cyEdges');
@@ -76,10 +76,17 @@ Promise.all([
       name: 'cose'
     });
 
+
+
     cy.on('select','node', selectedNodeHandler)
     cy.on('unselect','node', unselectedNodeHandler)
     cy.on('select','edge', selectededgeHandler)
     cy.on('unselect','edge', unselectededgeHandler)
+
+    cy.on('mouseover','node', selectedNodeHandler)
+    cy.on('mouseout','node', unselectedNodeHandler)
+    cy.on('mouseover','edge', selectededgeHandler)
+    cy.on('mouseout','edge', unselectededgeHandler)
 
   });
 
