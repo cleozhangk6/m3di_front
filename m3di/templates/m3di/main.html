@@ -55,10 +55,10 @@
     <br>
 
       <h3>Basic Info</h3>
-        {% for object in results_variant %}
+        {% for object in results_basic %}
         <ul>
-          <li>Protein name: <a href="{{ object.protein_link }}">{{ results_basic.protein_name }}</a></li>
-          <li>Gene name: <a href="{{ object.gene_link }}">{{ results_basic.gene_name }}</a></li>
+          <li>Protein name: <a href="{{ object.protein_link }}">{{ object.protein_name }}</a></li>
+          <li>Gene name: <a href="{{ object.gene_link }}">{{ object.gene_name }}</a></li>
         </ul>
         {% endfor %}
 
