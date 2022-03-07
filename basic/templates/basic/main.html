@@ -12,6 +12,14 @@
       <script src="{% static 'basic/cytoscape.js' %}"></script>
   </head>
 
+  <div class="sidenav">
+    <a href="#">Variants</a>
+    <a href="#">Functional domains</a>
+    <a href="#">Signal Peptide</a>
+    <a href="#">Interaction network</a>
+    <a href="#">Variant effect on interaction</a>
+  </div>
+
   <body>
 
     <div id="stick-to-top">
@@ -35,7 +43,7 @@
       <div class="search-bar">
           <div class="container">
             <form action="{% url 'basic:main' %}" method="get">
-                Uniprot/Gene ID:
+                Uniprot ID:
                 <input id="input_uni" name="q" type="text" placeholder="" size="10px">
                 Residue Position:
                 <input id="input_var" name="v" type="text" placeholder="" size="6px">
@@ -50,265 +58,279 @@
     </div>
     </div>
 
-<element id="stick-to-top">
-  <div class="box-1"> 
-   
-    <h1>M3DI Search Results : {{query_uni}}</h1>
-  
-      {% if query_uni and query_var %}
-      <ul>
-      {% for object in results_protein %}
-      <p><strong>Protein name: <a class="link" href="{{ object.protein_link }}">{{ object.protein_name }}</a></strong></p>
-      {% endfor %}
-      </ul>
-      <p><strong>Query amino acid position {{ query_var }}</strong></p>
-      {% for object in results_sequence %}
-      <p><strong>Wild type residue at query position: {{object.wt }} </strong></p>
-      {% endfor %}
-      {% for object in results_gene %}
-        <ul>
-          <p> <strong> Gene name: <a class="link" href="{{ object.gene_link}}">{{object.gene_name }}</a></strong></p>
-        </ul>
-      {% endfor %}
-    
-      
-      {% elif query_uni %}
-      <p>You searched for {{ query_uni }}</p>
-      <p>No variant specified</p>
 
-      {% else %}
-      <p>No search submitted</p>
-      {% endif %}
-  </div> 
-</element>   
-     
-    
+   
   
-  <section class="results">
+      <div class="search-bar">
+        <div class="container">
         
+          <div class="box-1"> 
+            <h2>M3DI Search Results : {{query_uni}}</h2>
+              <ul>
+              {% for object in results_protein %}
+              <p><strong>Protein name: <a class="link" href="{{ object.protein_link }}">{{ object.protein_name }}</a></strong></p>
+              {% endfor %}
+              </ul>
+              {% for object in results_gene %}
+                <ul>
+                  <p> <strong> Gene name: <a class="link" href="{{ object.gene_link}}">{{object.gene_name }}</a></strong></p>
+                </ul>
+              {% endfor %}
+              <p><strong>Query amino acid position {{ query_var }}</strong></p>
+              {% for object in results_sequence %}
+              <p><strong>Wild type residue at query position: {{object.wt }} </strong></p>
+              {% endfor %}
+              <p><strong>Organism:</strong> <i> Homo Sapiens </i> </p> 
+              <p><strong>Cellular localisation:</strong>{% for object in results_loc_cellcomp %} <a class="link" href="{{ object.cellcomp_link}}">{{object.cellcomp_label }} </a>, {% endfor %}</p>
+          </div>
+        </div>
+      </div>
+  
+   
+    
+    
+  <section class="results">
+    <div class="box-2">  
+      <h3>Variants</h3>
+      <table class="variant-table">
+          <tr>
+            <th>UniprotID</th>
+            <th>Position</th>
+            <th>Wildtype residue </th>
+            <th>Mutant residue </th>
+            <th>Missense Prediction</th>
+            <th>Missense Reason(s)</th>
+            <th>Uniprot Annotation</th>
+          </tr>
+        {% for object in results_variant %}
+          <tr>
+            <td>{{ object.uniprot }}</td>
+            <td>{{ object.pdbpos }}</td>
+            <td>{{ object.res_wt }}</td>
+            <td>{{ object.res_mut }}</td>
+            <td>{{ object.missensepred }}</td>
+            <td>{{ object.missense_reason }}</td>
+            <td>{{ object.comment}}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div class="box-2">
+    
+    <div class="box-2a"> 
+      <h3>Transmembrane Domain(s):</h3>
+        
+        <table class="variant-table">
+          <tr>
+            <th>TM domain start </th>
+            <th>TM domain end </th>
+            <th>TM domain type</th>
+            <th>Evidence Code </th>
+          </tr>
+          {% for object in tm_results %}
+          <tr>
+            <td>{{ object.tm_start }}</td>
+            <td>{{ object.tm_end }}</td>
+            <td>{{ object.text  }}</td>
+            <td><a class="link" href="{{ object.source}}">{{ object.label  }} </a></td>
+          </tr>
+        {% endfor %}
+        </table>
+        
+        <ul>   
+          {% for object in trans_dom_var %}
+          <li> Residue {{query_var}} located in transmembrane domain: {{object.tm_start}} - {{object.tm_end}}</li>
+          {% empty %}
+          <li> Residue {{query_var}} not located in transmembrane domain</li>
+          {% endfor %}
+        </ul>
+    </div>
+        
+  
+
+    <div class="box-2a"> 
+
+      <h3>Topological domains</h3>
+                  
+        <table class="variant-table">
+          <tr>
+            <th>Domain start </th>
+            <th>Domain end </th>
+            <th>Domain Label</th>
+            <th>Evidence Code </th>
+          </tr>
+            {% for object in topo1_results %}
+          <tr>
+            <td>{{ object.topo_start }}</td>
+            <td>{{ object.topo_end }}</td>
+            <td>{{ object.topology  }}</td>
+            <td><a class="link" href="{{ object.source}}">{{ object.label  }} </a></td>
+          </tr>
+          {% endfor %}
+        </table>
+
+        {% for object in results_topo %}
+          <ul>
+          <li>Residue  {{ query_var }} is located at the {{ object.topology }} region</li>
+          </ul>
+          {% empty %}
+          <li> Query residue not located in topological domain(s) </li>
+        {% endfor %}
+    </div>
+
+    <div class="box-2a"> 
+      <h3>Binding Site(s)</h3>
+
+            <table class="variant-table">
+              <tr>
+                <th>Site position  </th>
+                <th>Substrate </th>
+                <th>Evidence Code </th>
+              </tr>
+              {% for object in bind1_results %}
+              <tr>
+                <td>{{ object.bs_position }}</td>
+                <td>{{ object.substrate}}</td>
+                <td><a class="link" href="{{ object.source}}">{{ object.label  }} </a></td>
+              </tr>
+            {% endfor %}
+            </table>
+
+            
+
+              <ul>
+                {% for object in results_binding %}
+              <li>Query residue {{query_var}} is part of binding site for {{object.substrate }} </li>
+                {% empty %}
+              <li>Query residue {{query_var}} is not part of any binding site </li>
+                {% endfor %}
+              </ul>
+    </div>
+
+    <div class="box-2a"> 
+      <h3>Post-Translational Modification Site(s)</h3>
+
+            <table class="variant-table">
+              <tr>
+                <th>Site position </th>
+                <th>Amino acid</th>
+                <th> PTM product   </th>
+                <th> Evidence Code  </th>
+              </tr>
+              {% for object in ptm1_results %}
+              <tr>
+                <td>{{ object.pos }}</td>
+                <td>{{ object.aa}}</td>
+                <td>{{ object.ptm_type}}</td>
+                <td><a class="link" href="{{ object.source}}">{{ object.label  }} </a></td>
+              </tr>
+            {% endfor %}
+            </table>
+
+            <ul>
+              {% for object in results_PTM %}
+            <li> Query residue {{query_var}} is part of a post translational modification site, the post translationally modified residue is: <a class="link" href="{{ object.source}}">{{object.ptm_type }} , </a> </li>
+              {% empty %}
+            <li>Query residue {{query_var}} is not part of any post translational modification site.  </li>
+              {% endfor %}
+            </ul>
+    </div>
+    <div class="box-2a"> 
+      <h3> Pfam: Functional domain results </h3>
+            <table class="variant-table">
+              <tr>
+                <th>Domain start </th>
+                <th>Domain end </th>
+                <th>Pfam ID </th>
+                <th>Domain Name</th>
+              </tr>
+              {% for object in Pfam_results_general %}
+              <tr>
+                <td>{{ object.env_s }}</td>
+                <td>{{ object.env_e }}</td>
+                <td> <a class= "link" href = "http://pfam.xfam.org/family/{{ object.pfam_id }}" > {{object.pfam_id}} </a> </td>
+                <td>{{ object.pfam_name }}</td>
+              {% endfor %}
+            </tr>
+            </table>
+
+              {% for object in Pfam_results %}
+              <li> Query position located in <a class= "link" href = "http://pfam.xfam.org/family/{{ object.pfam_id }}" > {{object.pfam_name}} </a></li>
+              {% empty %} 
+              <li> Query position not found in any Pfam domain</li>
+              {% endfor %}
+
+    </div>
+
+    <div class="box-2a"> 
       <div class="container">
 
-        
-        <div id="cy"> <h3>Interaction map from String-DB:</h3> </div>
+        <h3>Interaction map from String-DB:</h3>  
+        <div id="cy">  </div>
         {{ results_interact_string|json_script:"interaction-data" }} 
+    </div>
 
 
-       
-        <div class="box-2"> 
+    
 
-            
-          <h3>Signal Peptide: </h3> 
-          <ul> 
-            {% for object in results_signal %} 
-            <li>Signal peptide found at positions 1-{{ object.signal_peptide }}</li>
-            {% empty %}
-            <li>No signal peptide information found</li>
-            {% endfor %}
-          
-            {% for object in results_signal_var %}
-            <li> Residue {{query_var}} located in signal peptide</li>
-            {% empty %}
-            <li> Residue {{query_var}} not located in signal peptide</li>
-          
-            
-            {% endfor %}
-          </ul>
-
-          <h3>Cellular localization:</h3> 
-          {% for object in results_protein %} 
-          <p> {{ object.protein_name}} be found in the following components of human cells:</p>
-          {% endfor %}
-           <ul>
-              {% for object in results_loc_cellcomp %} 
-              <li><a class="link" href="{{ object.cellcomp_link}}">{{object.cellcomp_label }}  </a></li>
-              {% endfor %}
-
-              {% for object in results_loc %} 
-              <p> Transmembrane protein type: {{object.topo_label}}</p>
-              {% endfor %}
-          </ul>
+  </section>
 
 
-          <h3>Transmembrane Domain(s):</h3>
-          
-          <table class="variant-table">
-            <tr>
-              <th>TM domain start </th>
-              <th>TM domain end </th>
-              <th>TM domain type</th>
-              <th>Evidence Code </th>
-            </tr>
-            {% for object in tm_results %}
-            <tr>
-              <td>{{ object.tm_start }}</td>
-              <td>{{ object.tm_end }}</td>
-              <td>{{ object.text  }}</td>
-              <td><a class="link" href="{{ object.source}}">{{ object.label  }} </a></td>
-            </tr>
-          {% endfor %}
-          </table>
-          
-          <ul>   
-            {% for object in trans_dom_var %}
-            <p> Residue {{query_var}} located in transmembrane domain: {{object.tm_start}} - {{object.tm_end}}</p>
-            {% empty %}
-            <p> Residue {{query_var}} not located in transmembrane domain</p>
-            {% endfor %}
-          </ul>
-
-          <h3>Topological domains</h3>
-          
-          <table class="variant-table">
-            <tr>
-              <th>Domain start </th>
-              <th>Domain end </th>
-              <th>Domain Label</th>
-              <th>Evidence Code </th>
-            </tr>
-            {% for object in topo1_results %}
-            <tr>
-              <td>{{ object.topo_start }}</td>
-              <td>{{ object.topo_end }}</td>
-              <td>{{ object.topology  }}</td>
-              <td><a class="link" href="{{ object.source}}">{{ object.label  }} </a></td>
-            </tr>
-          {% endfor %}
-          </table>
-
-          {% for object in results_topo %}
-            <ul>
-            <p>Residue  {{ query_var }} is located at the {{ object.topology }} region</p>
-            </ul>
-            {% empty %}
-            <p> Query residue not located in topological domain(s) </p>
-          {% endfor %}
-
-          <h3>Binding Site(s)</h3>
-
-          <table class="variant-table">
-            <tr>
-              <th>Site position  </th>
-              <th>Substrate </th>
-              <th>Evidence Code </th>
-            </tr>
-            {% for object in bind1_results %}
-            <tr>
-              <td>{{ object.bs_position }}</td>
-              <td>{{ object.substrate}}</td>
-              <td><a class="link" href="{{ object.source}}">{{ object.label  }} </a></td>
-            </tr>
-           {% endfor %}
-          </table>
-
-          
-
-            <ul>
-              {% for object in results_binding %}
-             <li>Query residue {{query_var}} is part of binding site for {{object.substrate }} </li>
-              {% empty %}
-             <li>Query residue {{query_var}} is not part of any binding site </li>
-              {% endfor %}
-            </ul>
-          
-          <h3>Post-Translational Modification Site(s)</h3>
-
-          <table class="variant-table">
-            <tr>
-              <th>Site position </th>
-              <th>Amino acid</th>
-              <th> PTM product   </th>
-              <th> Evidence Code  </th>
-            </tr>
-            {% for object in ptm1_results %}
-            <tr>
-              <td>{{ object.pos }}</td>
-              <td>{{ object.aa}}</td>
-              <td>{{ object.ptm_type}}</td>
-              <td><a class="link" href="{{ object.source}}">{{ object.label  }} </a></td>
-            </tr>
-           {% endfor %}
-          </table>
-
-          <ul>
-            {% for object in results_PTM %}
-           <li> Query residue {{query_var}} is part of a post translational modification site, the post translationally modified residue is: <a class="link" href="{{ object.source}}">{{object.ptm_type }} , </a> </li>
-            {% empty %}
-           <li>Query residue {{query_var}} is not part of any post translational modification site.  </li>
-            {% endfor %}
-          </ul>
-
-          <h3>Variants</h3>
-          <table class="variant-table">
-            <tr>
-              <th>UniprotID</th>
-              <th>Position</th>
-              <th>Wildtype residue </th>
-              <th>Mutant residue </th>
-              <th>Missense Prediction</th>
-              <th>Missense Reason(s)</th>
-              <th>Uniprot Annotation</th>
-            </tr>
-            {% for object in results_variant %}
-            <tr>
-              <td>{{ object.uniprot }}</td>
-              <td>{{ object.pdbpos }}</td>
-              <td>{{ object.res_wt }}</td>
-              <td>{{ object.res_mut }}</td>
-              <td>{{ object.missensepred }}</td>
-              <td>{{ object.missense_reason }}</td>
-              <td>{{ object.comment}}</td>
-            </tr>
-          {% endfor %}
-          </table>
-          <h3> Pfam: Functional domain results </h3>
-          <table class="variant-table">
-            <tr>
-              <th>Domain start </th>
-              <th>Domain end </th>
-              <th>Pfam ID </th>
-              <th>Domain Name</th>
-            </tr>
-            {% for object in Pfam_results_general %}
-            <tr>
-              <td>{{ object.env_s }}</td>
-              <td>{{ object.env_e }}</td>
-              <td> <a class= "link" href = "http://pfam.xfam.org/family/{{ object.pfam_id }}" > {{object.pfam_id}} </a> </td>
-              <td>{{ object.pfam_name }}</td>
-            {% endfor %}
-          </tr>
-          </table>
-
-            {% for object in Pfam_results %}
-            <p> Query position located in <a class= "link" href = "http://pfam.xfam.org/family/{{ object.pfam_id }}" > {{object.pfam_name}} </a></p>
-            {% empty %} 
-            <p> Query position not found in any Pfam domain</p>
-            {% endfor %}
 
 
+
+
+    <div class="box-2a">    
+      <h3>Signal Peptide: </h3> 
+      <ul> 
+        {% for object in results_signal %} 
+        <li>Signal peptide found at positions 1-{{ object.signal_peptide }}</li>
+        {% empty %}
+        <li>No signal peptide information found</li>
+        {% endfor %}
+      
+        {% for object in results_signal_var %}
+        <li> Residue {{query_var}} located in signal peptide</li>
+        {% empty %}
+        <li> Residue {{query_var}} not located in signal peptide</li>
+      
         
+        {% endfor %}
+      </ul>
+    </div>
+    
 
-
-
-        </div class="box-2"> 
-
-        <div class="box-3"> 
-        
-          <h3>Functional annotation (UniProt): </h3>
+      
             
-            <ul> 
-              {% for object in function_results %} 
-              <li> {{ object.function_annotation }}  <a class="link" href="{{ object.annotation_link}}"> source </a> </li> 
-              {% endfor %} 
+
+            
+            
+      
+
+            
+            
+
+
+
+    
+
+          <div class="box-3"> 
+          
+            <h3>Functional annotation (UniProt): </h3>
               
-            </ul>
-          </div class="box-3"> 
-        
+              <ul> 
+                {% for object in function_results %} 
+                <li> {{ object.function_annotation }}  <a class="link" href="{{ object.annotation_link}}"> source </a> </li> 
+                {% endfor %} 
+                
+              </ul>
+            </div class="box-3"> 
           
-      </div>
+            
+        </div>
 
-          <br/>
-          <br>
-    </section>
+            <br/>
+            <br>
+  </section>
     
     <hr color="#CAC4D7">
     

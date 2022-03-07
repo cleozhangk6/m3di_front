@@ -50,6 +50,10 @@ html, body {
     top: 0;
     z-index: 10000;
 }
+
+.hr {
+    border: 10px, #ada5bd;
+}
   
 
 
@@ -135,7 +139,7 @@ html, body {
     margin-right:auto;
     margin-left: auto;
     padding-top: 100px;
-    position: relative;
+    position: sticky;
 }
 
 .home-search form {
@@ -270,24 +274,32 @@ footer .container{
     color: #7F798B;
 }
 
+.wrapper .sidebar{
+    background: #7F798B;;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 225px;
+    height: 100%;
+    padding: 20px 0;
+    transition: all 0.5s ease;
+}
 
 
 .results .container{
-
     width: 90%;
     height: 100%;
     margin-right:auto;
-    margin-left: auto;
+    margin-left: 250px;
     padding-top: 20px;
     position: relative;
 }
 
 #cy {
-    float: right;
     width: 900px;
     height: 1000px;
     padding: 50px;
-    margin: right 20px;
+    margin-left: 0px;
     position: relative;
     border: 10px solid #CAC4D7 ;
     background-color: #FFFFFF;
@@ -305,25 +317,60 @@ h1 {
 }
 
 .box-1 {
-    margin: auto;
-    text-align: center;
-    margin-top: 20px;
-    padding-left: 200px;
-    padding-right: 200px;
-    width: 1800px;
-    border: 10px #CAC4D7 ;
-    border-style: none, none, solid, none;
-    font-size: 20px;
+    position: fixed;
+    margin-top: 0px;
+    background-color: white ;
+    margin-left: 230px;
+    text-align: left;
+    padding: 20px;
+    width: 100%;
+    border: 5px solid white ;
+    border-bottom:3px solid grey ;
+    font-size: 22px;
+    z-index: 100000;
 }
 
+
 .box-2 {
+    position: relative;
     text-align: left;
-    width: 1000px;
-    margin-top: 20px;
-    margin-left : 20px;
+    width: 100%;
+    margin-top: 410px;
+    margin-left: 250px;
     padding-left: 20px;
     padding-right: 20px;
+    padding-bottom: 30px;
     font-size: 20px;
+    background-color: white ;
+    border-bottom: 3px solid grey ;
+
+}
+
+.box-2a {
+    position: relative;
+    text-align: left;
+    width: 100%;
+    margin-left: 250px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 30px;
+    font-size: 20px;
+    background-color: white ;
+    border-bottom: 3px solid grey ;
+
+}
+
+.box-2b {
+    position: relative;
+    text-align: left;
+    width: 100%;
+    margin-left: 250px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 30px;
+    font-size: 20px;
+    background-color: white ;
+    border-bottom: 3px solid grey ;
 
 }
 
@@ -331,16 +378,18 @@ h1 {
     text-align: left;
     width: 1800px;
     margin-top: 20px;
-    margin-left : 20px;
+    margin-left :250px;;
     padding-left: 20px;
     padding-right: 20px;
     font-size: 20px;
+    background-color: white ;
 
 }
 
 .results .container p, li, h3, h4, ul {
     text-align: left;
-    margin-left: auto;
+    
+
 }
 
 
@@ -348,15 +397,47 @@ h1 {
     text-align: left;
     border: 1px solid;
     border-radius: 5px;
-    border-spacing:30px;
-    padding: 1em;
+    border-spacing:15px;
+    padding: 10px;
   
 }
 .results .variant-table th{
-    padding: 0.5em;
+    padding: 0.5em; 
 }
 
 .link{
     color :  #483D8B ;
 }
 
+.sidenav {
+    height: 100%; /* Full-height: remove this if you want "auto" height */
+    width: 230px; /* Set the width of the sidebar */
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: #b0a4c9c7 ; /* Black */
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 20px;
+    margin-top: 188px;
+  }
+  
+  /* The navigation menu links */
+.sidenav a {
+    padding: 10px;
+    text-decoration: none;
+    font-size: 25px;
+    color: grey;
+    display: block;
+  }
+  
+  /* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+    color: #f1f1f1;
+  }
+  
+  /* Style page content */
+.main {
+    margin-left: 230px; /* Same as the width of the sidebar */
+    padding: 0px ;
+  }
