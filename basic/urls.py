@@ -12,6 +12,8 @@ urlpatterns = [
     path('index/',IndexView.as_view(),name='index'),
     # path('index/main/',MainView.as_view(),name='main'),
     path('index/main/',views.main_UniVar,name='main'),
+
+
 ]
 
 

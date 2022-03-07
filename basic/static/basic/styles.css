@@ -9,13 +9,15 @@
   box-sizing: border-box; /*make the sizing account for padding and border*/
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-    color: #777;
+    color: rgb(0, 0, 0);
     text-align: center;
 }
 
 html, body {
     margin: 0;
     padding: 0;
+    
+
   }
 
 .top_bar {
@@ -43,13 +45,13 @@ html, body {
 }
 
 /* The sticky class is added to the header with JS when it reaches its scroll position */
-.sticky {
-    position: fixed;
+#stick-to-top {
+    position: sticky;
     top: 0;
-    width: 100%;
-    z-index: 100;
+    z-index: 10000;
 }
   
+
 
 #m3di_logo_left {
     float: left;
@@ -79,7 +81,7 @@ html, body {
 }
 
 .main-nav ul a:hover {
-    background-color: #E2E1E5;
+    background-color: #7F798B;
 }
 
 #welcome {
@@ -87,7 +89,7 @@ html, body {
 }
 
 .hero {
-    background-color: #EDE8F9;
+    background-color:  #7F798B;
     background-image: url("images/bg-img1.png");
     background-size: cover;
 }
@@ -140,6 +142,7 @@ html, body {
     display: table;
     margin-left: auto;
     margin-right: auto;
+
 }
 
 .right {
@@ -157,7 +160,7 @@ html, body {
 }
 
 .fa-solid {
-    color: #CAC4D7;
+    color: #afa0d1;
     font-size: 1.3em;
 }
 
@@ -236,14 +239,15 @@ footer .container{
     height: 70px;
     margin-right:auto;
     margin-left: auto;
-    padding-top: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     position: relative;
     background-color: #EDE8F9;
 }
 
 .search-bar input {
     display: table-cell;
-    font-size: small;
+    font-size: large;
     height: 1.8em;
     text-align: start;
     text-indent: 0.3em;
@@ -269,6 +273,7 @@ footer .container{
 
 
 .results .container{
+
     width: 90%;
     height: 100%;
     margin-right:auto;
@@ -278,30 +283,80 @@ footer .container{
 }
 
 #cy {
-    width: 80%;
-    height: 500px;
-    margin-left: auto;
-    padding-top: auto;
+    float: right;
+    width: 900px;
+    height: 1000px;
+    padding: 50px;
+    margin: right 20px;
     position: relative;
+    border: 10px solid #CAC4D7 ;
+    background-color: #FFFFFF;
+    border-radius: 25px;
     }
 
 .results canvas {
     left: 0;
 }
 
-.results .container li, h3, ul {
+h1 { 
+    text-align: center; 
+    color: black;
+
+}
+
+.box-1 {
+    margin: auto;
+    text-align: center;
+    margin-top: 20px;
+    padding-left: 200px;
+    padding-right: 200px;
+    width: 1800px;
+    border: 10px #CAC4D7 ;
+    border-style: none, none, solid, none;
+    font-size: 20px;
+}
+
+.box-2 {
     text-align: left;
+    width: 1000px;
+    margin-top: 20px;
+    margin-left : 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 20px;
+
+}
+
+.box-3 {
+    text-align: left;
+    width: 1800px;
+    margin-top: 20px;
+    margin-left : 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 20px;
+
+}
+
+.results .container p, li, h3, h4, ul {
+    text-align: left;
+    margin-left: auto;
 }
 
 
 .results .variant-table{
-    margin-left: auto;
-    margin-right: auto;
+    text-align: left;
     border: 1px solid;
-    padding: 0.5em;
-    padding-top: 0;
+    border-radius: 5px;
+    border-spacing:30px;
+    padding: 1em;
+  
 }
 .results .variant-table th{
     padding: 0.5em;
+}
+
+.link{
+    color :  #483D8B ;
 }
 
