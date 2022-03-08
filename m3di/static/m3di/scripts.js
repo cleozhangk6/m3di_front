@@ -113,17 +113,17 @@ Promise.all([
 
   });
 
-      // whether to show 
-      // cy.style().selector('edge[?self]').style({'opacity':'0'}).update()
-
+// Display self-interaction checkbox
 function displaySelf() {
   checkSelf = document.getElementById("check_self");
   if (checkSelf.checked == true) {
-    cy.style().selector('edge[?self]').style({'opacity':'1'}).update();
+    cy.edges('[?self]').style({'opacity':'1'});
   } else {
-    cy.style().selector('edge[?self]').style({'opacity':'0'}).update();
+    cy.edges('[?self]').style({'opacity':'0'});
   }
   
 }
 
+//cy.nodes('[id=\"P05556\"]').addClass(query
 
+// cy.nodes('[id=\"P05556\"]').style({'background-color':'blue'})
