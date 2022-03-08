@@ -116,5 +116,14 @@ Promise.all([
       // whether to show 
       // cy.style().selector('edge[?self]').style({'opacity':'0'}).update()
 
+function displaySelf() {
+  checkSelf = document.getElementById("check_self");
+  if (checkSelf.checked == true) {
+    cy.style().selector('edge[?self]').style({'opacity':'1'}).update();
+  } else {
+    cy.style().selector('edge[?self]').style({'opacity':'0'}).update();
+  }
+  
+}
 
 

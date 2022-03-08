@@ -40,6 +40,8 @@
     <div class="container">
 
       <h3>Interaction</h3>
+      <input type="checkbox" id="check_self" onclick="displaySelf()" checked>
+      <label for="check_self"> Display self-interaction</label>
       <div class="interaction">
         <div id="cy">
         {{ cyNodes_json|json_script:"cyNodes" }}
@@ -50,6 +52,7 @@
           <span id="node"></span>
           <span id="edge"></span>
         </div>
+
       </div>
 
     <br>
