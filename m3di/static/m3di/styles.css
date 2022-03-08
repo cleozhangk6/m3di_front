@@ -347,6 +347,10 @@ footer .container{
     text-align: left;
 }
 
+.side-window a{
+    color: #7F798B;
+}
+
 br {
     clear: left;
 }

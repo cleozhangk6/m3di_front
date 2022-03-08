@@ -17,14 +17,14 @@ var selectedNodeHandler = function(evt) {
   $('#node').show();
   var node = evt.cyTarget.data();
   $("#node").html(`
-  <p> Uniprot ID: <a href="${node.link}">${node.id}</a></p>
-  <p> Protein name: ${node.name} </p>
+  <p> Protein name: <a href="${node.link}">${node.name}</a></p>
+  <p> Uniprot ID: ${node.id} </p>
   <p> Gene name: ${node.gene} </p>`);
 }
 var unselectedNodeHandler = function() {
   $('#node').hide();
 }
-var selectededgeHandler = function(evt) {
+var selectedEdgeHandler = function(evt) {
   $('#edge').show();
   var edge = evt.cyTarget.data();
   $("#edge").html(`
@@ -33,9 +33,10 @@ var selectededgeHandler = function(evt) {
   <p> Model/Structure: ${edge.type} </p>
   <p> PDB: ${edge.pdb} </p>`);
 }
-var unselectededgeHandler = function() {
+var unselectedEdgeHandler = function() {
   $('#edge').hide();
 }
+
 
 Promise.all([
   fetch('/static/m3di/cy-style.json')
@@ -49,7 +50,7 @@ Promise.all([
       style: dataArray[0],
       elements: [],
       minZoom: 0.5,
-      maxZoom: 5
+      maxZoom: 2
       });
     //Add nodes
     for (var i = 0; i < cyNodes.length; i++) {
@@ -76,17 +77,30 @@ Promise.all([
       name: 'cose'
     });
 
-
-
+  
     cy.on('select','node', selectedNodeHandler)
     cy.on('unselect','node', unselectedNodeHandler)
-    cy.on('select','edge', selectededgeHandler)
-    cy.on('unselect','edge', unselectededgeHandler)
+    cy.on('select','edge', selectedEdgeHandler)
+    cy.on('unselect','edge', unselectedEdgeHandler)
 
-    cy.on('mouseover','node', selectedNodeHandler)
-    cy.on('mouseout','node', unselectedNodeHandler)
-    cy.on('mouseover','edge', selectededgeHandler)
-    cy.on('mouseout','edge', unselectededgeHandler)
+    // cy.on('mouseover','node', function(event) {
+    //   var node = event.cyTarget;
+    //   node.qtip({
+    //     content: 'hello',
+    //     show: {
+    //       event: event.type,
+    //       ready: true
+    //    },
+    //    hide: {
+    //       event: 'mouseout unfocus'
+    //    }
+    //   },event)
+    // })
+
+    // cy.on('mouseover','node', selectedNodeHandler)
+    // cy.on('mouseout','node', unselectedNodeHandler)
+    // cy.on('mouseover','edge', selectededgeHandler)
+    // cy.on('mouseout','edge', unselectededgeHandler)
 
   });
 
