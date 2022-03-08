@@ -12,6 +12,7 @@ function convertJson(myId) {
 
 const cyEdges = convertJson('cyEdges');
 const cyNodes = convertJson('cyNodes');
+// const cyEdges_raw = convertJson('cyEdges_raw');
 
 var selectedNodeHandler = function(evt) {
   $('#node').show();
@@ -19,7 +20,8 @@ var selectedNodeHandler = function(evt) {
   $("#node").html(`
   <p> Protein name: <a href="${node.link}">${node.name}</a></p>
   <p> Uniprot ID: ${node.id} </p>
-  <p> Gene name: ${node.gene} </p>`);
+  <p> Gene name: ${node.gene} </p>
+  <p> Organism: <i>Homo Sapiens</i> </p>`);
 }
 var unselectedNodeHandler = function() {
   $('#node').hide();
@@ -27,11 +29,17 @@ var unselectedNodeHandler = function() {
 var selectedEdgeHandler = function(evt) {
   $('#edge').show();
   var edge = evt.cyTarget.data();
-  $("#edge").html(`
-  <p> Interaction: ${edge.source} - ${edge.target} </p>
-  <p> Experimental score: ${edge.exp} </p>
-  <p> Model/Structure: ${edge.type} </p>
-  <p> PDB: ${edge.pdb} </p>`);
+  if (edge.type != null) {
+    $("#edge").html(`
+    <p> Interaction: ${edge.source} - ${edge.target} </p>
+    <p> Experimental score: ${edge.exp} </p>
+    <p> Model/Structure: ${edge.type} </p>
+    <p> PDB: <a href="https://www.rcsb.org/structure/${edge.pdb}">${edge.pdb}</a> </p>`);}
+  else {
+    $("#edge").html(`
+    <p> Interaction: ${edge.source} - ${edge.target} </p>
+    <p> Experimental score: ${edge.exp} </p>`)
+  }
 }
 var unselectedEdgeHandler = function() {
   $('#edge').hide();
@@ -70,9 +78,21 @@ Promise.all([
           target: cyEdges[i].p2,
           exp: cyEdges[i].experimental,
           type: cyEdges[i].type,
-          pdb: cyEdges[i].PDB_id} }
+          pdb: cyEdges[i].PDB_id, 
+          self: cyEdges[i].self} }
       );
     };
+    // //Add self interacting edges
+    //   for (var i = 0; i < cyEdges_raw.length; i++) {
+    //     cy.add(
+    //       { data: { id: cyEdges_raw[i].p1 + '-' + cyEdges_raw[i].p2, 
+    //         source: cyEdges_raw[i].p1, 
+    //         target: cyEdges_raw[i].p2,
+    //         type: cyEdges_raw[i].type,
+    //         pdb: cyEdges_raw[i].PDB_id,
+    //         self: 'y'} }
+    //     );
+    // };
     cy.layout({
       name: 'cose'
     });
@@ -103,5 +123,9 @@ Promise.all([
     // cy.on('mouseout','edge', unselectededgeHandler)
 
   });
+
+      // whether to show 
+      // cy.style().selector('edge[?self]').style({'opacity':'0'}).update()
+
 
 

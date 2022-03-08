@@ -47,7 +47,8 @@
     "selector": "edge[?type]",
     "style": {
       "opacity": 0.9,
-      "z-index": 100}
+      "z-index": 100,
+      "line-color": "#ffbf80"}
   }, {
     "selector": "edge[type=\"Model\"]",
     "style": {
@@ -55,7 +56,8 @@
   }, {
     "selector": "edge[type=\"Structure\"]",
     "style": {
-      "line-color": "#d96226"}
+      "line-color": "#d96226",
+      "z-index": 150}
   }, {
     "selector": "edge:selected",
     "style": {
