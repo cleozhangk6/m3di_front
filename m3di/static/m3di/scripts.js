@@ -82,17 +82,6 @@ Promise.all([
           self: cyEdges[i].self} }
       );
     };
-    // //Add self interacting edges
-    //   for (var i = 0; i < cyEdges_raw.length; i++) {
-    //     cy.add(
-    //       { data: { id: cyEdges_raw[i].p1 + '-' + cyEdges_raw[i].p2, 
-    //         source: cyEdges_raw[i].p1, 
-    //         target: cyEdges_raw[i].p2,
-    //         type: cyEdges_raw[i].type,
-    //         pdb: cyEdges_raw[i].PDB_id,
-    //         self: 'y'} }
-    //     );
-    // };
     cy.layout({
       name: 'cose'
     });

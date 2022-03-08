@@ -136,7 +136,6 @@ def main_UniVar(request):
         
         cyNodes_json = raw_to_json(cyNodes_raw)
         cyEdges_json = raw_to_json(cyEdges_raw, cyEdges_raw_self)
-        # cyEdges_raw_json = raw_to_json(cyEdges_raw_self)
 
         context = {
             'query_uni': query_uni,
@@ -146,7 +145,6 @@ def main_UniVar(request):
             'results_topo': results_topo,
             'results_variant': results_variant,
             'cyEdges_json': cyEdges_json,
-            # 'cyEdges_raw_json': cyEdges_raw_json,
             'cyNodes_json': cyNodes_json
         }
 
