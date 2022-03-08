@@ -55,17 +55,6 @@ def main_UniVar(request):
             results_variant = MissenseVarCom.objects.none()
 
 
-        # interactors = Stringinteractions.objects.raw('''
-        # SELECT id, uniprot_id FROM BasicInfo2 WHERE uniprot_id = %s
-        # UNION
-        # (SELECT b.id, b.uniprot_id FROM StringInteractions as s
-        # LEFT JOIN StringToUniprot as su1 ON su1.string_id = s.string_p1
-        # LEFT JOIN StringToUniprot as su2 ON su2.string_id = s.string_p2
-        # LEFT JOIN BasicInfo2 as b ON b.uniprot_id = su2.uniprot_id
-        # WHERE su1.uniprot_id = %s AND su2.uniprot_id IS NOT NULL AND s.experimental > 0
-        # ORDER BY s.experimental desc, s.combined_score, s.id
-        # limit 10);
-        # ''',[query_uni,query_uni])
     
         cyNodes_raw = Stringinteractions.objects.raw('''
             SELECT * FROM BasicInfo2 WHERE uniprot_id = %s
@@ -154,34 +143,29 @@ def main_UniVar(request):
         #         AND i.prot2 in (select * from t)
         #         AND i.prot1 = i.prot2;
         #     ''', [query_uni, query_uni])
-
-        # cyNodes_raw = Stringinteractions.objects.raw('''
-        #     SELECT * FROM BasicInfo2 WHERE uniprot_id = %s
-        #     UNION
-        #     (SELECT b.* FROM StringInteractions as s
+        
+        # npos = Stringinteractions.objects.raw('''
+        #     WITH t AS
+        #     (SELECT b.uniprot_id FROM StringInteractions as s
         #     LEFT JOIN StringToUniprot as su1 ON su1.string_id = s.string_p1
         #     LEFT JOIN StringToUniprot as su2 ON su2.string_id = s.string_p2
         #     LEFT JOIN BasicInfo2 as b ON b.uniprot_id = su2.uniprot_id
-        #     WHERE su1.uniprot_id = %s
-        #         AND su2.uniprot_id IS NOT NULL AND s.experimental > 0
-        #     ORDER BY s.experimental desc, s.combined_score, s.id 
-        #     LIMIT 10);
-        #     ''',[query_uni,query_uni])
-        
+        #     WHERE su1.uniprot_id = %s AND su2.uniprot_id IS NOT NULL AND s.experimental > 0
+        #     ORDER BY s.combined_score desc, s.combined_score, s.id
+        #     limit 10)
+        #     SELECT MAX(id) AS id, uniprot_p2 AS uniprot, GROUP_CONCAT(pos_p2,aa_p2 SEPARATOR ', ') AS pos
+        #     FROM InteractionSurfaceFinal
+        #     WHERE uniprot_p1 = %s AND uniprot_p2 in (select * from t) AND pos_p1 = %s
+        #     GROUP BY uniprot_p2;
+        #     ''', [query_uni,query_uni,query_var])
+
+
         npos = Stringinteractions.objects.raw('''
-            WITH t AS
-            (SELECT b.uniprot_id FROM StringInteractions as s
-            LEFT JOIN StringToUniprot as su1 ON su1.string_id = s.string_p1
-            LEFT JOIN StringToUniprot as su2 ON su2.string_id = s.string_p2
-            LEFT JOIN BasicInfo2 as b ON b.uniprot_id = su2.uniprot_id
-            WHERE su1.uniprot_id = %s AND su2.uniprot_id IS NOT NULL AND s.experimental > 0
-            ORDER BY s.combined_score desc, s.combined_score, s.id
-            limit 10)
             SELECT MAX(id) AS id, uniprot_p2 AS uniprot, GROUP_CONCAT(pos_p2,aa_p2 SEPARATOR ', ') AS pos
             FROM InteractionSurfaceFinal
-            WHERE uniprot_p1 = %s AND uniprot_p2 in (select * from t) AND pos_p1 = %s
+            WHERE uniprot_p1 = %s AND uniprot_p2 in {} AND pos_p1 = %s
             GROUP BY uniprot_p2;
-            ''', [query_uni,query_uni,query_var])
+            '''.format(i_tuple),[query_uni,query_var])
 
         
         cyNodes_json = raw_to_json(cyNodes_raw)
