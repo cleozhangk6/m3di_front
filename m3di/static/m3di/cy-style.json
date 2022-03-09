@@ -24,6 +24,10 @@
       "border-color": "#cccccc",
       "background-color": "#77828C"}
   }, {
+    "selector": "node[?pos]",
+    "style": {
+      "background-color": "red"}
+  }, {
     "selector": "edge",
     "style": {
       "width": 4,

@@ -67,7 +67,8 @@ Promise.all([
                     idInt: i,
                     link: cyNodes[i].protein_link,
                     name: cyNodes[i].protein_name,
-                    gene: cyNodes[i].gene_name} }
+                    gene: cyNodes[i].gene_name,
+                    pos: cyNodes[i].pos} }
         );
       };
     //Add edges
