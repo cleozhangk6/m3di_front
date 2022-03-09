@@ -27,7 +27,8 @@
   <section class="results">
     <!-- <p><strong>Search Results</strong></p> -->
     <div id="you-searched-for">
-      <p>You searched for {{ query_uni }}</p>
+      <p><span>You searched for</span>
+        <span id="query_uni">{{ query_uni }}</span></p>
       {% if query_uni and query_var %}
       <p>Residue position {{ query_var }}</p>
       {% elif query_uni %}
@@ -40,12 +41,18 @@
     <div class="container">
 
       <h3>Interaction</h3>
-      <div>
+      <span>
         <input type="checkbox" id="check_self" onclick="displaySelf()" checked>
         <label for="check_self"> Display self-interaction</label>
-      </div>
+      </span>
+      <span>
+        <input type="checkbox" id="check_pos" onclick="colorPos()" checked>
+        <label for="check_pos"> Show interface</label>
+      </span>
+
       <div class="interaction">
         <div id="cy">
+        <!-- {{ query_uni|json_script:"query_uni"}} -->
         {{ cyNodes_json|json_script:"cyNodes" }}
         {{ cyEdges_json|json_script:"cyEdges" }}
         </div>

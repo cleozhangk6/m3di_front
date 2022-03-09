@@ -12,11 +12,6 @@
       "text-outline-width": "2px",
       "color": "#fff"}
   }, {
-    "selector": "node[idInt=0]",
-    "style": {
-      "width": "70px",
-      "height": "70px"}
-  }, {
     "selector": "node:selected",
     "style": {
       "border-width": 8,
@@ -26,7 +21,8 @@
   }, {
     "selector": "node[?pos]",
     "style": {
-      "background-color": "red"}
+      "background-color": "#FD3333",
+      "text-outline-color": "#FD3333"}
   }, {
     "selector": "edge",
     "style": {

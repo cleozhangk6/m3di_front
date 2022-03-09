@@ -12,16 +12,17 @@ function convertJson(myId) {
 
 const cyEdges = convertJson('cyEdges');
 const cyNodes = convertJson('cyNodes');
-// const cyEdges_raw = convertJson('cyEdges_raw');
+const query_uni = document.getElementById('query_uni').textContent;
 
 var selectedNodeHandler = function(evt) {
   $('#node').show();
   var node = evt.cyTarget.data();
   $("#node").html(`
-  <p> Protein name: <a href="${node.link}">${node.name}</a></p>
+  <p> Protein: <a href="${node.link}">${node.name}</a></p>
   <p> Uniprot ID: ${node.id} </p>
-  <p> Gene name: ${node.gene} </p>
-  <p> Organism: <i>Homo Sapiens</i> </p>`);
+  <p> Gene ID: ${node.gene} </p>
+  <p> Organism: <i>Homo Sapiens</i> </p>
+  <p> Residues in interface: ${node.pos}</p>`);
 }
 var unselectedNodeHandler = function() {
   $('#node').hide();
@@ -60,11 +61,11 @@ Promise.all([
       minZoom: 0.5,
       maxZoom: 2
       });
+        
     //Add nodes
     for (var i = 0; i < cyNodes.length; i++) {
         cy.add(
           { data: { id: cyNodes[i].uniprot_id,
-                    idInt: i,
                     link: cyNodes[i].protein_link,
                     name: cyNodes[i].protein_name,
                     gene: cyNodes[i].gene_name,
@@ -87,7 +88,9 @@ Promise.all([
       name: 'cose'
     });
 
-  
+    // select and enlarge query protein node
+    cy.nodes('[id="' + query_uni + '"]').style({"width": "70px","height": "70px"})
+
     cy.on('select','node', selectedNodeHandler)
     cy.on('unselect','node', unselectedNodeHandler)
     cy.on('select','edge', selectedEdgeHandler)
@@ -121,9 +124,20 @@ function displaySelf() {
     cy.edges('[?self]').style({'opacity':'1'});
   } else {
     cy.edges('[?self]').style({'opacity':'0'});
-  }
-  
+  }  
 }
+
+// Color proteins involved in interface
+function colorPos() {
+  checkPos = document.getElementById("check_pos");
+  if (checkPos.checked == true) {
+    cy.nodes('[?pos]').style({'background-color':'#FD3333',"text-outline-color": "#FD3333"});
+  } else {
+    cy.nodes('[?pos]').style({'background-color':'#605C69',"text-outline-color": "#605C69"});
+  }  
+}
+
+
 
 //cy.nodes('[id=\"P05556\"]').addClass(query
 

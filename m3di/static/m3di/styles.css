@@ -312,8 +312,12 @@ footer .container{
     position: relative;
 }
 
-#you-searched-for p{
+#you-searched-for *{
     color: #777;
+}
+
+#query_uni {
+    padding-left: 0.5px;
 }
 
 .results .container .interaction div{
