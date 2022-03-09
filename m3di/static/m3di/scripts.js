@@ -5,7 +5,7 @@ function populate_uniprot(){
 
 function populate_uniprot2(){
   document.getElementById('input_uni').value="P09651";
-  document.getElementById('input_var').value="10";
+  document.getElementById('input_var').value="11";
 }
 
 // 8

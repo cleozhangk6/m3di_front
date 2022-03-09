@@ -23,6 +23,10 @@ def main_UniVar(request):
     if request.method == "GET":
         query_uni = request.GET['q']
         query_var = request.GET['v']
+        if request.GET['l']:
+            query_lim = request.GET['l']
+        else:
+            query_lim = '10'
 
         results_basic = Basicinfo2.objects.filter(uniprot_id__icontains=query_uni)
         results_signal = Signalpeptide.objects.filter(sp_uniprot_id__icontains=query_uni)
@@ -66,8 +70,8 @@ def main_UniVar(request):
             WHERE su1.uniprot_id = %s
                 AND su2.uniprot_id IS NOT NULL AND s.experimental > 0
             ORDER BY s.experimental desc, s.combined_score, s.id 
-            LIMIT 10);
-            ''',[query_uni,query_uni])
+            LIMIT %s);
+            ''',[query_uni,query_uni,int(query_lim)])
 
         # Use a list as an SQL parameter in Python:
         # Call tuple(list) to convert the list into a tuple object.

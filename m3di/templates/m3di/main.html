@@ -8,10 +8,12 @@
   <div class="search-bar">
     <div class="container">
       <form action="{% url 'm3di:main' %}" method="get">
-          Uniprot/Gene ID:
+          Uniprot/Gene ID*:
           <input id="input_uni" name="q" type="text" placeholder="" size="10px">
           Residue Position:
           <input id="input_var" name="v" type="text" placeholder="" size="6px">
+          Number of interactors:
+          <input id="input_lim" name="l" type="text" placeholder="10" size="6px">
           <a href="{% url 'm3di:main' %}">
             <button type="submit">Submit</button></a>
             <a id="example" onclick="populate_uniprot()">e.g.#1</a>
