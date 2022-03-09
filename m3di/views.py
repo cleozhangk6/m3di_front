@@ -96,13 +96,6 @@ def main_UniVar(request):
             '''.format(nodes,nodes))
 
 
-        # npos = Stringinteractions.objects.raw('''
-        #     # SELECT MAX(id) AS id, uniprot_p2 AS uniprot, GROUP_CONCAT(pos_p2,aa_p2 SEPARATOR ', ') AS pos
-        #     # FROM InteractionSurfaceFinal
-        #     # WHERE uniprot_p1 = %s AND uniprot_p2 in {} AND pos_p1 = %s
-        #     # GROUP BY uniprot_p2;
-        #     # '''.format(nodes),[query_uni,query_var])
-
         if query_var: 
             cyNodes_raw = Basicinfo2.objects.raw('''
             SELECT id, uniprot_id, protein_link, protein_name, gene_name, pos

@@ -43,14 +43,6 @@ html, body {
 }
 
 
-/* The sticky class is added to the header with JS when it reaches its scroll position */
-/* .sticky {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 100;
-} */
-
 #stick-to-top {
     position: sticky;
     top:0;
@@ -158,9 +150,12 @@ html, body {
 }
 
 #example {
+    cursor: pointer;
     font-size: small;
+    color:#777;
     padding-bottom: 0.3em;
-    padding-left: 0.6em;
+    padding-left: 0.3em;
+    text-decoration: underline;
 }
 
 .fa-solid {
@@ -331,6 +326,7 @@ footer .container{
 #cy {
     width: 55%;
     height: 500px;
+    margin-top: 20px;
 }
 
 .side-window {

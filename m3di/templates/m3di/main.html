@@ -12,12 +12,10 @@
           <input id="input_uni" name="q" type="text" placeholder="" size="10px">
           Residue Position:
           <input id="input_var" name="v" type="text" placeholder="" size="6px">
-          <!-- Mutation:
-          <input id="input_wt" name="wt" type="text" placeholder="" size="4px">
-          <i class="fa-solid fa-arrow-right"></i>
-          <input id="input_mut" name="mut" type="text" placeholder="" size="4px"> -->
           <a href="{% url 'm3di:main' %}">
             <button type="submit">Submit</button></a>
+            <a id="example" onclick="populate_uniprot()">e.g.#1</a>
+            <a id="example" onclick="populate_uniprot2()">e.g.#2</a>
       </form>
     </div>
   </div>
@@ -52,7 +50,6 @@
 
       <div class="interaction">
         <div id="cy">
-        <!-- {{ query_uni|json_script:"query_uni"}} -->
         {{ cyNodes_json|json_script:"cyNodes" }}
         {{ cyEdges_json|json_script:"cyEdges" }}
         </div>

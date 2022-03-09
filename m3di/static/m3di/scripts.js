@@ -1,6 +1,11 @@
 function populate_uniprot(){
-    document.getElementById('input_uni').value="Q9BYF1";
-    document.getElementById('input_var').value="199";
+    document.getElementById('input_uni').value="P31947";
+    document.getElementById('input_var').value="226";
+}
+
+function populate_uniprot2(){
+  document.getElementById('input_uni').value="P09651";
+  document.getElementById('input_var').value="10";
 }
 
 // 8
@@ -131,7 +136,7 @@ function displaySelf() {
 function colorPos() {
   checkPos = document.getElementById("check_pos");
   if (checkPos.checked == true) {
-    cy.nodes('[?pos]').style({'background-color':'#FD3333',"text-outline-color": "#FD3333"});
+    cy.nodes('[?pos]').style({'background-color':'#cc0000',"text-outline-color": "#cc0000"});
   } else {
     cy.nodes('[?pos]').style({'background-color':'#605C69',"text-outline-color": "#605C69"});
   }  
