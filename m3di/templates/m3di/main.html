@@ -28,7 +28,8 @@
       <p><span>You searched for</span>
         <span id="query_uni">{{ query_uni }}</span></p>
       {% if query_uni and query_var %}
-      <p>Residue position {{ query_var }}</p>
+      <p><span>Residue position</span> 
+        <span id="query_var">{{ query_var }}</span></p>
       {% elif query_uni %}
       <p>No variant specified</p>
       {% else %}
@@ -39,14 +40,19 @@
     <div class="container">
 
       <h3>Interaction</h3>
-      <span>
-        <input type="checkbox" id="check_self" onclick="displaySelf()" checked>
-        <label for="check_self"> Display self-interaction</label>
-      </span>
-      <span>
-        <input type="checkbox" id="check_pos" onclick="colorPos()" checked>
-        <label for="check_pos"> Show interface</label>
-      </span>
+      
+      <div class="check-boxes">
+        <span>
+          <input type="checkbox" id="check_self" onclick="displaySelf()" checked>
+          <label for="check_self"> Self-interaction</label>
+        </span>
+        {% if query_var %}
+        <span>
+          <input type="checkbox" id="check_pos" onclick="colorPos()" checked>
+          <label for="check_pos"> Interaction with residue {{ query_var }}</label>
+        </span>
+        {% endif %}
+      </div>
 
       <div class="interaction">
         <div id="cy">

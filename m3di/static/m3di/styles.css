@@ -323,10 +323,13 @@ footer .container{
     left: 0;
 }
 
+.check-boxes {
+    margin-bottom: 20px;
+}
+
 #cy {
     width: 55%;
     height: 500px;
-    margin-top: 20px;
 }
 
 .side-window {

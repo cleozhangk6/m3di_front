@@ -136,7 +136,7 @@ function displaySelf() {
 function colorPos() {
   checkPos = document.getElementById("check_pos");
   if (checkPos.checked == true) {
-    cy.nodes('[?pos]').style({'background-color':'#cc0000',"text-outline-color": "#cc0000"});
+    cy.nodes('[?pos]').style({'background-color':'#d96226',"text-outline-color": "#d96226"});
   } else {
     cy.nodes('[?pos]').style({'background-color':'#605C69',"text-outline-color": "#605C69"});
   }  
@@ -144,6 +144,4 @@ function colorPos() {
 
 
 
-//cy.nodes('[id=\"P05556\"]').addClass(query
-
-// cy.nodes('[id=\"P05556\"]').style({'background-color':'blue'})
+//cc0000, FD333

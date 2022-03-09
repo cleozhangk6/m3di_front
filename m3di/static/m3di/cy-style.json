@@ -21,8 +21,8 @@
   }, {
     "selector": "node[?pos]",
     "style": {
-      "background-color": "#cc0000",
-      "text-outline-color": "#cc0000"}
+      "background-color": "#d96226",
+      "text-outline-color": "#d96226"}
   }, {
     "selector": "edge",
     "style": {
