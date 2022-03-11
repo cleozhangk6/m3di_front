@@ -27,7 +27,7 @@ var selectedNodeHandler = function(evt) {
   <p> Uniprot ID: ${node.id} </p>
   <p> Gene ID: ${node.gene} </p>
   <p> Organism: <i>Homo Sapiens</i> </p>
-  <p> Residues in interface: ${node.pos}</p>`);
+  <p> Residues interacting: ${node.pos}</p>`);
 }
 var unselectedNodeHandler = function() {
   $('#node').hide();
@@ -94,7 +94,7 @@ Promise.all([
     });
 
     // select and enlarge query protein node
-    cy.nodes('[id="' + query_uni + '"]').style({"width": "70px","height": "70px"})
+    cy.nodes('[id="' + query_uni + '"]').style({"width": "70px","height": "70px", "shape": "hexagon"})
 
     cy.on('select','node', selectedNodeHandler)
     cy.on('unselect','node', unselectedNodeHandler)
