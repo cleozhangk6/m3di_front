@@ -131,7 +131,7 @@ html, body {
     height: 430px;
     margin-right:auto;
     margin-left: auto;
-    padding-top: 100px;
+    padding-top: 85px;
     position: relative;
 }
 
@@ -142,7 +142,7 @@ html, body {
 
 .right {
     text-align: right;
-    width: 20em;
+    width: 15em;
 }
 
 .left {
@@ -154,7 +154,7 @@ html, body {
     cursor: pointer;
     font-size: small;
     color:#777;
-    padding-bottom: 0.3em;
+    padding-bottom: 0.8em;
     padding-left: 0.3em;
     text-decoration: underline;
 }

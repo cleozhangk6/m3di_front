@@ -9,16 +9,26 @@ function populate_uniprot2(){
 }
 
 function toggleAdvance(){
-  var x = document.getElementsByClassName('advanced-settings');
-  var t = document.getElementById('toggle-advance');
-  for (var i = 0; i < x.length; i++) {
-    if (x[i].style.display === "none") {
-      x[i].style.display = "table-row";
-      t.textContent = 'Hide advanced';
+  var el = document.getElementsByClassName('advanced-settings');
+  var txt = document.getElementById('toggle-advance');
+  for (var i = 0; i < el.length; i++) {
+    if (el[i].style.display === "none") {
+      el[i].style.display = "table-row";
+      txt.textContent = 'Hide advanced';
     } else {
-      x[i].style.display = "none";
-      t.textContent = 'Show advanced';
+      el[i].style.display = "none";
+      txt.textContent = 'Show advanced';
     }
+  }
+}
+
+function showCustom(select,input){
+  var sel = document.getElementById(select);
+  var cus = document.getElementById(input);
+  if (sel.value === 'Custom') {
+    cus.style.visibility = 'visible';
+  } else {
+    cus.style.visibility = 'hidden';
   }
 }
 

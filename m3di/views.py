@@ -23,12 +23,12 @@ def main_UniVar(request):
     if request.method == "GET":
         query_uni = request.GET['q']
         query_var = request.GET['v']
-        # get interaction score threshold
+        # obtain interaction score threshold
         if request.GET['s'] != 'Custom':
             query_sco = request.GET['s']
         else:
-            query_sco = request.GET['s_custom'] * 100
-        # get max number of iteractors
+            query_sco = request.GET['s_custom']
+        # obtain max number of iteractors
         if request.GET['l'] != 'Custom':
             query_lim = request.GET['l']
         else:
@@ -76,10 +76,10 @@ def main_UniVar(request):
         LEFT JOIN BasicInfo2 as b ON b.uniprot_id = su2.uniprot_id
         WHERE su1.uniprot_id = %s
             AND su2.uniprot_id IS NOT NULL 
-            AND s.experimental > 0
+            AND s.experimental >= %s
         ORDER BY s.experimental desc, s.combined_score, s.id 
         LIMIT %s);
-        ''',[query_uni,query_uni,int(query_lim)])
+        ''',[query_uni,query_uni,float(query_sco)*1000,int(query_lim)])
 
     # Use a list as an SQL parameter in Python:
     # Call tuple(list) to convert the list into a tuple object.

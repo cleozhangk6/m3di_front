@@ -55,23 +55,23 @@
                 <i class="fa-solid fa-circle-info"></i>
                 <label>Interaction confidence:</label></td>
               <td class="left">
-                <select name="s">
-                  <option value="700" >High (&ge;0.7)</option>
-                  <option value="400">Medium (&ge;0.4)</option>
-                  <option value="200">Low (&ge;0.2)</option>
-                  <option value="0" selected="selected">No Limit (&ge;0)</option>
-                  <option value="200">Custom</option>
+                <select name="s" id="select-sco" onchange="showCustom('select-sco','input_sco')">
+                  <option value="0.7" selected="selected">High (&ge;0.7)</option>
+                  <option value="0.4">Medium (&ge;0.4)</option>
+                  <option value="0.2">Low (&ge;0.2)</option>
+                  <option value="0">No Limit (&ge;0)</option>
+                  <option value="Custom">Custom</option>
                 </select>
-                <input id="input_sc" name="s" type="number" value="0.5" 
-                min="0" max="1" step="0.1" style="width: 4em;">
+                <input id="input_sco" name="s_custom" type="number" value="0.5" 
+                min="0" max="1" step="0.1" style="width: 4em; visibility: hidden;">
               </td>
             </tr>
             <tr class="advanced-settings" style="display:none">
               <td class="right">
                 <i class="fa-solid fa-circle-info"></i>
-                <label>Number of interactors to show:</label></td>
+                <label>Max number of interactors:</label></td>
               <td class="left">
-                <select name="l">
+                <select name="l" id="select-lim" onchange="showCustom('select-lim','input_lim')">
                   <option value="10" selected="selected">10 interactors</option>
                   <option value="20">20 interactors</option>
                   <option value="50">50 interactors</option>
@@ -79,7 +79,7 @@
                   <option value="Custom">Custom</option>                  
                 </select>
                 <input id="input_lim" name="l_custom" type="number" value="10"  
-                style="width: 4em;" >
+                style="width: 4em; visibility: hidden;" >
               </td>
             </tr>
             <tr>
