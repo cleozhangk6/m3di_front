@@ -8,6 +8,20 @@ function populate_uniprot2(){
   document.getElementById('input_var').value="11";
 }
 
+function toggleAdvance(){
+  var x = document.getElementsByClassName('advanced-settings');
+  var t = document.getElementById('toggle-advance');
+  for (var i = 0; i < x.length; i++) {
+    if (x[i].style.display === "none") {
+      x[i].style.display = "table-row";
+      t.textContent = 'Hide advanced';
+    } else {
+      x[i].style.display = "none";
+      t.textContent = 'Show advanced';
+    }
+  }
+}
+
 // 8
 
 function convertJson(myId) {
@@ -94,7 +108,7 @@ Promise.all([
     });
 
     // select and enlarge query protein node
-    cy.nodes('[id="' + query_uni + '"]').style({"width": "70px","height": "70px", "shape": "hexagon"})
+    cy.nodes('[id="' + query_uni + '"]').style({"width": "70px","height": "70px", "shape": "square"})
 
     cy.on('select','node', selectedNodeHandler)
     cy.on('unselect','node', unselectedNodeHandler)

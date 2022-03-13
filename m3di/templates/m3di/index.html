@@ -33,27 +33,58 @@
               </td>
             </tr>
               <tr>
-                <td class="right"><label>Uniprot ID/Gene ID*:</label></td>
-                <td class="left">
-                  <input id="input_uni" name="q" type="text" placeholder="e.g. Q9BYF1 or ACE2" size="21px">
+                <td class="right">
                   <i class="fa-solid fa-circle-info"></i>
+                  <label>Uniprot ID/Gene ID*:</label></td>
+                <td class="left">
+                  <input id="input_uni" name="q" type="text" placeholder="e.g. Q9BYF1 or ACE2" size="18px">
+                  <!-- <i class="fa-solid fa-circle-info"></i> -->
                   <div id="info-box">Info Box</div>
                 </td>
               </tr>
             <tr>
-              <td class="right"><label>Residue Position:</label></td>
+              <td class="right">
+                <i class="fa-solid fa-circle-info"></i>
+                <label>Residue Position:</label></td>
               <td class="left">
-                <input id="input_var" name="v" type="text" placeholder="e.g. 199"  size="14px">
+                <input id="input_var" name="v" type="text" placeholder="e.g. 199"  size="10px">
+              </td>
+            </tr>
+            <tr class="advanced-settings" style="display:none">
+              <td class="right">
+                <i class="fa-solid fa-circle-info"></i>
+                <label>Interaction confidence:</label></td>
+              <td class="left">
+                <select name="s">
+                  <option value="700" >High (&ge;0.7)</option>
+                  <option value="400">Medium (&ge;0.4)</option>
+                  <option value="200">Low (&ge;0.2)</option>
+                  <option value="0" selected="selected">No Limit (&ge;0)</option>
+                  <option value="200">Custom</option>
+                </select>
+                <input id="input_sc" name="s" type="number" value="0.5" 
+                min="0" max="1" step="0.1" style="width: 4em;">
+              </td>
+            </tr>
+            <tr class="advanced-settings" style="display:none">
+              <td class="right">
+                <i class="fa-solid fa-circle-info"></i>
+                <label>Number of interactors to show:</label></td>
+              <td class="left">
+                <select name="l">
+                  <option value="10" selected="selected">10 interactors</option>
+                  <option value="20">20 interactors</option>
+                  <option value="50">50 interactors</option>
+                  <option value="100">Show All</option>
+                  <option value="Custom">Custom</option>                  
+                </select>
+                <input id="input_lim" name="l_custom" type="number" value="10"  
+                style="width: 4em;" >
               </td>
             </tr>
             <tr>
-              <td class="right"><label>Number of Interactors:</label></td>
-              <td class="left">
-                <input id="input_lim" name="l" type="text" placeholder="10"  size="12px">
-              </td>
-            </tr>
-            <tr>
-              <td></td>
+              <td class="right">
+                <span id="toggle-advance" onclick="toggleAdvance()">Show advanced</span> </td>
               <td class="left">
                 <a href="{% url 'm3di:main' %}">
                   <button type="submit">Submit</button></a>
