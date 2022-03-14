@@ -27,25 +27,32 @@
 {% endblock %}
 
 {% block Content %}
-<body onload="executeCy();">
+
+  {% if nodes_len == 1%}
+  <body>
+  {% else %}
+  <body onload="executeCy();">
+  {% endif %}
+
+  {% if query %}
   <section class="results">
-    <!-- <p><strong>Search Results</strong></p> -->
     <div id="you-searched-for">
       <p><span>You searched for</span>
         <span id="query_uni">{{ query_uni }}</span></p>
       {% if query_uni and query_var %}
       <p><span>Residue position</span> 
         <span id="query_var">{{ query_var }}</span></p>
-      {% elif query_uni %}
-      <p>No variant specified</p>
       {% else %}
-      <p>No search submitted</p>
+      <p>No variant specified</p>
       {% endif %}
     </div>
       
     <div class="container">
 
       <h3>Interaction</h3>
+      {% if nodes_len == 1%}
+      <p>No interactors above threshold. Try setting a lower confidence level.</p>
+      {% else %}
       
       <div class="check-boxes">
         <span>
@@ -62,8 +69,8 @@
 
       <div class="interaction">
         <div id="cy">
-        {{ cyNodes_json|json_script:"cyNodes" }}
-        {{ cyEdges_json|json_script:"cyEdges" }}
+          {{ cyNodes_json|json_script:"cyNodes" }}
+          {{ cyEdges_json|json_script:"cyEdges" }}
         </div>
         <div class="side-window">
           <h3>Select a node or an edge</h3>
@@ -71,6 +78,7 @@
           <span id="edge"></span>
         </div>
       </div>
+      {% endif %}
 
     <br>
 
@@ -123,7 +131,12 @@
         <br/>
         <br>
   </section>
+  
+  {% else %}
+  <p>No search submitted</p>
+  {% endif %}
 
   <hr color="#CAC4D7">
+
 </body>
 {% endblock %}
