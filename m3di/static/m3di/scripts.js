@@ -27,16 +27,12 @@ function showCustom(select,input){
   }
 }
 
-// 8
+// Cytoscape
 
 function convertJson(myId) {
   var cont = document.getElementById(myId).textContent
   return JSON.parse(cont.replace(/\\/g,'').replace(/^"|"$/g, ''))
 }
-
-const cyEdges = convertJson('cyEdges');
-const cyNodes = convertJson('cyNodes');
-const query_uni = document.getElementById('query_uni').textContent;
 
 var selectedNodeHandler = function(evt) {
   $('#node').show();
@@ -70,76 +66,61 @@ var unselectedEdgeHandler = function() {
   $('#edge').hide();
 }
 
-
-Promise.all([
-  fetch('/static/m3di/cy-style.json')
-  .then(function(res) {
-    return res.json()
-  })
-])
-  .then(function(dataArray) {
-    var cy = window.cy = cytoscape({
-      container: document.getElementById('cy'),
-      style: dataArray[0],
-      elements: [],
-      minZoom: 0.5,
-      maxZoom: 2
-      });
-        
-    //Add nodes
-    for (var i = 0; i < cyNodes.length; i++) {
+function executeCy() {
+  Promise.all([
+    fetch('/static/m3di/cy-style.json')
+    .then(function(res) {
+      return res.json()
+    })
+  ])
+    .then(function(dataArray) {
+      const cyEdges = convertJson('cyEdges');
+      const cyNodes = convertJson('cyNodes');
+      const query_uni = document.getElementById('query_uni').textContent;
+      var cy = window.cy = cytoscape({
+        container: document.getElementById('cy'),
+        style: dataArray[0],
+        elements: [],
+        minZoom: 0.5,
+        maxZoom: 2
+        });
+      //Add nodes
+      for (var i = 0; i < cyNodes.length; i++) {
+          cy.add(
+            { data: { id: cyNodes[i].uniprot_id,
+                      link: cyNodes[i].protein_link,
+                      name: cyNodes[i].protein_name,
+                      gene: cyNodes[i].gene_name,
+                      pos: cyNodes[i].pos} }
+          );
+        };
+      //Add edges
+      for (var i = 0; i < cyEdges.length; i++) {
         cy.add(
-          { data: { id: cyNodes[i].uniprot_id,
-                    link: cyNodes[i].protein_link,
-                    name: cyNodes[i].protein_name,
-                    gene: cyNodes[i].gene_name,
-                    pos: cyNodes[i].pos} }
+          { data: { id: cyEdges[i].p1 + '-' + cyEdges[i].p2, 
+            source: cyEdges[i].p1, 
+            target: cyEdges[i].p2,
+            exp: cyEdges[i].experimental,
+            type: cyEdges[i].type,
+            pdb: cyEdges[i].PDB_id, 
+            self: cyEdges[i].self} }
         );
       };
-    //Add edges
-    for (var i = 0; i < cyEdges.length; i++) {
-      cy.add(
-        { data: { id: cyEdges[i].p1 + '-' + cyEdges[i].p2, 
-          source: cyEdges[i].p1, 
-          target: cyEdges[i].p2,
-          exp: cyEdges[i].experimental,
-          type: cyEdges[i].type,
-          pdb: cyEdges[i].PDB_id, 
-          self: cyEdges[i].self} }
-      );
-    };
-    cy.layout({
-      name: 'cose'
+      cy.layout({
+        name: 'cose'
+      });
+  
+      // select and enlarge query protein node
+      cy.nodes('[id="' + query_uni + '"]').style({"width": "60px","height": "60px", "shape": "square"})
+  
+      cy.on('select','node', selectedNodeHandler)
+      cy.on('unselect','node', unselectedNodeHandler)
+      cy.on('select','edge', selectedEdgeHandler)
+      cy.on('unselect','edge', unselectedEdgeHandler)
+  
     });
+};
 
-    // select and enlarge query protein node
-    cy.nodes('[id="' + query_uni + '"]').style({"width": "70px","height": "70px", "shape": "square"})
-
-    cy.on('select','node', selectedNodeHandler)
-    cy.on('unselect','node', unselectedNodeHandler)
-    cy.on('select','edge', selectedEdgeHandler)
-    cy.on('unselect','edge', unselectedEdgeHandler)
-
-    // cy.on('mouseover','node', function(event) {
-    //   var node = event.cyTarget;
-    //   node.qtip({
-    //     content: 'hello',
-    //     show: {
-    //       event: event.type,
-    //       ready: true
-    //    },
-    //    hide: {
-    //       event: 'mouseout unfocus'
-    //    }
-    //   },event)
-    // })
-
-    // cy.on('mouseover','node', selectedNodeHandler)
-    // cy.on('mouseout','node', unselectedNodeHandler)
-    // cy.on('mouseover','edge', selectededgeHandler)
-    // cy.on('mouseout','edge', unselectededgeHandler)
-
-  });
 
 // Display self-interaction checkbox
 function displaySelf() {
