@@ -109,10 +109,9 @@ function executeCy() {
       cy.layout({
         name: 'cose'
       });
-  
-      // select and enlarge query protein node
+      //Select and enlarge query protein node
       cy.nodes('[id="' + query_uni + '"]').style({"width": "60px","height": "60px", "shape": "square"})
-  
+      //Add event listeners when selecting node/edges
       cy.on('select','node', selectedNodeHandler)
       cy.on('unselect','node', unselectedNodeHandler)
       cy.on('select','edge', selectedEdgeHandler)
@@ -122,7 +121,7 @@ function executeCy() {
 };
 
 
-// Display self-interaction checkbox
+//Display self-interaction checkbox
 function displaySelf() {
   checkSelf = document.getElementById("check_self");
   if (checkSelf.checked == true) {
@@ -132,7 +131,7 @@ function displaySelf() {
   }  
 }
 
-// Color proteins involved in interface
+//Color proteins involved in interface
 function colorPos() {
   checkPos = document.getElementById("check_pos");
   if (checkPos.checked == true) {

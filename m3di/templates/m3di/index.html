@@ -7,103 +7,103 @@
 
     
 {% block Content %}
-    <section class="hero">
-        <div class="container">
-          <h1 id="welcome"> Welcome to M3DI</h1>
-          <p>
-              Missense 3D interaction is Lorem ipsum dolor sit amet, consectetur
-              adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-              magna aliqua.
-          </p>
-          <br>
-          <a href="#home-search">
-          <button type="button">Start your search</button></a>  
-        </div>
-      </section>
-
-    <section id="home-search" class="home-search">
-        <div class="container">
-
-        <form action="{% url 'm3di:main' %}" method="get">
-          <table>
-            <tr>
-              <td></td>
-              <td class="left" id="example">
-                <a id="example" onclick="populateInput('P31947','226')">Example: P31947, 226</a>
-              </td>
-            </tr>
-              <tr>
-                <td class="right">
-                  <i class="fa-solid fa-circle-info"></i>
-                  <label>Uniprot ID/Gene ID*:</label></td>
-                <td class="left">
-                  <input id="input_uni" name="q" type="text" placeholder="e.g. Q9BYF1 or ACE2" size="18px">
-                  <!-- <i class="fa-solid fa-circle-info"></i> -->
-                  <div id="info-box">Info Box</div>
-                </td>
-              </tr>
-            <tr>
-              <td class="right">
-                <i class="fa-solid fa-circle-info"></i>
-                <label>Residue Position:</label></td>
-              <td class="left">
-                <input id="input_var" name="v" type="text" placeholder="e.g. 199"  size="10px">
-              </td>
-            </tr>
-            <tr class="advanced-settings" style="display:none">
-              <td class="right">
-                <i class="fa-solid fa-circle-info"></i>
-                <label>Interaction confidence:</label></td>
-              <td class="left">
-                <select name="s" id="select-sco" onchange="showCustom('select-sco','input_sco')">
-                  <option value="0.7" selected="selected">High (&ge; 0.7)</option>
-                  <option value="0.4">Medium (&ge; 0.4)</option>
-                  <option value="0.2">Low (&ge; 0.2)</option>
-                  <option value="0">No Limit (&ge; 0)</option>
-                  <option value="Custom">Custom</option>
-                </select>
-                <input id="input_sco" name="s_custom" type="number" value="0.5" 
-                min="0" max="1" step="0.1" style="width: 4em; visibility: hidden;">
-              </td>
-            </tr>
-            <tr class="advanced-settings" style="display:none">
-              <td class="right">
-                <i class="fa-solid fa-circle-info"></i>
-                <label>Max number of interactors:</label></td>
-              <td class="left">
-                <select name="l" id="select-lim" onchange="showCustom('select-lim','input_lim')">
-                  <option value="10" selected="selected">10 interactors</option>
-                  <option value="20">20 interactors</option>
-                  <option value="50">50 interactors</option>
-                  <option value="100">Show All</option>
-                  <option value="Custom">Custom</option>                  
-                </select>
-                <input id="input_lim" name="l_custom" type="number" value="10"  
-                style="width: 4em; visibility: hidden;" >
-              </td>
-            </tr>
-            <tr>
-              <td class="right">
-                <span id="toggle-advance" onclick="toggleAdvance()">Show advanced</span> </td>
-              <td class="left">
-                <a href="{% url 'm3di:main' %}">
-                  <button type="submit">Submit</button></a>
-              </td>
-            </tr>
-          </table>
-        </form>
-
-
-      </div>
-     </section>
-
-     
-
-    <section class="home-detail">
+<body>
+  <section class="hero">
       <div class="container">
+        <h1 id="welcome"> Welcome to M3DI</h1>
+        <p>
+            Missense 3D interaction is Lorem ipsum dolor sit amet, consectetur
+            adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+            magna aliqua.
+        </p>
+        <br>
+        <a href="#home-search">
+        <button type="button">Start your search</button></a>  
       </div>
     </section>
 
-    <!-- <hr color="#CAC4D7"> -->
+  <section id="home-search" class="home-search">
+      <div class="container">
+
+      <form action="{% url 'm3di:main' %}" method="get">
+        <table>
+          <tr>
+            <td></td>
+            <td class="left" id="example">
+              <a id="example" onclick="populateInput('P31947','226')">Example: P31947, 226</a>
+            </td>
+          </tr>
+            <tr>
+              <td class="right">
+                <i class="fa-solid fa-circle-info"></i>
+                <label>Uniprot ID/Gene ID*:</label></td>
+              <td class="left">
+                <input id="input_uni" name="q" type="text" placeholder="e.g. Q9BYF1 or ACE2" size="18px">
+                <!-- <i class="fa-solid fa-circle-info"></i> -->
+                <div id="info-box">Info Box</div>
+              </td>
+            </tr>
+          <tr>
+            <td class="right">
+              <i class="fa-solid fa-circle-info"></i>
+              <label>Residue Position:</label></td>
+            <td class="left">
+              <input id="input_var" name="v" type="text" placeholder="e.g. 199"  size="10px">
+            </td>
+          </tr>
+          <tr class="advanced-settings" style="display:none">
+            <td class="right">
+              <i class="fa-solid fa-circle-info"></i>
+              <label>Interaction confidence:</label></td>
+            <td class="left">
+              <select name="s" id="select-sco" onchange="showCustom('select-sco','input_sco')">
+                <option value="0.7" selected="selected">High (&ge; 0.7)</option>
+                <option value="0.4">Medium (&ge; 0.4)</option>
+                <option value="0.2">Low (&ge; 0.2)</option>
+                <option value="0">No Limit (&ge; 0)</option>
+                <option value="Custom">Custom</option>
+              </select>
+              <input id="input_sco" name="s_custom" type="number" value="0.5" 
+              min="0" max="1" step="0.1" style="width: 4em; visibility: hidden;">
+            </td>
+          </tr>
+          <tr class="advanced-settings" style="display:none">
+            <td class="right">
+              <i class="fa-solid fa-circle-info"></i>
+              <label>Max number of interactors:</label></td>
+            <td class="left">
+              <select name="l" id="select-lim" onchange="showCustom('select-lim','input_lim')">
+                <option value="10" selected="selected">10 interactors</option>
+                <option value="20">20 interactors</option>
+                <option value="50">50 interactors</option>
+                <option value="100">Show All</option>
+                <option value="Custom">Custom</option>                  
+              </select>
+              <input id="input_lim" name="l_custom" type="number" value="10"  
+              style="width: 4em; visibility: hidden;" >
+            </td>
+          </tr>
+          <tr>
+            <td class="right">
+              <span id="toggle-advance" onclick="toggleAdvance()">Show advanced</span> </td>
+            <td class="left">
+              <a href="{% url 'm3di:main' %}">
+                <button type="submit">Submit</button></a>
+            </td>
+          </tr>
+        </table>
+      </form>
+      
+    </div>
+  </section>
+
     
+
+  <section class="home-detail">
+    <div class="container">
+    </div>
+  </section>
+
+    <!-- <hr color="#CAC4D7"> -->
+</body>
 {% endblock %}
