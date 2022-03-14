@@ -31,7 +31,8 @@ function showCustom(select,input){
 
 function convertJson(myId) {
   var cont = document.getElementById(myId).textContent
-  return JSON.parse(cont.replace(/\\/g,'').replace(/^"|"$/g, ''))
+  //Remove backward slashes and boundary quotationmarks
+  return JSON.parse(cont.replace(/\\|^"|"$/g, ''))
 }
 
 var selectedNodeHandler = function(evt) {
