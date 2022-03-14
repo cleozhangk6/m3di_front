@@ -35,17 +35,19 @@
           </tr>
             <tr>
               <td class="right">
-                <i class="fa-solid fa-circle-info"></i>
-                <label>Uniprot ID/Gene ID*:</label></td>
+                <i class="fa-solid fa-circle-info" id="fa-uni"></i>
+                <div class="info-box" id="info-uni">Required*: the UniProt or Gene ID of your protein</div>
+                <label>UniProt ID/Gene ID*:</label></td>
               <td class="left">
                 <input id="input_uni" name="q" type="text" placeholder="e.g. Q9BYF1 or ACE2" size="18px">
                 <!-- <i class="fa-solid fa-circle-info"></i> -->
-                <div id="info-box">Info Box</div>
               </td>
             </tr>
           <tr>
             <td class="right">
-              <i class="fa-solid fa-circle-info"></i>
+              <i class="fa-solid fa-circle-info" id="fa-var"></i>
+              <div class="info-box" id="info-var">
+                Optional: the UniProt position of a particular amino acid substitution in your protein</div>
               <label>Residue Position:</label></td>
             <td class="left">
               <input id="input_var" name="v" type="text" placeholder="e.g. 199"  size="10px">
@@ -53,7 +55,9 @@
           </tr>
           <tr class="advanced-settings" style="display:none">
             <td class="right">
-              <i class="fa-solid fa-circle-info"></i>
+              <i class="fa-solid fa-circle-info" id="fa-sco"></i>
+              <div class="info-box" id="info-sco">
+                Optional: the minimum required score (based on experimenal evidence) to filter interactions</div>
               <label>Interaction confidence:</label></td>
             <td class="left">
               <select name="s" id="select-sco" onchange="showCustom('select-sco','input_sco')">
@@ -69,7 +73,9 @@
           </tr>
           <tr class="advanced-settings" style="display:none">
             <td class="right">
-              <i class="fa-solid fa-circle-info"></i>
+              <i class="fa-solid fa-circle-info" id="fa-lim"></i>
+              <div class="info-box" id="info-lim">
+                Optional: the maximum number of interactors to show</div>
               <label>Max number of interactors:</label></td>
             <td class="left">
               <select name="l" id="select-lim" onchange="showCustom('select-lim','input_lim')">
@@ -93,7 +99,7 @@
           </tr>
         </table>
       </form>
-      
+
     </div>
   </section>
 

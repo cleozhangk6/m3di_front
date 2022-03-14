@@ -166,30 +166,53 @@ html, body {
     cursor: pointer
 }
 
-#info-box {
+.info-box {
     position: absolute;
-    width: 150px;
-    height: 160px;
-    border-radius: 10px;
-    background-color: #CAC4D7;
+    width: auto;
+    height: auto;
+    border-radius: 6px;
+    background-color: #7F798B;
     color: white;
-    padding: 1em;
+    text-align: left;
+    font-size: small;
+    padding: 0.5em;
     visibility: hidden;
 }
 
-#info-box::before {
+/* .info-box::before {
     content: "";
     position: absolute;
     left: 0%;
     top: 20%;
-    transform: translateX(-90%);
-    border: 12px solid;
-    border-color: #0000 #CAC4D7 #0000 #0000;
+    transform: translate(800%, 130%);
+    border: 8px solid;
+    border-color: #7F798B #0000 #0000 #0000;
+} */
+
+
+#fa-uni:hover + #info-uni{
+    top: 22%;
+    left: -0.5%;
+    visibility: visible;
 }
 
-.fa-solid:hover + #info-box{
-    top: 24%;
-    left:83%;
+#fa-var:hover + #info-var{
+    top: 30%;
+    left: 3%;
+    width: 280px;
+    visibility: visible;
+}
+
+#fa-sco:hover + #info-sco{
+    top: 42%;
+    left: 0%;
+    width: 300px;
+    visibility: visible;
+}
+
+#fa-lim:hover + #info-lim{
+    top: 57%;
+    left: -6%;
     visibility: visible;
 }
 

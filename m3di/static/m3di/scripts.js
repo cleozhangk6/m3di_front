@@ -29,12 +29,6 @@ function showCustom(select,input){
 
 // Cytoscape
 
-function convertJson(myId) {
-  var cont = document.getElementById(myId).textContent
-  //Remove backward slashes and boundary quotationmarks
-  return JSON.parse(cont.replace(/\\|^"|"$/g, ''))
-}
-
 var selectedNodeHandler = function(evt) {
   $('#node').show();
   var node = evt.cyTarget.data();
@@ -65,6 +59,12 @@ var selectedEdgeHandler = function(evt) {
 }
 var unselectedEdgeHandler = function() {
   $('#edge').hide();
+}
+
+function convertJson(myId) {
+  var cont = document.getElementById(myId).textContent
+  return JSON.parse(cont.replace(/\\|^"|"$/g, ''))
+  //Regex: remove backward slashes and boundary quotationmarks
 }
 
 function executeCy() {
