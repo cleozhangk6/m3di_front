@@ -1,11 +1,6 @@
-function populate_uniprot(){
-    document.getElementById('input_uni').value="P31947";
-    document.getElementById('input_var').value="226";
-}
-
-function populate_uniprot2(){
-  document.getElementById('input_uni').value="P09651";
-  document.getElementById('input_var').value="11";
+function populateInput(uniprot,variant){
+    document.getElementById('input_uni').value=uniprot;
+    document.getElementById('input_var').value=variant;
 }
 
 function toggleAdvance(){
