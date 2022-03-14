@@ -9,10 +9,10 @@ function toggleAdvance(){
   for (var i = 0; i < el.length; i++) {
     if (el[i].style.display === "none") {
       el[i].style.display = "table-row";
-      txt.textContent = 'Hide advanced';
+      txt.textContent = 'Hide Advanced';
     } else {
       el[i].style.display = "none";
-      txt.textContent = 'Show advanced';
+      txt.textContent = 'Show Advanced';
     }
   }
 }

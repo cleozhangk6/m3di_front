@@ -86,12 +86,12 @@
                 <option value="Custom">Custom</option>                  
               </select>
               <input id="input_lim" name="l_custom" type="number" value="10"  
-              style="width: 4em; visibility: hidden;" >
+              min="1" max="100" style="width: 4em; visibility: hidden;" >
             </td>
           </tr>
           <tr>
             <td class="right">
-              <span id="toggle-advance" onclick="toggleAdvance()">Show advanced</span> </td>
+              <span id="toggle-advance" onclick="toggleAdvance()">Show Advanced</span> </td>
             <td class="left">
               <a href="{% url 'm3di:main' %}">
                 <button type="submit">Submit</button></a>
