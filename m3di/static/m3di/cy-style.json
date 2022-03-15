@@ -21,28 +21,14 @@
   }, {
     "selector": "node[?pos]",
     "style": {
-      "background-color": "#d96226",
-      "text-outline-color": "#d96226"}
+      "background-color": "#A6CA6E",
+      "text-outline-color": "#A6CA6E"}
   }, {
     "selector": "edge",
     "style": {
       "width": 4,
-      "line-color": "#ffbb99",
-      "opacity": 0.7}
-  }, {
-    "selector": "edge[exp > 0]",
-    "style": {
-      "line-color": "#e6e6e6"}
-  }, {
-    "selector": "edge[exp > 300]",
-    "style": {
       "line-color": "#cccccc",
-      "z-index": 10}
-  }, {
-    "selector": "edge[exp > 600]",
-    "style": {
-      "line-color": "#b3b3b3",
-      "z-index": 20}
+      "opacity": 1}
   }, {
     "selector": "edge[?type]",
     "style": {
@@ -56,7 +42,7 @@
   }, {
     "selector": "edge[type=\"Structure\"]",
     "style": {
-      "line-color": "#d96226",
+      "line-color": "#ff8521",
       "z-index": 150}
   }, {
     "selector": "edge:selected",

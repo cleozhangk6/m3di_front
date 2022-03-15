@@ -49,23 +49,17 @@
       
     <div class="container">
 
-      <h3>Interaction</h3>
+      <div class="interaction-title">
+        <h3 style="display:inline">Interaction Network</h3> 
+        <p style="display:inline">(showing at most <em>{{query_lim}}</em> interactors with confidence &ge; 
+          <em id="query_sco">{{query_sco}}</em>)</p></div>
+        <br>
+      
       {% if nodes_len == 1%}
       <p>No interactors above threshold. Try setting a lower confidence level.</p>
       {% else %}
       
-      <div class="checkboxes">
-        <span>
-          <input type="checkbox" id="check_self" onclick="displaySelf()" checked>
-          <label for="check_self"> Self-interaction</label>
-        </span>
-        {% if query_var %}
-        <span>
-          <input type="checkbox" id="check_pos" onclick="colorPos()" checked>
-          <label for="check_pos"> Interaction with residue {{ query_var }}</label>
-        </span>
-        {% endif %}
-      </div>
+
 
       <div class="interaction">
         <div id="cy">
@@ -73,10 +67,22 @@
           {{ cyEdges_json|json_script:"cyEdges" }}
         </div>
         <div class="side-window">
-          <h3>Select a node or an edge</h3>
+          <h3>Select a node or an edge&nbsp;&nbsp;<i class="fa-solid fa-circle-info"></i></h3>
           <span id="node"></span>
           <span id="edge"></span>
         </div>
+      </div>
+      <div class="checkboxes">
+        <span>
+          <input type="checkbox" id="check_self" onclick="displaySelf()" checked>
+          <label for="check_self"> Show self-interaction</label>
+        </span>
+        {% if query_var %}
+        <span>
+          <input type="checkbox" id="check_pos" onclick="colorPos()" checked>
+          <label for="check_pos"> Show interaction with residue {{ query_var }}</label>
+        </span>
+        {% endif %}
       </div>
       {% endif %}
 

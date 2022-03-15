@@ -113,8 +113,7 @@ def main_UniVar(request):
                     AND i.prot2 = su1.uniprot_id      
                 WHERE su1.uniprot_id in {} 
                     AND su2.uniprot_id in {}
-                    AND su1.uniprot_id > su2.uniprot_id
-                    AND experimental > 0;
+                    AND su1.uniprot_id > su2.uniprot_id;
                 '''.format(nodes,nodes))        
             cyEdges_raw_self = Stringinteractions.objects.raw('''
                 SELECT i.id, i.prot1 AS p1, i.prot2 AS p2, i.type, 
@@ -150,6 +149,8 @@ def main_UniVar(request):
             'query': query,            
             'query_uni': query_uni,
             'query_var': query_var,
+            'query_sco': query_sco,
+            'query_lim': query_lim,
             'results_basic': results_basic,
             'results_signal': results_signal,
             'results_topo': results_topo,

@@ -162,7 +162,7 @@ html, body {
 
 .fa-circle-info{
     color: #CAC4D7;
-    font-size: 1.3em;
+    font-size: 1em;
     cursor: pointer
 }
 
@@ -408,13 +408,21 @@ footer .container{
 }
 
 .side-window b {
-    color: #a2a0a7;
-    border-left: 5px solid #a2a0a7;
+    color: #388cad;
+    border-left: 5px solid #388cad;
     padding-left: 5px;
 }
 
 .side-window a{
-    color: #004560;
+    /* color: #004560; */
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.side-window em{
+    color: #777;
+    font-size: small;
 }
 
 .side-window a:hover{
@@ -426,9 +434,10 @@ br {
 }
 
 
-.results .container li, h3 {
+.results .container li, h3, .interaction-title {
     text-align: left;
 }
+
 
 
 .results .variant-table{
