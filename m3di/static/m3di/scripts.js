@@ -40,7 +40,7 @@ var selectedNodeHandler = function(evt) {
     <p> <b>UniProt ID:</b> ${node.id} </p>
     <p> <b>Gene ID:</b> ${node.gene} </p>
     <p> <b>Organism:</b> <i>Homo Sapiens</i> </p>
-    <p> <b>Residues involved in the interaction surface with 
+    <p> <b>Residues involved in the interaction with 
         residue ${query_var} of ${query_uni}:</b> 
         </br>${node.pos}</p> </br>`);
   } else {
@@ -61,13 +61,13 @@ var selectedEdgeHandler = function(evt) {
     $("#edge").html(`
     <p> <b>Interaction:</b> ${edge.source} - ${edge.target} </p>
     <p> <b>Experimental score:</b> ${edge.exp} </p>
-    <p> <b>Type of Structure:</b> ${edge.type} </p>
+    <p> <b>Type of structure:</b> ${edge.type} </p>
     <p> <b>PDB (or model template) ID:</b> <a target="_blank" href="https://www.rcsb.org/structure/${edge.pdb}">
         ${edge.pdb}</a> </p> </br>`);
   } else if (edge.self != null) {
     $("#edge").html(`
     <p> <b>Interaction:</b> Self-interaction </p>
-    <p> <b>Type of Structure:</b> ${edge.type} </p>
+    <p> <b>Type of structure:</b> ${edge.type} </p>
     <p> <b>PDB (or model template) ID:</b> <a target="_blank" href="https://www.rcsb.org/structure/${edge.pdb}">
         ${edge.pdb}</a> </p> </br>`);
   } else {

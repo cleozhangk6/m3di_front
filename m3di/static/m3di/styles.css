@@ -370,18 +370,17 @@ footer .container{
     left: 0;
 }
 
-.check-boxes {
-    text-align: left;
-    margin-left: 10%;
+.checkboxes {
+    text-align: center;
+    width: 55%;
     margin-bottom: 20px;
 }
 
-.check-boxes input {
+.checkboxes input, label {
     cursor: pointer;
+    text-align: center;
     height: 20px;
     width: 20px;
-    margin: 0%;
-    background-color: yellow;
 }
 
 #cy {
