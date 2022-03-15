@@ -9,41 +9,52 @@
     <div class="container">
       <form action="{% url 'm3di:main' %}" method="get">
           Uniprot/Gene ID*:
-          <input id="input_uni" name="q" type="text" placeholder="" size="10px">
+          <input id="input_uni" name="q" type="text" placeholder="" size="8px">
           Residue Position:
-          <input id="input_var" name="v" type="text" placeholder="" size="6px">
-          Number of interactors:
-          <input id="input_lim" name="l" type="text" placeholder="10" size="6px">
+          <input id="input_var" name="v" type="text" placeholder="" size="5px">
+          Confidence:
+          <input id="input_sco" name="s" type="number" value="0.5" 
+          min="0" max="1" step="0.1" style="width: 3.3em;">
+          NO. of interactors:
+          <input id="input_lim" name="l" type="number" value="10" style="width: 3.3em;">
           <a href="{% url 'm3di:main' %}">
             <button type="submit">Submit</button></a>
-            <a id="example" onclick="populate_uniprot()">e.g.#1</a>
-            <a id="example" onclick="populate_uniprot2()">e.g.#2</a>
+            <a id="example" onclick="populateInput('P31947','226')">e.g.#1</a>
+            <a id="example" onclick="populateInput('P09651','11')">e.g.#2</a>
       </form>
     </div>
   </div>
 {% endblock %}
 
 {% block Content %}
+
+  {% if nodes_len == 1%}
+  <body>
+  {% else %}
+  <body onload="executeCy();">
+  {% endif %}
+
+  {% if query %}
   <section class="results">
-    <!-- <p><strong>Search Results</strong></p> -->
     <div id="you-searched-for">
       <p><span>You searched for</span>
         <span id="query_uni">{{ query_uni }}</span></p>
       {% if query_uni and query_var %}
       <p><span>Residue position</span> 
         <span id="query_var">{{ query_var }}</span></p>
-      {% elif query_uni %}
-      <p>No variant specified</p>
       {% else %}
-      <p>No search submitted</p>
+      <p>No variant specified</p>
       {% endif %}
     </div>
       
     <div class="container">
 
       <h3>Interaction</h3>
+      {% if nodes_len == 1%}
+      <p>No interactors above threshold. Try setting a lower confidence level.</p>
+      {% else %}
       
-      <div class="check-boxes">
+      <div class="checkboxes">
         <span>
           <input type="checkbox" id="check_self" onclick="displaySelf()" checked>
           <label for="check_self"> Self-interaction</label>
@@ -58,16 +69,16 @@
 
       <div class="interaction">
         <div id="cy">
-        {{ cyNodes_json|json_script:"cyNodes" }}
-        {{ cyEdges_json|json_script:"cyEdges" }}
+          {{ cyNodes_json|json_script:"cyNodes" }}
+          {{ cyEdges_json|json_script:"cyEdges" }}
         </div>
         <div class="side-window">
           <h3>Select a node or an edge</h3>
           <span id="node"></span>
           <span id="edge"></span>
         </div>
-
       </div>
+      {% endif %}
 
     <br>
 
@@ -98,7 +109,7 @@
         {% for object in results_variant %}
           <tr>
             <td>{{ object.uniprot }}</td>
-            <td>{{ object.pdbpos }}</td>
+            <td>{{ object.posuniprot }}</td>
             <td>{{ object.res_wt }}</td>
             <td>{{ object.res_mut }}</td>
             <td>{{ object.missensepred }}</td>
@@ -120,7 +131,12 @@
         <br/>
         <br>
   </section>
+  
+  {% else %}
+  <p>No search submitted</p>
+  {% endif %}
 
   <hr color="#CAC4D7">
-    
+
+</body>
 {% endblock %}

@@ -14,21 +14,43 @@ def raw_to_json(*RawQuerySets):
     return json.dumps(array)
 
 
-# Create your views here.
+# Create Views
 
 class IndexView(generic.TemplateView):
     template_name = 'm3di/index.html'
 
+class DocView(generic.TemplateView):
+    template_name = 'm3di/doc.html'
+
+class StatsView(generic.TemplateView):
+    template_name = 'm3di/stats.html'
+
+class ContactView(generic.TemplateView):
+    template_name = 'm3di/contact.html'
+
 def main_UniVar(request):
     if request.method == "GET":
-        query_uni = request.GET['q']
+        # Obtain UniProt or gene ID
+        query = request.GET['q']
+        # Obtain residue position of variant        
         query_var = request.GET['v']
-        if request.GET['l']:
+        # Obtain interaction score threshold
+        if request.GET['s'] != 'Custom':
+            query_sco = request.GET['s']
+        else:
+            query_sco = request.GET['s_custom']
+        # Obtain max number of iteractors
+        if request.GET['l'] != 'Custom':
             query_lim = request.GET['l']
         else:
-            query_lim = '10'
+            query_lim = request.GET['l_custom']
 
-        results_basic = Basicinfo2.objects.filter(uniprot_id__icontains=query_uni)
+    if query:
+        # Allow both UniProt and Gene ID input
+        results_basic = Basicinfo2.objects.raw('SELECT * FROM BasicInfo2 WHERE uniprot_id=%s OR gene_name=%s', [query,query])
+        # Convert query to UniProtID only
+        query_uni = results_basic[0].uniprot_id
+
         results_signal = Signalpeptide.objects.filter(sp_uniprot_id__icontains=query_uni)
         # results_loc_cellcomp = Topocellcomp.objects.filter(uniprot_id__icontains=query_uni)
         # Pfam_results_general = Pfam.objects.filter(pf_uniprot_id__icontains=query_uni)
@@ -59,7 +81,7 @@ def main_UniVar(request):
             results_variant = MissenseVarCom.objects.none()
 
 
-    
+        # Return a list of nodes (interactors) for cytoscape
         cyNodes_raw = Stringinteractions.objects.raw('''
             SELECT * FROM BasicInfo2 WHERE uniprot_id = %s
             UNION
@@ -68,39 +90,44 @@ def main_UniVar(request):
             LEFT JOIN StringToUniprot as su2 ON su2.string_id = s.string_p2
             LEFT JOIN BasicInfo2 as b ON b.uniprot_id = su2.uniprot_id
             WHERE su1.uniprot_id = %s
-                AND su2.uniprot_id IS NOT NULL AND s.experimental > 0
+                AND su2.uniprot_id IS NOT NULL 
+                AND s.experimental >= %s
             ORDER BY s.experimental desc, s.combined_score, s.id 
             LIMIT %s);
-            ''',[query_uni,query_uni,int(query_lim)])
+            ''',[query_uni,query_uni,float(query_sco)*1000,int(query_lim)])
 
         # Use a list as an SQL parameter in Python:
         # Call tuple(list) to convert the list into a tuple object.
         # Call str.format(tuple) to format the SQL query str with the tuple from the previous step.
         nodes = tuple([obj.uniprot_id for obj in cyNodes_raw])
 
-        cyEdges_raw = Stringinteractions.objects.raw('''
-            SELECT s.id, su1.uniprot_id AS p1, su2.uniprot_id AS p2,
-                s.experimental, i.type, i.PDB_id
-            FROM StringInteractions as s
-            LEFT JOIN StringToUniprot as su1 ON su1.string_id = s.string_p1
-            LEFT JOIN StringToUniprot as su2 ON su2.string_id = s.string_p2
-            LEFT JOIN interactome3D_1 as i ON i.prot1 = su2.uniprot_id 
-                AND i.prot2 = su1.uniprot_id      
-            WHERE su1.uniprot_id in {} 
-                AND su2.uniprot_id in {}
-                AND su1.uniprot_id > su2.uniprot_id
-                AND experimental > 0;
-            '''.format(nodes,nodes))        
+        # Avoid error caused by trailing comma in a single-item tuple (no interactors)
+        if len(nodes) > 1:
+            cyEdges_raw = Stringinteractions.objects.raw('''
+                SELECT s.id, su1.uniprot_id AS p1, su2.uniprot_id AS p2,
+                    s.experimental, i.type, i.PDB_id
+                FROM StringInteractions as s
+                LEFT JOIN StringToUniprot as su1 ON su1.string_id = s.string_p1
+                LEFT JOIN StringToUniprot as su2 ON su2.string_id = s.string_p2
+                LEFT JOIN interactome3D_1 as i ON i.prot1 = su2.uniprot_id 
+                    AND i.prot2 = su1.uniprot_id      
+                WHERE su1.uniprot_id in {} 
+                    AND su2.uniprot_id in {}
+                    AND su1.uniprot_id > su2.uniprot_id
+                    AND experimental > 0;
+                '''.format(nodes,nodes))        
+            cyEdges_raw_self = Stringinteractions.objects.raw('''
+                SELECT i.id, i.prot1 AS p1, i.prot2 AS p2, i.type, 
+                        i.PDB_id, 'y' as self
+                FROM interactome3D_1 as i
+                WHERE i.prot1 in {} AND i.prot2 in {} AND i.prot1 = i.prot2;
+                '''.format(nodes,nodes))
+            cyEdges_json = raw_to_json(cyEdges_raw, cyEdges_raw_self)
+        else:
+            cyEdges_json = None
 
-        cyEdges_raw_self = Stringinteractions.objects.raw('''
-            SELECT i.id, i.prot1 AS p1, i.prot2 AS p2, i.type, 
-                    i.PDB_id, 'y' as self
-            FROM interactome3D_1 as i
-            WHERE i.prot1 in {} AND i.prot2 in {} AND i.prot1 = i.prot2;
-            '''.format(nodes,nodes))
-
-
-        if query_var: 
+        # Change cyNodes content (add interface info) when a variant is specified
+        if query_var and len(nodes) > 1: 
             cyNodes_raw = Basicinfo2.objects.raw('''
             SELECT id, uniprot_id, protein_link, protein_name, gene_name, pos
             FROM (
@@ -117,21 +144,23 @@ def main_UniVar(request):
             ON t1.uniprot_id = t2.uniprot_p2;
             '''.format(nodes,nodes),[query_uni,query_var])
 
-        
         cyNodes_json = raw_to_json(cyNodes_raw)
-        cyEdges_json = raw_to_json(cyEdges_raw, cyEdges_raw_self)
 
         context = {
+            'query': query,            
             'query_uni': query_uni,
             'query_var': query_var,
             'results_basic': results_basic,
             'results_signal': results_signal,
             'results_topo': results_topo,
             'results_variant': results_variant,
+            'cyNodes_json': cyNodes_json,
             'cyEdges_json': cyEdges_json,
-            'cyNodes_json': cyNodes_json
+            'nodes_len': len(nodes)
         }
+    else:
+        context = None
 
-        return render(request, 'm3di/main.html', context)
+    return render(request, 'm3di/main.html', context)
 
 

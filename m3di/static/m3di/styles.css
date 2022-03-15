@@ -35,7 +35,8 @@ html, body {
 
 .main-header .container {
     width: 100%;
-    height: 80px;
+    min-height: 80px;
+    height: auto;
     margin-right:auto;
     margin-left: auto;
     position: relative;
@@ -131,63 +132,87 @@ html, body {
     height: 430px;
     margin-right:auto;
     margin-left: auto;
-    padding-top: 100px;
+    padding-top: 85px;
     position: relative;
 }
 
-.home-search form {
-    display: table;
+.home-search table {
     margin-left: auto;
     margin-right: auto;
 }
 
 .right {
     text-align: right;
+    width: 15em;
 }
 
 .left {
     text-align: left;
+    width: 15em;
 }
 
 #example {
     cursor: pointer;
     font-size: small;
     color:#777;
-    padding-bottom: 0.3em;
+    padding-bottom: 0.8em;
     padding-left: 0.3em;
     text-decoration: underline;
 }
 
-.fa-solid {
+.fa-circle-info{
     color: #CAC4D7;
     font-size: 1.3em;
     cursor: pointer
 }
 
-#info-box {
+.info-box {
     position: absolute;
-    width: 150px;
-    height: 160px;
-    border-radius: 10px;
-    background-color: #CAC4D7;
+    width: auto;
+    height: auto;
+    border-radius: 6px;
+    background-color: #7F798B;
     color: white;
-    padding: 1em;
+    text-align: left;
+    font-size: small;
+    padding: 0.5em;
     visibility: hidden;
 }
 
-#info-box::before {
+/* .info-box::before {
     content: "";
     position: absolute;
     left: 0%;
     top: 20%;
-    transform: translateX(-90%);
-    border: 12px solid;
-    border-color: #0000 #CAC4D7 #0000 #0000;
+    transform: translate(800%, 130%);
+    border: 8px solid;
+    border-color: #7F798B #0000 #0000 #0000;
+} */
+
+
+#fa-uni:hover + #info-uni{
+    top: 22%;
+    left: -0.5%;
+    visibility: visible;
 }
 
-.fa-solid:hover + #info-box{
-    top: 24%;
-    left:83%;
+#fa-var:hover + #info-var{
+    top: 30%;
+    left: 3%;
+    width: 280px;
+    visibility: visible;
+}
+
+#fa-sco:hover + #info-sco{
+    top: 42%;
+    left: 0%;
+    width: 300px;
+    visibility: visible;
+}
+
+#fa-lim:hover + #info-lim{
+    top: 57%;
+    left: -6%;
     visibility: visible;
 }
 
@@ -205,6 +230,28 @@ html, body {
     margin: 0.5em;
     margin-left: 0.5em;
     border: 0.13em solid #7A7A7A;
+}
+
+.home-search select{
+    -webkit-appearance: none;
+    font-size: small;
+    height: 2.5em;
+    text-indent: 0.5em;
+    margin: 0.5em;
+    margin-left: 0.5em;
+    border: 0.13em solid #7A7A7A;
+    border-radius: 0%;
+    background-image: url("images/drop-arrow.png");
+    background-position: -5em 0;
+    background-size: 14em 2.5em;
+    width: 9em;
+}
+
+
+#toggle-advance {
+    color:#777;
+    font-size: 0.9em;
+    cursor: pointer;
 }
 
 .home-search button {
@@ -273,9 +320,8 @@ footer .container{
 }
 
 .search-bar input {
-    display: table-cell;
     font-size: small;
-    height: 1.8em;
+    height: 2em;
     text-align: start;
     text-indent: 0.3em;
     margin: 0.5em;
@@ -324,8 +370,17 @@ footer .container{
     left: 0;
 }
 
-.check-boxes {
+.checkboxes {
+    text-align: center;
+    width: 55%;
     margin-bottom: 20px;
+}
+
+.checkboxes input, label {
+    cursor: pointer;
+    text-align: center;
+    height: 20px;
+    width: 20px;
 }
 
 #cy {
@@ -334,7 +389,7 @@ footer .container{
 }
 
 .side-window {
-    width: 30%;
+    width: 40%;
     height: auto;
     border: 2px solid #d9d9d9;
     border-radius: 30px;
@@ -349,10 +404,21 @@ footer .container{
     margin-left: 40px;
     margin-right: 20px;
     text-align: left;
+    line-height: 1.5;
+}
+
+.side-window b {
+    color: #a2a0a7;
+    border-left: 5px solid #a2a0a7;
+    padding-left: 5px;
 }
 
 .side-window a{
-    color: #7F798B;
+    color: #004560;
+}
+
+.side-window a:hover{
+    color: #388cad;
 }
 
 br {

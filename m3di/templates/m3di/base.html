@@ -15,40 +15,38 @@
     <script src="{% static 'm3di/cytoscape.js' %}"></script>
   </head>
 
-  <body>
-    <div id="stick-to-top">
-        <div class="top_bar">
-          <div class="container"></div>
-        </div>
-        <header class="main-header">
-          <div class="container">
-            <a id="m3di_logo_left" href="{% url 'm3di:index' %}">
-              <img src="{% static 'm3di/images/logo.png' %}" width="100"></a>
-            <nav class="nav main-nav">            
-              <ul>
-                <li><a href="{% url 'm3di:index' %}">Home</a></li>
-                <li><a href="about.html">Documentation</a></li>
-                <li><a href="dataset.html">Statistics</a></li>
-                <li><a href="contact.html">Contact us</a></li>
-              </ul>
-            </nav>
-          </div>      
-        </header>
-        {% block Search-bar %} {% endblock %}
-    </div>
-
-    {% block Content %} {% endblock %}
-
-    <footer>
+  <div id="stick-to-top">
+      <div class="top_bar">
+        <div class="container"></div>
+      </div>
+      <header class="main-header">
         <div class="container">
-          <span id="msc_left">MSc Bioinformatics and Systems Biology</span>
-          <img id="ic_logo_right" src="{% static 'm3di/images/Imperial.png' %}" width="200">
-        </div>
-      </footer>
-  
-  
-      <script src="{% static 'm3di/scripts.js' %}"></script>
+          <a id="m3di_logo_left" href="{% url 'm3di:index' %}">
+            <img src="{% static 'm3di/images/logo.png' %}" width="100"></a>
+          <nav class="main-nav">            
+            <ul>
+              <li><a href="{% url 'm3di:index' %}">Home</a></li>
+              <li><a href="{% url 'm3di:doc' %}">Documentation</a></li>
+              <li><a href="{% url 'm3di:stats' %}">Statistics</a></li>
+              <li><a href="{% url 'm3di:contact' %}">Contact us</a></li>
+            </ul>
+          </nav>
+        </div>      
+      </header>
+      {% block Search-bar %} {% endblock %}
+  </div>
 
-</body>
+  {% block Content %} {% endblock %}
+
+  <footer>
+      <div class="container">
+        <span id="msc_left">MSc Bioinformatics and Systems Biology</span>
+        <img id="ic_logo_right" src="{% static 'm3di/images/Imperial.png' %}" width="200">
+      </div>
+    </footer>
+
+
+    <script src="{% static 'm3di/scripts.js' %}"></script>
+
 
 </html>
