@@ -160,7 +160,7 @@ html, body {
     text-decoration: underline;
 }
 
-.fa-solid {
+.fa-circle-info{
     color: #CAC4D7;
     font-size: 1.3em;
     cursor: pointer
@@ -371,7 +371,17 @@ footer .container{
 }
 
 .check-boxes {
+    text-align: left;
+    margin-left: 10%;
     margin-bottom: 20px;
+}
+
+.check-boxes input {
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+    margin: 0%;
+    background-color: yellow;
 }
 
 #cy {
@@ -380,7 +390,7 @@ footer .container{
 }
 
 .side-window {
-    width: 30%;
+    width: 40%;
     height: auto;
     border: 2px solid #d9d9d9;
     border-radius: 30px;
@@ -395,10 +405,21 @@ footer .container{
     margin-left: 40px;
     margin-right: 20px;
     text-align: left;
+    line-height: 1.5;
+}
+
+.side-window b {
+    color: #a2a0a7;
+    border-left: 5px solid #a2a0a7;
+    padding-left: 5px;
 }
 
 .side-window a{
-    color: #7F798B;
+    color: #004560;
+}
+
+.side-window a:hover{
+    color: #388cad;
 }
 
 br {

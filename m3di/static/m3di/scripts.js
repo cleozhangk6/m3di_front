@@ -32,12 +32,24 @@ function showCustom(select,input){
 var selectedNodeHandler = function(evt) {
   $('#node').show();
   var node = evt.cyTarget.data();
-  $("#node").html(`
-  <p> Protein: <a href="${node.link}">${node.name}</a></p>
-  <p> Uniprot ID: ${node.id} </p>
-  <p> Gene ID: ${node.gene} </p>
-  <p> Organism: <i>Homo Sapiens</i> </p>
-  <p> Residues interacting: ${node.pos}</p>`);
+  if (document.getElementById('query_var') != null && node.pos != null) {
+    const query_uni = document.getElementById('query_uni').textContent;
+    const query_var = document.getElementById('query_var').textContent;
+    $("#node").html(`
+    <p> <b>Protein:</b> <a target="_blank" href="${node.link}">${node.name}</a></p>
+    <p> <b>UniProt ID:</b> ${node.id} </p>
+    <p> <b>Gene ID:</b> ${node.gene} </p>
+    <p> <b>Organism:</b> <i>Homo Sapiens</i> </p>
+    <p> <b>Residues involved in the interaction surface with 
+        residue ${query_var} of ${query_uni}:</b> 
+        </br>${node.pos}</p> </br>`);
+  } else {
+    $("#node").html(`
+    <p> <b>Protein:</b> <a target="_blank" href="${node.link}">${node.name}</a></p>
+    <p> <b>UniProt ID:</b> ${node.id} </p>
+    <p> <b>Gene ID:</b> ${node.gene} </p>
+    <p> <b>Organism:</b> <i>Homo Sapiens</i> </p> </br>`);
+  }
 }
 var unselectedNodeHandler = function() {
   $('#node').hide();
@@ -45,16 +57,23 @@ var unselectedNodeHandler = function() {
 var selectedEdgeHandler = function(evt) {
   $('#edge').show();
   var edge = evt.cyTarget.data();
-  if (edge.type != null) {
+  if (edge.type != null && edge.self == null) {
     $("#edge").html(`
-    <p> Interaction: ${edge.source} - ${edge.target} </p>
-    <p> Experimental score: ${edge.exp} </p>
-    <p> Model/Structure: ${edge.type} </p>
-    <p> PDB: <a href="https://www.rcsb.org/structure/${edge.pdb}">${edge.pdb}</a> </p>`);}
-  else {
+    <p> <b>Interaction:</b> ${edge.source} - ${edge.target} </p>
+    <p> <b>Experimental score:</b> ${edge.exp} </p>
+    <p> <b>Type of Structure:</b> ${edge.type} </p>
+    <p> <b>PDB (or model template) ID:</b> <a target="_blank" href="https://www.rcsb.org/structure/${edge.pdb}">
+        ${edge.pdb}</a> </p> </br>`);
+  } else if (edge.self != null) {
     $("#edge").html(`
-    <p> Interaction: ${edge.source} - ${edge.target} </p>
-    <p> Experimental score: ${edge.exp} </p>`)
+    <p> <b>Interaction:</b> Self-interaction </p>
+    <p> <b>Type of Structure:</b> ${edge.type} </p>
+    <p> <b>PDB (or model template) ID:</b> <a target="_blank" href="https://www.rcsb.org/structure/${edge.pdb}">
+        ${edge.pdb}</a> </p> </br>`);
+  } else {
+    $("#edge").html(`
+    <p> <b>Interaction:</b> ${edge.source} - ${edge.target} </p>
+    <p> <b>Experimental score:</b> ${edge.exp} </p> </br>`)
   }
 }
 var unselectedEdgeHandler = function() {
@@ -68,6 +87,9 @@ function convertJson(myId) {
 }
 
 function executeCy() {
+  const cyEdges = convertJson('cyEdges');
+  const cyNodes = convertJson('cyNodes');
+  const query_uni = document.getElementById('query_uni').textContent;
   Promise.all([
     fetch('/static/m3di/cy-style.json')
     .then(function(res) {
@@ -75,9 +97,6 @@ function executeCy() {
     })
   ])
     .then(function(dataArray) {
-      const cyEdges = convertJson('cyEdges');
-      const cyNodes = convertJson('cyNodes');
-      const query_uni = document.getElementById('query_uni').textContent;
       var cy = window.cy = cytoscape({
         container: document.getElementById('cy'),
         style: dataArray[0],

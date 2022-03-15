@@ -126,7 +126,7 @@ def main_UniVar(request):
         else:
             cyEdges_json = None
 
-        # Change cyNodes content when a variant is specified
+        # Change cyNodes content (add interface info) when a variant is specified
         if query_var and len(nodes) > 1: 
             cyNodes_raw = Basicinfo2.objects.raw('''
             SELECT id, uniprot_id, protein_link, protein_name, gene_name, pos
