@@ -415,9 +415,11 @@ footer .container{
 
 .side-window a{
     /* color: #004560; */
-    color: black;
+    color: #777;
     text-decoration: none;
     cursor: pointer;
+    font-size: small;
+    font-style: italic;
 }
 
 .side-window em{

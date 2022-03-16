@@ -36,10 +36,10 @@ var selectedNodeHandler = function(evt) {
     const query_uni = document.getElementById('query_uni').textContent;
     const query_var = document.getElementById('query_var').textContent;
     $("#node").html(`
-    <p> <b>Protein:</b> <a target="_blank" href="${node.link}">${node.name}</a>
-      <em>(link to UniProt)</em></p>
-    <p> <b>UniProt ID:</b> <a onclick="populateInput('${node.id}','')">${node.id}</a>
-      <em>(fill search)</em> </p>
+    <p> <b>Protein:</b> ${node.name}
+      <a target="_blank" href="${node.link}">(link to UniProt)</a></p>
+    <p> <b>UniProt ID:</b> ${node.id}
+      <a onclick="populateInput('${node.id}','')">(fill search)</a></p>
     <p> <b>Gene ID:</b> ${node.gene} </p>
     <p> <b>Organism:</b> <i>Homo Sapiens</i> </p>
     <p> <b>Residues involved in the interaction surface with 
@@ -47,10 +47,10 @@ var selectedNodeHandler = function(evt) {
         ${node.pos}</p> </br>`);
   } else {
     $("#node").html(`
-    <p> <b>Protein:</b> <a target="_blank" href="${node.link}">${node.name}</a>
-      <em>(link to UniProt)</em></p>
-    <p> <b>UniProt ID:</b> <a onclick="populateInput('${node.id}','')">${node.id}</a>
-      <em>(fill search)</em> </p>
+    <p> <b>Protein:</b> ${node.name}
+      <a target="_blank" href="${node.link}">(link to UniProt)</a></p>
+    <p> <b>UniProt ID:</b> ${node.id}
+      <a onclick="populateInput('${node.id}','')">(fill search)</a></p>
     <p> <b>Gene ID:</b> ${node.gene} </p>
     <p> <b>Organism:</b> <i>Homo Sapiens</i> </p> </br>`);
   }
@@ -66,14 +66,16 @@ var selectedEdgeHandler = function(evt) {
     <p> <b>Interaction:</b> ${edge.source} - ${edge.target} </p>
     <p> <b>Experimental score:</b> ${edge.exp} </p>
     <p> <b>Structure or Model:</b> ${edge.type} </p>
-    <p> <b>PDB (or model template) ID:</b> <a target="_blank" href="https://www.rcsb.org/structure/${edge.pdb}">
-        ${edge.pdb}</a><em> (link to PDB)</em> </p> </br>`);
+    <p> <b>PDB (or model template) ID:</b> ${edge.pdb} 
+      <a target="_blank" href="https://www.rcsb.org/structure/${edge.pdb}">
+      (link to PDB) </a></p> </br>`);
   } else if (edge.self != null) {
     $("#edge").html(`
     <p> <b>Interaction:</b> Self-interaction </p>
     <p> <b>Model or Structure:</b> ${edge.type} </p>
-    <p> <b>PDB (or model template) ID:</b> <a target="_blank" href="https://www.rcsb.org/structure/${edge.pdb}">
-        ${edge.pdb}</a> <em>(link to PDB)</em> </p> </br>`);
+    <p> <b>PDB (or model template) ID:</b> ${edge.pdb} 
+      <a target="_blank" href="https://www.rcsb.org/structure/${edge.pdb}">
+      (link to PDB) </a></p> </br>`);
   } else {
     $("#edge").html(`
     <p> <b>Interaction:</b> ${edge.source} - ${edge.target} </p>
