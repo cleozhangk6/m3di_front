@@ -51,34 +51,96 @@ def main_UniVar(request):
         # Convert query to UniProtID only
         query_uni = results_basic[0].uniprot_id
 
-        results_signal = Signalpeptide.objects.filter(sp_uniprot_id__icontains=query_uni)
-        # results_loc_cellcomp = Topocellcomp.objects.filter(uniprot_id__icontains=query_uni)
-        # Pfam_results_general = Pfam.objects.filter(pf_uniprot_id__icontains=query_uni)
-        # function_results = Proteinfunctionl.objects.filter(uniprot_id__icontains=query_uni)
+        results_protein = Pronameunique.objects.raw(
+            'SELECT * FROM ProNameUnique join ProteinLink on ProNameUnique.uniprot_id = ProteinLink.uniprot_id where ProNameUnique.uniprot_id = %s' , [query_uni]
+        )
 
+        results_gene = Geneinfo.objects.raw(
+            'SELECT * from GeneInfo where uniprot_id = %s', [query_uni]
+        )
 
-        # results_signal = Signalpeptide.objects.raw(
-        #     f'''SELECT * FROM ProNameUnique LEFT JOIN SignalPeptide 
-        #     ON uniprot_id=sp_uniprot_id WHERE uniprot_id = "{query_uni}"''')
+        results_loc_cellcomp = Topocellcomp.objects.raw( 
+            'SELECT * from TopoCellComp where uniprot_id = %s', [query_uni]
+        )
 
-        if query_uni and query_var:
+        results_loc_topolabel = Topocellcomp.objects.raw(
+            'SELECT * FROM TopoCellComp where uniprot_id = %s AND topo_label IS NOT NULL', [query_uni]
+        )
 
-            results_variant = MissenseVarCom.objects.raw(
-                'SELECT * FROM Missense_Var_Com WHERE uniprot = %s and posuniprot = %s', [
-                    query_uni, query_var])
+        results_signal = Signalpeptide.objects.raw(
+            'SELECT * FROM SignalPeptide where uniprot_id = %s', [query_uni]
+        )
+
+        Pfam_results_general = Pfam.objects.raw(
+            'SELECT * FROM Pfam WHERE  uniprot_id = %s ', [query_uni]
+        )
+        
+        function_results = Proteinfunctionl.objects.raw(
+            'SELECT * FROM ProteinFunctionl where uniprot_id = %s', [query_uni]
+        )
+
+        tm_results = Transmem.objects.raw(
+            'SELECT * from TransMem join EviCodes on TransMem.eco = EviCodes.eco where uniprot_id = %s order by tm_start', [query_uni]
+        )
+
+        topo1_results = Topodom.objects.raw(
+            'select * from TopoDom join EviCodes on TopoDom.eco = EviCodes.eco where uniprot_id = %s order by topo_start', [query_uni]
+        )
+
+        bind1_results = Bindsite.objects.raw(
+            'select * from BindSite  join EviCodes on BindSite.eco = EviCodes.eco where uniprot_id = %s order by bs_position', [query_uni]
+        )
+
+        ptm1_results = Ptms.objects.raw(
+            'select * from PTMs join EviCodes on PTMs.eco = EviCodes.eco where uniprot_id = %s ' , [query_uni]
+        )
+
+        var_results =  Missensevarcom.objects.raw(
+            'SELECT * FROM MissenseVarCom WHERE uniprot_id = %s ' , [query_uni]
+            )
+    
+
+        if query_uni and query_var is not None : 
+
+            results_signal_var = Signalpeptide.objects.raw(
+            'SELECT * FROM SignalPeptide where uniprot_id = %s and signal_peptide > %s ', [query_uni, query_var]
+            )   
+
+            trans_dom_var = Transmem.objects.raw(
+            'SELECT * FROM TransMem where tm_start <= %s AND tm_end >= %s AND uniprot_id = %s ', [query_var, query_var, query_uni]
+            )
+        
+            results_binding = Bindsite.objects.raw( 
+            'SELECT * from BindSite join EviCodes on BindSite.eco = EviCodes.eco where uniprot_id = %s and bs_position = %s ', [query_uni, query_var]
+            )
+
             results_topo = Topodom.objects.raw(
-            '''SELECT id, topology FROM (SELECT * FROM TopoDom WHERE uniprot = %s) AS tab 
-            WHERE topo_start <= %s and topo_end >= %s''', [query_uni, query_var, query_var])
+            '''SELECT id, topology FROM (SELECT * FROM TopoDom WHERE uniprot_id = %s) AS tab 
+            WHERE topo_start <= %s and topo_end >= %s''', [
+                query_uni, query_var, query_var]
+            )
+            results_variant = Missensevarcom.objects.raw(
+            'SELECT * FROM MissenseVarCom WHERE uniprot_id = %s AND  posuniprot = %s' , [query_uni, query_var]
+            )
+            
+            results_PTM = Ptms.objects.raw(
+            'SELECT * FROM PTMs WHERE uniprot_id = %s AND pos = %s ' , [query_uni, query_var]
+            )
 
-        elif query_uni:
-            results_variant = MissenseVarCom.objects.raw(
-                'SELECT * FROM Missense_Var_Com WHERE uniprot = %s LIMIT 10', [
-                    query_uni])
-            results_topo = Topodom.objects.none()
+            results_sequence = Seqcanonical.objects.raw( 
+            'SELECT * FROM (SELECT id,  SUBSTRING(sequence, %s, 1) AS sub  FROM SeqCanonical where uniprot_id = %s) AS wt JOIN aa_conversion on wt.sub = aa_conversion.one_let' , [query_var, query_uni]
+            )
 
+            Pfam_results = Pfam.objects.raw(
+            'SELECT * FROM Pfam WHERE env_s  <= %s AND env_e >= %s AND uniprot_id = %s ', [query_var, query_var, query_uni]
+            )
 
-        else:
-            results_variant = MissenseVarCom.objects.none()
+        elif query_uni :
+
+            results_variant = Missensevarcom.objects.raw(
+                'SELECT * FROM MissenseVarCom WHERE uniprot_id = %s', [
+                    query_uni]
+            )
 
 
         # Return a list of nodes (interactors) for cytoscape
@@ -109,7 +171,7 @@ def main_UniVar(request):
                 FROM StringInteractions as s
                 LEFT JOIN StringToUniprot as su1 ON su1.string_id = s.string_p1
                 LEFT JOIN StringToUniprot as su2 ON su2.string_id = s.string_p2
-                LEFT JOIN interactome3D_1 as i ON i.prot1 = su2.uniprot_id 
+                LEFT JOIN Interactome3d as i ON i.prot1 = su2.uniprot_id 
                     AND i.prot2 = su1.uniprot_id      
                 WHERE su1.uniprot_id in {} 
                     AND su2.uniprot_id in {}
@@ -118,7 +180,7 @@ def main_UniVar(request):
             cyEdges_raw_self = Stringinteractions.objects.raw('''
                 SELECT i.id, i.prot1 AS p1, i.prot2 AS p2, i.type, 
                         i.PDB_id, 'y' as self
-                FROM interactome3D_1 as i
+                FROM Interactome3d as i
                 WHERE i.prot1 in {} AND i.prot2 in {} AND i.prot1 = i.prot2;
                 '''.format(nodes,nodes))
             cyEdges_json = raw_to_json(cyEdges_raw, cyEdges_raw_self)
@@ -152,12 +214,29 @@ def main_UniVar(request):
             'query_sco': query_sco,
             'query_lim': query_lim,
             'results_basic': results_basic,
-            'results_signal': results_signal,
-            'results_topo': results_topo,
-            'results_variant': results_variant,
             'cyNodes_json': cyNodes_json,
             'cyEdges_json': cyEdges_json,
-            'nodes_len': len(nodes)
+            'nodes_len': len(nodes),
+            'results_protein' : results_protein, 
+            'results_gene': results_gene, 
+            'results_signal' : results_signal,
+            'results_signal_var' : results_signal_var,
+            'trans_dom_var' : trans_dom_var,
+            'tm_results' : tm_results, 
+            'results_topo': results_topo,
+            'results_loc_cellcomp' : results_loc_cellcomp, 
+            'results_loc_topolabel': results_loc_topolabel,
+            'results_variant': results_variant,
+            'results_binding': results_binding, 
+            'results_PTM': results_PTM,
+            'Pfam_results' : Pfam_results,
+            'Pfam_results_general': Pfam_results_general,
+            'results_sequence': results_sequence,
+            'function_results': function_results,
+            'topo1_results' : topo1_results ,
+            'bind1_results': bind1_results,
+            'ptm1_results': ptm1_results,
+            'var_results' :var_results
         }
     else:
         context = None
