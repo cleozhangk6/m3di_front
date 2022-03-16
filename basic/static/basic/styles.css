@@ -33,6 +33,7 @@ html, body {
     margin-right:auto;
     margin-left: auto;
     position: relative;
+    z-index: 1000000;
 }
 
 .main-header .container {
@@ -40,8 +41,10 @@ html, body {
     height: 80px;
     margin-right:auto;
     margin-left: auto;
+    padding:auto;
     position: relative;
     background-color: white;
+    font-size: 20px;
 }
 
 /* The sticky class is added to the header with JS when it reaches its scroll position */
@@ -59,7 +62,7 @@ html, body {
 
 #m3di_logo_left {
     float: left;
-    padding: 16px;
+    padding: 10px;
     padding-left: 35px;
 }
 
@@ -92,19 +95,21 @@ html, body {
     color: black;
 }
 
-.hero {
+.hero  {
     background-color:  #7F798B;
     background-image: url("images/bg-img1.png");
     background-size: cover;
 }
 
 .hero .container {
+    font-size: 25px;
     width: 600px;
-    height: 320px;
+    height: 100%;
     margin-right:auto;
     margin-left: auto;
     padding-top: 70px;
-    position: relative;
+    position: static;
+    z-index: 10000;
 }
 
 .hero p {
@@ -134,12 +139,14 @@ html, body {
 }
 
 .home-search .container {
+    font-size: 25px;
     width: 600px;
     height: 430px;
     margin-right:auto;
     margin-left: auto;
+    margin-bottom: 0px;
     padding-top: 100px;
-    position: sticky;
+    position: static;
 }
 
 .home-search form {
@@ -158,7 +165,7 @@ html, body {
 }
 
 #example {
-    font-size: small;
+    font-size: 20px;
     padding-bottom: 0.3em;
     padding-left: 0.6em;
 }
@@ -167,6 +174,81 @@ html, body {
     color: #afa0d1;
     font-size: 1.3em;
 }
+.fa-solid:hover{
+    cursor: pointer;
+    background-color: #EDE8F9;
+    color: #7F798B;
+}
+
+.info-box{
+    position: absolute; 
+    width: auto; 
+    height:auto; 
+    border-radius: 6px;
+    background-color: #7F798B;
+    COLOR: WHITE;
+    text-align: left;
+    font-size: large;
+    padding: 0.5em; 
+    visibility: hidden; 
+}
+
+#fa-summary:hover + #info-summary{ 
+    /* top:22%;
+    left: -0.5%; */
+    visibility:visible;
+
+}
+
+#fa-variants1:hover + #info-variants1{ 
+    /* top:22%;
+    left: -0.5%; */
+    visibility:visible;
+}
+
+#fa-variants2:hover + #info-variants2{ 
+    /* top:22%;
+    left: -0.5%; */
+    visibility:visible;
+}
+
+#fa-transmem:hover + #info-transmem{ 
+    /* top:22%;
+    left: -0.5%; */
+    visibility:visible;
+}
+
+#fa-topo:hover + #info-topo{ 
+    /* top:22%;
+    left: -0.5%; */
+    visibility:visible;
+}
+
+#fa-bind:hover + #info-bind{ 
+    /* top:22%;
+    left: -0.5%; */
+    visibility:visible;
+}
+
+#fa-ptm:hover + #info-ptm{ 
+    /* top:22%;
+    left: -0.5%; */
+    visibility:visible;
+}
+
+#fa-domain:hover + #info-domain{ 
+    /* top:22%;
+    left: -0.5%; */
+    visibility:visible;
+}
+
+#fa-funct:hover + #info-funct{ 
+    /* top:22%;
+    left: -0.5%; */
+    visibility:visible;
+}
+
+
 
 .home-search label {
     color: black;
@@ -174,8 +256,8 @@ html, body {
 }
 
 .home-search input {
+    font-size: 20px;
     display: table-cell;
-    font-size: small;
     height: 2.5em;
     text-align: start;
     text-indent: 0.5em;
@@ -217,20 +299,34 @@ html, body {
 }
 
 footer .container{
-    width: 96%;
+    width: 100%;
     height: 100px;
-    margin-right:0;
-    margin-left: auto;
+    padding: 20px;
+    text-align: left;
+    margin-left:230px;
     background-color: white;
+    z-index: 1000000;
+}
+
+.footer2 .container{
+    width: 100%;
+    height: 100px;
+    padding: 20px;
+    text-align: left;
+    margin-left:50px;
+    background-color: white;
+    z-index: 1000000;
 }
 
 #msc_left {
     display: block;
     float: left;
+    margin-left: 20px;
     margin-top: 40px;
 }
 
 #ic_logo_right {
+    margin-right : 200px;
     float: right;
     padding-top: 15px;
 }
@@ -241,17 +337,18 @@ footer .container{
 .search-bar .container {
     width: 100%;
     height: 70px;
+    font-size: 25px;
     margin-right:auto;
     margin-left: auto;
     padding-top: 10px;
     padding-bottom: 10px;
-    position: relative;
+    position: sticky;
     background-color: #EDE8F9;
 }
 
 .search-bar input {
     display: table-cell;
-    font-size: large;
+    font-size: 20px;
     height: 1.8em;
     text-align: start;
     text-indent: 0.3em;
@@ -263,7 +360,7 @@ footer .container{
 .search-bar button {
     background-color: #7F798B;
     color: #FFFFFF;
-    font-size:1em;
+    font-size: 20px;
     border: none;
     padding: 0.3em;
 }
@@ -290,7 +387,6 @@ footer .container{
     width: 90%;
     height: 100%;
     margin-right:auto;
-    margin-left: 250px;
     padding-top: 20px;
     position: relative;
 }
@@ -298,9 +394,9 @@ footer .container{
 #cy {
     width: 900px;
     height: 1000px;
-    padding: 50px;
+    padding: 10px;
     margin-left: 0px;
-    position: relative;
+    position: static;
     border: 10px solid #CAC4D7 ;
     background-color: #FFFFFF;
     border-radius: 25px;
@@ -316,19 +412,47 @@ h1 {
 
 }
 
-.box-1 {
-    position: fixed;
+h2 {
+    text-align: left; 
+    color: black;
+}
+
+p {
+    text-align: left; 
+    color: black;
+}
+
+.box-1 .container p, h2 {
+   
+    position: fixed; 
+    float:right;
+    top:185px;
     margin-top: 0px;
     background-color: white ;
     margin-left: 230px;
     text-align: left;
     padding: 20px;
-    width: 100%;
+    height: 80px;
+    width: 89%;
     border: 5px solid white ;
     border-bottom:3px solid grey ;
-    font-size: 22px;
+    font-size: 30px;
     z-index: 100000;
 }
+
+.box-1a {
+    
+    margin-top: 10px;
+    background-color: lavender;
+    margin-left: 250px;
+    text-align: left;
+    width: 45%;
+    padding-left: 20px;
+    font-size: 25px ;
+    border: 3px solid lavender;
+    border-radius: 25px;
+} 
+
 
 
 .box-2 {
@@ -346,15 +470,16 @@ h1 {
 
 }
 
-.box-2a {
+.box-2a  {
     position: relative;
     text-align: left;
-    width: 100%;
-    margin-left: 250px;
+    width: 86%;
     padding-left: 20px;
     padding-right: 20px;
     padding-bottom: 30px;
-    font-size: 20px;
+    padding-top: 20px;
+    margin-left: 250px; 
+    font-size: 25px;
     background-color: white ;
     border-bottom: 3px solid grey ;
 
@@ -376,12 +501,12 @@ h1 {
 
 .box-3 {
     text-align: left;
-    width: 1800px;
+    width: 85%;
     margin-top: 20px;
     margin-left :250px;;
     padding-left: 20px;
     padding-right: 20px;
-    font-size: 20px;
+    font-size: 23px;
     background-color: white ;
 
 }
@@ -396,30 +521,52 @@ h1 {
 .results .variant-table{
     text-align: left;
     border: 1px solid;
-    border-radius: 5px;
+    border-radius: 15px;
     border-spacing:15px;
     padding: 10px;
   
 }
 .results .variant-table th{
-    padding: 0.5em; 
+    padding: 0.5em;
 }
+
+.results .variant-table2{
+    text-align: left;
+    border: 1px solid;
+    border-radius: 15px;
+    border-spacing:15px;
+    padding: 10px;
+  
+}
+.results .variant-table2 th{
+    padding: 0.5em;
+}
+
 
 .link{
     color :  #483D8B ;
 }
 
+a.anchor {
+    display: block;
+    position: relative;
+    top: -300px;
+    visibility: hidden;
+}
+
+
 .sidenav {
-    height: 100%; /* Full-height: remove this if you want "auto" height */
+    height: 90%; /* Full-height: remove this if you want "auto" height */
     width: 230px; /* Set the width of the sidebar */
-    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    position: fixed;
+    float:left; /* Fixed Sidebar (stay in place on scroll) */
     z-index: 1; /* Stay on top */
-    top: 0; /* Stay at the top */
+    top: 0px; /* Stay at the top */
     left: 0;
-    background-color: #b0a4c9c7 ; /* Black */
+    background-color: #b0a4c9 ; /* Black */
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 20px;
-    margin-top: 188px;
+    margin-top: 185px;
   }
   
   /* The navigation menu links */
@@ -427,7 +574,7 @@ h1 {
     padding: 10px;
     text-decoration: none;
     font-size: 25px;
-    color: grey;
+    color: black;
     display: block;
   }
   
@@ -441,3 +588,22 @@ h1 {
     margin-left: 230px; /* Same as the width of the sidebar */
     padding: 0px ;
   }
+
+#myBtn {
+    position: fixed; /* Fixed/sticky position */
+    bottom: 20px; /* Place the button at the bottom of the page */
+    right: 70px; /* Place the button 30px from the right */
+    z-index: 9999; /* Make sure it does not overlap */
+    border: none; /* Remove borders */
+    outline: none; /* Remove outline */
+    background-color:  #483D8B ; /* Set a background color */
+    color: white; /* Text color */
+    cursor: pointer; /* Add a mouse pointer on hover */
+    padding: 15px; /* Some padding */
+    border-radius: 10px; /* Rounded corners */
+    font-size: 18px; /* Increase font size */
+}
+
+#myBtn:hover {
+    background-color: #555; /* Add a dark-grey background on hover */
+}
