@@ -9,8 +9,20 @@
   {% endif %}
 
   {% if query %}
-  <section class="results">
-    <div id="you-searched-for">
+  <!-- <section class="sidenav">
+    <div class="container">
+      <a href="#Variants_table">Variants</a>
+      <a href="#TM_table">Transmembrane domains</a>
+      <a href="#Topo_table">Topological domains</a>
+      <a href="#Bind_table">Binding sites </a>
+      <a href="#PTM_table">Post Translational Modifications </a>
+      <a href="#Domain_table">Domains </a>
+      <a href="#">Protein-protein interactions</a>
+    </div>
+  </section> -->
+
+  
+    <!-- <div id="you-searched-for">
       <p><span>You searched for</span>
         <span id="query_uni">{{ query_uni }}</span></p>
       {% if query_uni and query_var %}
@@ -19,22 +31,75 @@
       {% else %}
       <p>No variant specified</p>
       {% endif %}
-    </div>
-      
-    <div class="container">
+    </div> -->
 
+    <section class="query-info"> 
+      <h2>Query protein: 
+        <span id="query_uni">{{ query_uni }}</span>  &nbsp &nbsp
+        {%if query_uni and query_var %} Query amino acid position: 
+        <span id="query_var">{{ query_var }}</span> 
+        {% endif %}</h2>
+      </section>
+
+    <section class="basic-info">
+      <div class = "container">
+        {% for object in results_basic %}
+        <p><strong>Protein name: <a class="link" href="{{ object.protein_link }}" target="_blank">{{ object.protein_name }}</a></strong></p>
+        <p><strong>Gene name: <a class="link" href="{{ object.gene_link}}" target="_blank">{{object.gene_name }}</a></strong></p>
+        {% endfor %}
+        {% if query_uni and query_var %}
+          {% for object in results_sequence %}
+          <p><strong>Wild type residue at query position: {{ object.one_let }}, {{object.aa_name }}</strong></p>
+          {% endfor %}
+        {% endif %}
+        <p><strong>Organism:</strong> <i> Homo Sapiens </i> </p> 
+        <p><strong>Cellular localisation:</strong>
+        {% for object in results_loc %} 
+        <a class="link" href="{{ object.cellcomp_link}}">{{ object.cellcomp_label }}</a>, 
+        {% endfor %}</p>
+      </div>
+    </section>
+
+    {%if query_uni and query_var %}
+    <section class="results-summary">
+      <div class="box-2a"> 
+        <a class="anchor" id="Variants_table"></a>
+        <h3>Variants at positon {{query_var}}, from Missense3D:  <i class="fa-solid fa-circle-info" id = fa-variants1> </i> <element class="info-box" id="info-variants1"> All the variants recored in Missense3D-DB for the query UniProt position.  </element> </h3> 
+        <table class="variant-table">
+            
+              <th>Position (Uniprot)</th>
+              <th>Wildtype residue </th>
+              <th>Mutant residue </th>
+              <th>Missense3D Prediction</th>
+              <th>Missense3D  Reason(s)</th>
+              <th>Uniprot Annotation</th>
+            </tr>
+          {% for object in results_variant %}
+            <tr>
+              <td>{{ object.posuniprot }}</td>
+              <td>{{ object.res_wt }}</td>
+              <td>{{ object.res_mut }}</td>
+              <td>{{ object.missensepred }}</td>
+              <td>{{ object.missense_reason }}</td>
+              <td>{{ object.comment}}</td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div class="box-2">
+    </section>
+    {% endif %}
+  
+      
+    <section class="results">
+    <div class="container">
       <div class="interaction-title">
         <h3 style="display:inline">Interaction Network</h3> 
         <p style="display:inline">(showing at most <em>{{query_lim}}</em> interactors with confidence &ge; 
           <em id="query_sco">{{query_sco}}</em>)</p></div>
         <br>
-      
       {% if nodes_len == 1%}
       <p>No interactors above threshold. Try setting a lower confidence level.</p>
       {% else %}
-      
-
-
       <div class="interaction">
         <div id="cy">
           {{ cyNodes_json|json_script:"cyNodes" }}
@@ -59,64 +124,62 @@
         {% endif %}
       </div>
       {% endif %}
+    </section>
 
     <br>
 
-      <h3>Basic Info</h3>
-        {% for object in results_basic %}
-        <ul>
-          <li>Protein name: <a href="{{ object.protein_link }}">{{ object.protein_name }}</a></li>
-          <li>Gene name: <a href="{{ object.gene_link }}">{{ object.gene_name }}</a></li>
-        </ul>
-        {% endfor %}
 
 
-        <h3>Signal Peptide</h3>
-        <ul>
-          <li>Signal peptide: {{ results_signal.0.signal_peptide }}</li>
-        </ul>
-
-      <h3>Variants</h3>
-        <table class="variant-table">
-          <tr>
-            <th>UniprotID</th>
-            <th>Position</th>
-            <th>Wildtype</th>
-            <th>Mutant</th>
-            <th>Prediction</th>
-            <th>Reason</th>
-          </tr>
-        {% for object in results_variant %}
-          <tr>
-            <td>{{ object.uniprot }}</td>
-            <td>{{ object.posuniprot }}</td>
-            <td>{{ object.res_wt }}</td>
-            <td>{{ object.res_mut }}</td>
-            <td>{{ object.missensepred }}</td>
-            <td>{{ object.missense_reason }}</td>
-          </tr>
-        {% endfor %}
-        </table>
-            
-      {% if query_var %}
-      <h3>Topology</h3>
-        <ul>
-          <li>Variant {{ query_var }} is located at the {{ results_topo.0.topology }} region</li>
-        </ul>
-      {% endif %}
+    <!-- <h3>Basic Info</h3>
+      {% for object in results_basic %}
+      <ul>
+        <li>Protein name: <a href="{{ object.protein_link }}">{{ object.protein_name }}</a></li>
+        <li>Gene name: <a href="{{ object.gene_link }}">{{ object.gene_name }}</a></li>
+      </ul>
+      {% endfor %}
 
 
-    </div>
+      <h3>Signal Peptide</h3>
+      <ul>
+        <li>Signal peptide: {{ results_signal.0.signal_peptide }}</li>
+      </ul>
 
-        <br/>
-        <br>
-  </section>
+    <h3>Variants</h3>
+      <table class="variant-table">
+        <tr>
+          <th>UniprotID</th>
+          <th>Position</th>
+          <th>Wildtype</th>
+          <th>Mutant</th>
+          <th>Prediction</th>
+          <th>Reason</th>
+        </tr>
+      {% for object in results_variant %}
+        <tr>
+          <td>{{ object.uniprot }}</td>
+          <td>{{ object.posuniprot }}</td>
+          <td>{{ object.res_wt }}</td>
+          <td>{{ object.res_mut }}</td>
+          <td>{{ object.missensepred }}</td>
+          <td>{{ object.missense_reason }}</td>
+        </tr>
+      {% endfor %}
+      </table>
+          
+    {% if query_var %}
+    <h3>Topology</h3>
+      <ul>
+        <li>Variant {{ query_var }} is located at the {{ results_topo.0.topology }} region</li>
+      </ul>
+    {% endif %}
+
+      <br> -->
   
   {% else %}
   <p>No search submitted</p>
   {% endif %}
 
-  <hr color="#CAC4D7">
+  <!-- <hr color="#CAC4D7"> -->
 
 </body>
 {% endblock %}

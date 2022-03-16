@@ -74,8 +74,8 @@ def main_UniVar(request):
         # Convert query to UniProtID only
         query_uni = results_basic[0].uniprot_id
 
-        results_signal = Signalpeptide.objects.filter(sp_uniprot_id__icontains=query_uni)
-        # results_loc_cellcomp = Topocellcomp.objects.filter(uniprot_id__icontains=query_uni)
+        
+        results_loc = Topocellcomp.objects.raw('SELECT * from TopoCellComp where uniprot_id = %s', [query_uni])
         # Pfam_results_general = Pfam.objects.filter(pf_uniprot_id__icontains=query_uni)
         # function_results = Proteinfunctionl.objects.filter(uniprot_id__icontains=query_uni)
 
@@ -86,22 +86,27 @@ def main_UniVar(request):
 
         if query_uni and query_var:
 
+            results_sequence = SeqCanonical.objects.raw( 
+                'SELECT * FROM (SELECT id, SUBSTRING(sequence, %s, 1) AS sub  FROM SeqCanonical where uniprot_id = %s) AS wt JOIN aa_conversion on wt.sub = aa_conversion.one_let' , [query_var, query_uni])
+
             results_variant = MissenseVarCom.objects.raw(
-                'SELECT * FROM Missense_Var_Com WHERE uniprot = %s and posuniprot = %s', [
-                    query_uni, query_var])
-            results_topo = Topodom.objects.raw(
-            '''SELECT id, topology FROM (SELECT * FROM TopoDom WHERE uniprot = %s) AS tab 
-            WHERE topo_start <= %s and topo_end >= %s''', [query_uni, query_var, query_var])
+                'SELECT * FROM MissenseVarCom WHERE uniprot_id = %s and posuniprot = %s', [query_uni, query_var])
+
+            # results_topo = Topodom.objects.raw(
+            # '''SELECT id, topology FROM (SELECT * FROM TopoDom WHERE uniprot = %s) AS tab 
+            # WHERE topo_start <= %s and topo_end >= %s''', [query_uni, query_var, query_var])
 
         elif query_uni:
             results_variant = MissenseVarCom.objects.raw(
-                'SELECT * FROM Missense_Var_Com WHERE uniprot = %s LIMIT 10', [
+                'SELECT * FROM MissenseVarCom WHERE uniprot_id = %s LIMIT 10', [
                     query_uni])
-            results_topo = Topodom.objects.none()
+            results_sequence = SeqCanonical.objects.none()
+            # results_topo = Topodom.objects.none()
 
 
         else:
             results_variant = MissenseVarCom.objects.none()
+            results_sequence = SeqCanonical.objects.none()
 
 
         # Return a list of nodes (interactors) for cytoscape
@@ -132,7 +137,7 @@ def main_UniVar(request):
                 FROM StringInteractions as s
                 LEFT JOIN StringToUniprot as su1 ON su1.string_id = s.string_p1
                 LEFT JOIN StringToUniprot as su2 ON su2.string_id = s.string_p2
-                LEFT JOIN interactome3D_1 as i ON i.prot1 = su2.uniprot_id 
+                LEFT JOIN Interactome3d as i ON i.prot1 = su2.uniprot_id 
                     AND i.prot2 = su1.uniprot_id      
                 WHERE su1.uniprot_id in {} 
                     AND su2.uniprot_id in {}
@@ -141,7 +146,7 @@ def main_UniVar(request):
             cyEdges_raw_self = Stringinteractions.objects.raw('''
                 SELECT i.id, i.prot1 AS p1, i.prot2 AS p2, i.type, 
                         i.PDB_id, 'y' as self
-                FROM interactome3D_1 as i
+                FROM Interactome3d as i
                 WHERE i.prot1 in {} AND i.prot2 in {} AND i.prot1 = i.prot2;
                 '''.format(nodes,nodes))
             cyEdges_json = raw_to_json(cyEdges_raw, cyEdges_raw_self)
@@ -175,9 +180,10 @@ def main_UniVar(request):
             'query_sco': query_sco,
             'query_lim': query_lim,
             'results_basic': results_basic,
-            'results_signal': results_signal,
-            'results_topo': results_topo,
+            'results_sequence': results_sequence,
+            'results_loc': results_loc,
             'results_variant': results_variant,
+            # 'results_signal': results_signal,
             'cyNodes_json': cyNodes_json,
             'cyEdges_json': cyEdges_json,
             'nodes_len': len(nodes)

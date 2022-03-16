@@ -93,7 +93,7 @@ html, body {
 }
 
 .hero .container {
-    width: 600px;
+    width: 800px;
     height: 320px;
     margin-right:auto;
     margin-left: auto;
@@ -101,9 +101,9 @@ html, body {
     position: relative;
 }
 
-.hero p {
+/* .hero p {
     color: #8F8D8D;
-}
+} */
 
 .hero button {
     background-color: transparent;
@@ -154,7 +154,7 @@ html, body {
 #example {
     cursor: pointer;
     font-size: small;
-    color:#777;
+    /* color:#777; */
     padding-bottom: 0.8em;
     padding-left: 0.3em;
     text-decoration: underline;
@@ -286,6 +286,7 @@ html, body {
     position: relative;
 }
 
+
 footer .container{
     width: 96%;
     height: 100px;
@@ -345,6 +346,20 @@ footer .container{
 
 
 
+section {
+    border-bottom: 3px solid #CAC4D7;
+}
+
+.query-info {
+    position: sticky;
+}
+
+h3, p{
+    text-align: left;
+    padding-left: 5%;
+}
+
+
 .results .container{
     width: 90%;
     height: 100%;
@@ -354,13 +369,11 @@ footer .container{
     position: relative;
 }
 
+/* 
 #you-searched-for *{
     color: #777;
-}
+} */
 
-#query_uni {
-    padding-left: 0.5px;
-}
 
 .results .container .interaction div{
     float: left;
@@ -453,3 +466,52 @@ br {
     padding: 0.5em;
 }
 
+
+
+/* ANYA's Code: rewritten */
+
+.sidenav {
+    height: 90%; /* Full-height: remove this if you want "auto" height */
+    width: 200px; /* Set the width of the sidebar */
+    position: fixed;
+    float:left; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 1; /* Stay on top */
+    top: 0px; /* Stay at the top */
+    left: 0;
+    background-color: #b0a4c9 ; /* Black */
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 20px;
+    margin-top: 185px;
+  }
+
+.sidenav a {
+    padding: 10px;
+    text-decoration: none;
+    font-size: 1em;
+    color: black;
+    display: block;
+  }
+  
+.sidenav a:hover {
+    color: #f1f1f1;
+  }
+
+  /* Style page content */
+.main {
+    margin-left: 230px; /* Same as the width of the sidebar */
+    padding: 0px ;
+  }
+
+/* .box-2a  {
+    position: relative;
+    text-align: left;
+    width: 86%;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 30px;
+    padding-top: 20px;
+    margin-left: 250px; 
+    font-size: 25px;
+    background-color: white ;
+    border-bottom: 3px solid grey ;
+} */
