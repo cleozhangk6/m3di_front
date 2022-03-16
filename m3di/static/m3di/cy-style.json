@@ -42,7 +42,7 @@
   }, {
     "selector": "edge[type=\"Structure\"]",
     "style": {
-      "line-color": "#ff8521",
+      "line-color": "#e66b19",
       "z-index": 150}
   }, {
     "selector": "edge:selected",
