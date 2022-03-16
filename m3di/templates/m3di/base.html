@@ -27,9 +27,10 @@
             <nav class="nav main-nav">            
               <ul>
                 <li><a href="{% url 'm3di:index' %}">Home</a></li>
-                <li><a href="about.html">Documentation</a></li>
-                <li><a href="dataset.html">Statistics</a></li>
-                <li><a href="contact.html">Contact us</a></li>
+                <li><a href="{% url 'm3di:doc' %}">Documentation</a></li>
+                <li><a href="{% url 'm3di:statistics' %}">Statistics</a></li>
+                <li><a href="{% url 'm3di:contact' %}">Contact us</a></li>
+                <li><a href="{% url 'm3di:help' %}">Help</a></li>
               </ul>
             </nav>
           </div>      

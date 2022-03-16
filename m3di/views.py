@@ -16,8 +16,17 @@ def raw_to_json(*RawQuerySets):
 
 # Create your views here.
 
+
+class HelpView(generic.TemplateView):
+    template_name = 'm3di/help.html'
 class IndexView(generic.TemplateView):
     template_name = 'm3di/index.html'
+class StatisticsView(generic.TemplateView):
+    template_name = 'm3di/statistics.html'
+class ContactView(generic.TemplateView):
+    template_name = 'm3di/contact.html'
+class DocView(generic.TemplateView):
+    template_name = 'm3di/doc.html'
 
 def main_UniVar(request):
     if request.method == "GET":
