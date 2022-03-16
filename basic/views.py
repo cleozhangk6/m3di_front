@@ -136,9 +136,13 @@ def main_UniVar(request):
         ptm1_results = Ptms.objects.raw(
             'select * from PTMs join EviCodes on PTMs.eco = EviCodes.eco where ptm_uniprot_id = %s ' , [query_uni]
         )
+
+        var_results =  MissenseVarCom.objects.raw(
+            'SELECT * FROM Missense_Var_Com WHERE uniprot = %s ' , [query_uni]
+            )
     
 
-        if query_uni and query_var: 
+        if query_uni and query_var is not None : 
 
             results_signal_var = Signalpeptide.objects.raw(
             'SELECT * FROM SignalPeptide where sp_uniprot_id = %s and signal_peptide > %s ', [query_uni, query_var]
@@ -166,7 +170,7 @@ def main_UniVar(request):
             )
 
             results_sequence = SeqCanonical.objects.raw( 
-            'SELECT id, SUBSTRING(sequence, %s, 1) as wt FROM Seq_canonical where uniprot_id = %s' , [query_var, query_uni]
+            'SELECT * FROM (SELECT id,  SUBSTRING(sequence, %s, 1) AS sub  FROM Seq_canonical where uniprot_id = %s) AS wt JOIN aa_conversion on wt.sub = aa_conversion.one_let' , [query_var, query_uni]
             )
 
             Pfam_results = Pfam.objects.raw(
@@ -229,7 +233,7 @@ def main_UniVar(request):
             'query_var': query_var,
             'results_protein' : results_protein, 
             'results_gene': results_gene, 
-            'results_signal': results_signal,
+            'results_signal' : results_signal,
             'results_signal_var' : results_signal_var,
             'trans_dom_var' : trans_dom_var,
             'tm_results' : tm_results, 
@@ -246,7 +250,8 @@ def main_UniVar(request):
             'topo1_results' : topo1_results ,
             'bind1_results': bind1_results,
             'ptm1_results': ptm1_results,
-            'results_interact_string': results_interact_string
+            'results_interact_string': results_interact_string,
+            'var_results' :var_results
         }
 
         return render(request, 'basic/main.html', context)

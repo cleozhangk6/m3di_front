@@ -21,7 +21,7 @@
       <header class="main-header">
         <div class="container">
           <a id="m3di_logo_left" href="{% url 'basic:index' %}">
-            <img src="{% static 'basic/images/logo.png' %}" width="100"></a>
+            <img src="{% static 'basic/images/logo.png' %}" width="150" height="70" ></a>
           <nav class="nav main-nav">            
             <ul>
               <li><a href="{% url 'basic:index' %}">Home</a></li>
@@ -34,18 +34,18 @@
       </header>
     </div>
     
-
+    
     <section class="hero">
         <div class="container">
-          <h1 id="welcome"> Welcome to M3DI</h1>
+          <h1 id="welcome"> Welcome to M3DI </h1>
           <p>
-              M3DI is a database integrating data from UniProt, Missense3D , String and Interactome-3D to provide the user with a tool to analyse the impact of missense variants on protein-protein interactions. 
+             M3DI is a database integrating data from UniProt, Missense3D , String and Interactome-3D to provide the user with a tool to analyse the impact of missense variants on protein-protein interactions. 
           </p>
           <br>
           <a href="#home-search">
-          <button type="button">Start your search</button></a>  
+          
         </div>
-      </section>
+    </section>
 
     <section id="home-search" class="home-search">
         <div class="container">
@@ -83,7 +83,7 @@
               <td></td>
               <td class="left">
                 <a href="{% url 'basic:main' %}">
-                  <button type="submit">Submit</button></a>
+                  <button type="submit">Start your search</button></a>
               </td>
             </tr>
           </table>
@@ -91,7 +91,7 @@
 
 
       </div>
-     </section>
+    </section>
 
      
 
@@ -102,12 +102,12 @@
 
     <!-- <hr color="#CAC4D7"> -->
     
-    <footer>
+    <footer2>
       <div class="container">
         <span id="msc_left">MSc Bioinformatics and Systems Biology</span>
-        <img id="ic_logo_right" src="{% static 'basic/images/Imperial.png' %}" width="200">
+        <img id="ic_logo_right" src="{% static 'basic/images/Imperial.png' %}" width="400">
       </div>
-    </footer>
+    </footer2>
 
 
 
