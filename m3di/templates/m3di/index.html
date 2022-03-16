@@ -25,7 +25,7 @@
   <section id="home-search" class="home-search">
       <div class="container">
 
-      <form action="{% url 'm3di:main' %}" method="get">
+      <form id="form" action="{% url 'm3di:main' %}" method="get">
         <table>
           <tr>
             <td></td>
@@ -93,8 +93,7 @@
             <td class="right">
               <span id="toggle-advance" onclick="toggleAdvance()">Show Advanced</span> </td>
             <td class="left">
-              <a href="{% url 'm3di:main' %}">
-                <button type="submit">Submit</button></a>
+                <button type="submit">Submit</button>
             </td>
           </tr>
         </table>

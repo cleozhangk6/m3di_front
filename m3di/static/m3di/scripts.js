@@ -27,6 +27,15 @@ function showCustom(select,input){
   }
 }
 
+// function directToMain(){
+//   var input_uni = document.getElementById('input_uni').value;
+//   var input_var = document.getElementById('input_var').value;
+//   if (input_var === "") {
+//     document.getElementById("form").action="{% url 'm3di:main-uni' %}";
+//   }
+// }
+// /Users/apple/Dev/trydjango/m3di_front/m3di/templates/m3di/main-uni.html
+// href="{% url 'm3di:main' %}" onclick="directToMain();"
 // Cytoscape
 
 var selectedNodeHandler = function(evt) {

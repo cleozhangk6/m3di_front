@@ -14,7 +14,7 @@ def raw_to_json(*RawQuerySets):
     return json.dumps(array)
 
 
-# Create Views
+# Create template views for index, documentation, statistics, contact
 
 class IndexView(generic.TemplateView):
     template_name = 'm3di/index.html'
@@ -27,6 +27,29 @@ class StatsView(generic.TemplateView):
 
 class ContactView(generic.TemplateView):
     template_name = 'm3di/contact.html'
+
+# Define a view for when only uniprot/geneID is provided
+
+# def main_Uni(request):
+#     if request.method == "GET":
+#         query = request.GET['q']
+    
+#     if query:
+#         # Allow both UniProt and Gene ID input
+#         results_basic = Basicinfo2.objects.raw('SELECT * FROM BasicInfo2 WHERE uniprot_id=%s OR gene_name=%s', [query,query])
+#         # Convert query to UniProtID only
+#         query_uni = results_basic[0].uniprot_id
+    
+#         context = {
+#             'query': query,            
+#             'query_uni': query_uni,
+#         }
+#     else:
+#         context = None
+
+#     return render(request, 'm3di/main-uni.html', context)
+
+# Define a view for when both uniprot/geneID and variant is provided
 
 def main_UniVar(request):
     if request.method == "GET":
