@@ -188,7 +188,54 @@
     </div>
   </div class="box-2">
 
-  <a id = "TransMem_table"> </a> 
+  <div class="box-2a"> 
+    <h3>Interaction network:</h3>  
+      <div class="container">
+      
+        <div class="interaction-title">
+          <p style="display:inline">(showing at most <em>{{query_lim}}</em> interactors with confidence &ge; 
+            <em id="query_sco">{{query_sco}}</em>)</p></div>
+          <br>
+        
+        {% if nodes_len == 1%}
+        <p>No interactors above threshold. Try setting a lower confidence level.</p>
+        {% else %}
+        
+      
+      
+      <div class="interaction">
+          <div id="cy">
+            {{ cyNodes_json|json_script:"cyNodes" }}
+            {{ cyEdges_json|json_script:"cyEdges" }}
+          </div>
+          <div class="side-window">
+            <h3>Select a node or an edge&nbsp;&nbsp;<i class="fa-solid fa-circle-info"></i></h3>
+            <span id="node"></span>
+            <span id="edge"></span>
+          </div>
+        </div>
+        <div class="checkboxes">
+          <span>
+            <input type="checkbox" id="check_self" onclick="displaySelf()" checked>
+            <label for="check_self"> Show self-interaction</label>
+          </span>
+          {% if query_var %}
+          <span>
+            <input type="checkbox" id="check_pos" onclick="colorPos()" checked>
+            <label for="check_pos"> Show interaction with residue {{ query_var }}</label>
+          </span>
+          {% endif %}
+        </div>
+        {% endif %}
+
+      </div>
+      
+      <br>
+    
+  </div class="box-2" >
+
+
+  
   <div class="box-2a"> 
     <a class="anchor" id="TM_table"></a>
     <h3>Transmembrane Domain(s): <i class="fa-solid fa-circle-info" id = fa-transmem> </i> <element class="info-box" id="info-transmem"> The positions and types of transmembrane domains, if any, recorded for the query protein. The evidence label indicates how the annotation was inferred. Source papers for the annotation are hyperlinked in blue where available. Annotation source:UniProt.  </element></h3> 
@@ -223,7 +270,7 @@
       <li> Residue {{query_var}} not located in transmembrane domain</li>
       {% endfor %}
     </ul>
-</div>
+  </div>
 
 
 <div class="box-2a"> 
@@ -262,10 +309,10 @@
   {% endfor %}
 </ul>
 </div>
-</a>
+
 
 <div class="box-2a"> 
-<h3>Binding Site(s)<i class="fa-solid fa-circle-info" id = fa-bind> </i> <element class="info-box" id="info-bind"> The positions and substrates of binding sites recorded for the query protein. In the case that a specific substrate has not been identified, it is labelled "Substrate". The evidence label indicates how the annotation was inferred. Source papers for the annotation are hyperlinked in blue where available. Annotation source:UniProt. </element> </h3>
+<h3>Binding Site(s)<i class="fa-solid fa-circle-info" id = fa-bind> </i> <element class="info-box" id="info-bind"> The positions and substrates of binding sites recorded for the query protein. In the case that a specific substrate has not been identified, it is labelled "Substrate". The evidence label indicates how the annotation was inferred. Source papers for the annotation are hyperlinked in blue where available. Duplicate entries are a result of the same binding site being predicted by multiple papers. Annotation source:UniProt. </element> </h3>
 <a class="anchor" id="Bind_table"></a>
   <table class="variant-table">
     <tr>
@@ -299,40 +346,40 @@
         </ul>
 </div>
 
-<div class="box-2a"> 
-<h3>Post-Translational Modification Sites <i class="fa-solid fa-circle-info" id = fa-ptm> </i> <element class="info-box" id="info-ptm">The positions and products of post translational modification sites (PTMs) recorded for the query protein. The evidence label indicates how the annotation was inferred. Source papers for the annotation are hyperlinked in blue where available. Annotation source:UniProt. </element></h3>
-<a class="anchor" id="PTM_table"></a>
-      <table class="variant-table">
-        <tr>
-          <th>Site position </th>
-          <th>Amino acid</th>
-          <th> PTM product   </th>
-          <th> Evidence Code  </th>
-          <th> Source  </th>
-        </tr>
-        {% for object in ptm1_results %}
-        <tr>
-          <td>{{ object.pos }}</td>
-          <td>{{ object.aa}}</td>
-          <td>{{ object.ptm_type}}</td>
-          <td><a class="link" href="{{ object.evidence_link}}" target="_blank">{{ object.label  }} </a></td>
-          {% if object.source %}
-          <td><a class="link" href="{{ object.source}}" target="_blank"> Source publication </a></td>
-          {% else %}
-          <td>Source not available</td>
-        {% endif %}
-        </tr>
-      {% endfor %}
-      </table>
-
-      <ul>
-        {% for object in results_PTM %}
-      <li> Query residue {{query_var}} is part of a post translational modification site, the post translationally modified residue is: <a class="link" href="{{ object.source}}" target="_blank">{{object.ptm_type }} , </a> </li>
-        {% empty %}
-      <li>Query residue {{query_var}} is not part of any post translational modification site.  </li>
+  <div class="box-2a"> 
+  <h3>Post-Translational Modification Sites <i class="fa-solid fa-circle-info" id = fa-ptm> </i> <element class="info-box" id="info-ptm">The positions and products of post translational modification sites (PTMs) recorded for the query protein. The evidence label indicates how the annotation was inferred. Source papers for the annotation are hyperlinked in blue where available. Annotation source:UniProt. </element></h3>
+  <a class="anchor" id="PTM_table"></a>
+        <table class="variant-table">
+          <tr>
+            <th>Site position </th>
+            <th>Amino acid</th>
+            <th> PTM product   </th>
+            <th> Evidence Code  </th>
+            <th> Source  </th>
+          </tr>
+          {% for object in ptm1_results %}
+          <tr>
+            <td>{{ object.pos }}</td>
+            <td>{{ object.aa}}</td>
+            <td>{{ object.ptm_type}}</td>
+            <td><a class="link" href="{{ object.evidence_link}}" target="_blank">{{ object.label  }} </a></td>
+            {% if object.source_link %}
+            <td><a class="link" href="{{ object.source_link}}" target="_blank"> Source publication </a></td>
+            {% else %}
+            <td>Source not available</td>
+          {% endif %}
+          </tr>
         {% endfor %}
-      </ul>
-</div>
+        </table>
+
+        <ul>
+          {% for object in results_PTM %}
+        <li> Query residue {{query_var}} is part of a post translational modification site, the post translationally modified residue is: <a class="link" href="{{ object.source}}" target="_blank">{{object.ptm_type }} , </a> </li>
+          {% empty %}
+        <li>Query residue {{query_var}} is not part of any post translational modification site.  </li>
+          {% endfor %}
+        </ul>
+  </div>
 
 <div class="box-2a"> 
 <a class="anchor" id="Domain_table"></a>
@@ -346,8 +393,8 @@
         </tr>
         {% for object in Pfam_results_general %}
         <tr>
-          <td>{{ object.env_s }}</td>
-          <td>{{ object.env_e }}</td>
+          <td>{{ object.ali_s }}</td>
+          <td>{{ object.ali_e }}</td>
           <td> <a class= "link" href = "http://pfam.xfam.org/family/{{ object.pfam_id }}" target="_blank" > {{object.pfam_id}} </a> </td>
           <td>{{ object.pfam_name }}</td>
         {% endfor %}
@@ -364,49 +411,7 @@
 </div>
 
 
-<div class="box-2a"> 
-<h3>Interaction network:</h3>  
-<div class="container">
 
-  <div class="interaction-title">
-    <p style="display:inline">(showing at most <em>{{query_lim}}</em> interactors with confidence &ge; 
-      <em id="query_sco">{{query_sco}}</em>)</p></div>
-    <br>
-  
-  {% if nodes_len == 1%}
-  <p>No interactors above threshold. Try setting a lower confidence level.</p>
-  {% else %}
-  
-
-
-  <div class="interaction">
-    <div id="cy">
-      {{ cyNodes_json|json_script:"cyNodes" }}
-      {{ cyEdges_json|json_script:"cyEdges" }}
-    </div>
-    <div class="side-window">
-      <h3>Select a node or an edge&nbsp;&nbsp;<i class="fa-solid fa-circle-info"></i></h3>
-      <span id="node"></span>
-      <span id="edge"></span>
-    </div>
-  </div>
-  <div class="checkboxes">
-    <span>
-      <input type="checkbox" id="check_self" onclick="displaySelf()" checked>
-      <label for="check_self"> Show self-interaction</label>
-    </span>
-    {% if query_var %}
-    <span>
-      <input type="checkbox" id="check_pos" onclick="colorPos()" checked>
-      <label for="check_pos"> Show interaction with residue {{ query_var }}</label>
-    </span>
-    {% endif %}
-  </div>
-  {% endif %}
-
-<br>
-
-</div>
 </section>
 
 

@@ -132,7 +132,7 @@ def main_UniVar(request):
             )
 
             Pfam_results = Pfam.objects.raw(
-            'SELECT * FROM Pfam WHERE env_s  <= %s AND env_e >= %s AND uniprot_id = %s ', [query_var, query_var, query_uni]
+            'SELECT * FROM Pfam WHERE ali_s  <= %s AND ali_e >= %s AND uniprot_id = %s ', [query_var, query_var, query_uni]
             )
 
         elif query_uni :
