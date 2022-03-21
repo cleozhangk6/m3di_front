@@ -57,7 +57,7 @@
       <a href="#Bind_table">Binding sites </a>
       <a href="#PTM_table">Post Translational Modifications </a>
       <a href="#Domain_table">Domains </a>
-      <a href="#">Protein-protein interactions</a>
+      <a href="#Interactions">Protein-protein interactions</a>
     </div>
 
       
@@ -86,7 +86,7 @@
 
       {%if query_uni and query_var %}
       <div class="box-1a">
-        <h3>Results summary for variant at position {{query_var}} : <i class="fa-solid fa-circle-info" id = fa-summary> </i> <element class="info-box" id="info-summary"> Summary of information on the position searched according to the M3DI database. Click on the hyperlinks (blue) to navighate to more detailed information on available annotations.   </element> </h3>
+        <h3>Results summary for variant at position {{query_var}} : <i class="fa-solid fa-circle-info" id = fa-summary> </i> <element class="info-box" id="info-summary"> Summary of information on the position searched according to the M3DI database. Click on the hyperlinks (blue) to navigate to more detailed information on available annotations.   </element> </h3>
   
         <ul>   
           {% for object in trans_dom_var %}
@@ -131,6 +131,54 @@
         
       </div>
     {% endif %}
+
+    <div class="box-2a"> </div>
+
+    <div class="box-2a"> 
+      <h3>Interaction network:</h3>  <a class="anchor" id="Interactions"></a>
+        <div class="container">
+        
+          <div class="interaction-title">
+            <p style="display:inline">(showing at most <em>{{query_lim}}</em> interactors with confidence &ge; 
+              <em id="query_sco">{{query_sco}}</em>)</p></div>
+            <br>
+          
+          {% if nodes_len == 1%}
+          <p>No interactors above threshold. Try setting a lower confidence level.</p>
+          {% else %}
+          
+        
+        
+        <div class="interaction">
+            <div id="cy">
+              {{ cyNodes_json|json_script:"cyNodes" }}
+              {{ cyEdges_json|json_script:"cyEdges" }}
+            </div>
+            <div class="side-window">
+              <h3>Select a node or an edge&nbsp;&nbsp;<i class="fa-solid fa-circle-info"></i></h3>
+              <span id="node"></span>
+              <span id="edge"></span>
+            </div>
+          </div>
+          <div class="checkboxes">
+            <span>
+              <input type="checkbox" id="check_self" onclick="displaySelf()" checked>
+              <label for="check_self"> Show self-interaction</label>
+            </span>
+            {% if query_var %}
+            <span>
+              <input type="checkbox" id="check_pos" onclick="colorPos()" checked>
+              <label for="check_pos"> Show interaction with residue {{ query_var }}</label>
+            </span>
+            {% endif %}
+          </div>
+          {% endif %}
+  
+        </div>
+        
+        <br>
+      
+    </div class="box-2" >
       
     {%if query_uni and query_var %}
     <div class="box-2a"> 
@@ -188,51 +236,7 @@
     </div>
   </div class="box-2">
 
-  <div class="box-2a"> 
-    <h3>Interaction network:</h3>  
-      <div class="container">
-      
-        <div class="interaction-title">
-          <p style="display:inline">(showing at most <em>{{query_lim}}</em> interactors with confidence &ge; 
-            <em id="query_sco">{{query_sco}}</em>)</p></div>
-          <br>
-        
-        {% if nodes_len == 1%}
-        <p>No interactors above threshold. Try setting a lower confidence level.</p>
-        {% else %}
-        
-      
-      
-      <div class="interaction">
-          <div id="cy">
-            {{ cyNodes_json|json_script:"cyNodes" }}
-            {{ cyEdges_json|json_script:"cyEdges" }}
-          </div>
-          <div class="side-window">
-            <h3>Select a node or an edge&nbsp;&nbsp;<i class="fa-solid fa-circle-info"></i></h3>
-            <span id="node"></span>
-            <span id="edge"></span>
-          </div>
-        </div>
-        <div class="checkboxes">
-          <span>
-            <input type="checkbox" id="check_self" onclick="displaySelf()" checked>
-            <label for="check_self"> Show self-interaction</label>
-          </span>
-          {% if query_var %}
-          <span>
-            <input type="checkbox" id="check_pos" onclick="colorPos()" checked>
-            <label for="check_pos"> Show interaction with residue {{ query_var }}</label>
-          </span>
-          {% endif %}
-        </div>
-        {% endif %}
-
-      </div>
-      
-      <br>
-    
-  </div class="box-2" >
+  
 
 
   
@@ -264,11 +268,13 @@
     </table>
 
     <ul>   
+      {% if query_uni and query_var %}
       {% for object in trans_dom_var %}
       <li> Residue {{query_var}} located in transmembrane domain: {{object.tm_start}} - {{object.tm_end}}</li>
       {% empty %}
       <li> Residue {{query_var}} not located in transmembrane domain</li>
       {% endfor %}
+      {% endif %}
     </ul>
   </div>
 
@@ -300,13 +306,14 @@
       {% endfor %}
     </table>
 <ul>
+  {% if query_uni and query_var %}
   {% for object in results_topo %}
-   
     <li>Residue  {{ query_var }} is located at the {{ object.topology }} region</li>
     
     {% empty %}
-    <li> Query residue not located in topological domain(s) </li>
+    <li> Residue  {{ query_var }} is  not located in topological domain(s) </li>
   {% endfor %}
+  {% endif %}
 </ul>
 </div>
 
@@ -338,16 +345,18 @@
       
 
         <ul>
+          {% if query_uni and query_var %}
           {% for object in results_binding %}
-        <li>Query residue {{query_var}} is part of binding site for {{object.substrate }} </li>
+        <li>Residue  {{ query_var }} is  part of binding site for {{object.substrate }} </li>
           {% empty %}
-        <li>Query residue {{query_var}} is not part of any binding site </li>
+        <li>Residue {{query_var}} is not part of any binding site </li>
           {% endfor %}
+          {% endif %}
         </ul>
 </div>
 
   <div class="box-2a"> 
-  <h3>Post-Translational Modification Sites <i class="fa-solid fa-circle-info" id = fa-ptm> </i> <element class="info-box" id="info-ptm">The positions and products of post translational modification sites (PTMs) recorded for the query protein. The evidence label indicates how the annotation was inferred. Source papers for the annotation are hyperlinked in blue where available. Annotation source:UniProt. </element></h3>
+  <h3>Post-Translational Modification Sites <i class="fa-solid fa-circle-info" id = fa-ptm> </i> <element class="info-box" id="info-ptm">The positions and products of post translational modification sites (PTMs) recorded for the query protein. The evidence label indicates how the annotation was inferred. Source papers for the annotation are hyperlinked in blue where available. Duplicate entries are a result of the same PTM site being inferred from multiple papers.  Annotation source:UniProt. </element></h3>
   <a class="anchor" id="PTM_table"></a>
         <table class="variant-table">
           <tr>
@@ -373,17 +382,19 @@
         </table>
 
         <ul>
+          {% if query_uni and query_var %}
           {% for object in results_PTM %}
-        <li> Query residue {{query_var}} is part of a post translational modification site, the post translationally modified residue is: <a class="link" href="{{ object.source}}" target="_blank">{{object.ptm_type }} , </a> </li>
+        <li> Residue  {{ query_var }} is  part of a post translational modification site, the post translationally modified residue is: <a class="link" href="{{ object.source}}" target="_blank">{{object.ptm_type }} , </a> </li>
           {% empty %}
-        <li>Query residue {{query_var}} is not part of any post translational modification site.  </li>
+        <li> Residue  {{ query_var }} is  not part of any post translational modification site.  </li>
           {% endfor %}
+          {% endif %}
         </ul>
   </div>
 
 <div class="box-2a"> 
 <a class="anchor" id="Domain_table"></a>
-<h3> Pfam: Functional domain results <i class="fa-solid fa-circle-info" id = fa-domain> </i> <element class="info-box" id="info-domain"> Positions of functional domains recorded for the query protein. The envelope positions from Pfam are used. For more information on Pfam domains, click on the Pfam id hyperlinked in blue. </element></h3>
+<h3> Pfam: Functional domain results <i class="fa-solid fa-circle-info" id = fa-domain> </i> <element class="info-box" id="info-domain"> Positions of functional domains recorded for the query protein. The alignment positions from Pfam/HMMER are used. For more information on Pfam domains, click on the Pfam id hyperlinked in blue. </element></h3>
       <table class="variant-table">
         <tr>
           <th>Domain start </th>
@@ -402,11 +413,13 @@
       </table>
       <ul>
 
+        {% if query_uni and query_var %}
         {% for object in Pfam_results %}
-        <li> Query position located in <a class= "link" href = "http://pfam.xfam.org/family/{{ object.pfam_id }}" target="_blank" > {{object.pfam_name}} </a></li>
+        <li> Residue  {{ query_var }} is  <a class= "link" href = "http://pfam.xfam.org/family/{{ object.pfam_id }}" target="_blank" > {{object.pfam_name}} </a></li>
         {% empty %} 
-        <li> Query position not found in any Pfam domain</li>
+        <li> Residue  {{ query_var }} is  not found in any Pfam domain</li>
         {% endfor %}
+        {% endif %}
       </ul>
 </div>
 
@@ -426,9 +439,9 @@
     {% endfor %}
   
     {% for object in results_signal_var %}
-    <li> Residue {{query_var}} located in signal peptide</li>
+    <li> Residue {{query_var}} is located in a signal peptide</li>
     {% empty %}
-    <li> Residue {{query_var}} not located in signal peptide</li>
+    <li> Residue {{query_var}} is ot located in a signal peptide</li>
   
     
     {% endfor %}

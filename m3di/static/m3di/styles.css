@@ -565,10 +565,10 @@ p {
     text-align: left;
     padding: 20px;
     height: 80px;
-    width: 82%;
+    width: 100%;
     border: 5px solid white ;
     border-bottom:3px solid grey ;
-    /* font-size: 30px; */
+    font-size: 28px; 
     z-index: 1;
 }
 
@@ -605,7 +605,7 @@ p {
 .box-2a  {
     position: relative;
     text-align: left;
-    /* width: 86%; */
+    width: 86%; 
     padding-left: 20px;
     padding-right: 20px;
     padding-bottom: 30px;
@@ -614,6 +614,7 @@ p {
     /* font-size: 25px; */
     background-color: white ;
     border-bottom: 3px solid grey ;
+
 
 }
 
@@ -744,4 +745,5 @@ a.anchor {
 footer {
     z-index: 2;
     background-color: white;
+    margin-left: 200px;
 }
